@@ -1,0 +1,202 @@
+from fastapi import FastAPI, UploadFile, File, HTTPException
+import pandas as pd
+from app.services.column_validator import detect_sales_columns, validate_sales_file, validate_column_types
+from app.services.schema import SALES_SCHEMA, ALIASES
+from app.routers.api import router as api_router
+
+from fastapi import FastAPI, Request
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
+
+app = FastAPI()
+templates = Jinja2Templates(directory="app/templates")
+app.include_router(api_router, prefix="/api")
+
+from app.routers.pages import router as pages_router
+
+app.mount("/static", StaticFiles(directory="app/static"), name="static")
+app.include_router(pages_router)
+
+from app.services.sessions import (
+    create_session,
+    get_session_df,
+    update_session_df,
+    get_session_original_df
+)
+
+@app.get("/api/health")
+def health():
+    return {"status": "ok"}
+
+# UPLOAD 
+@app.post("/api/upload")
+async def upload_file(file: UploadFile = File(...)):
+
+    if not file.filename.endswith((".csv", ".xlsx")):
+        raise HTTPException(400, "Este archivo no parece ser de ventas. Sube un Excel o CSV con tus ventas.")
+
+    try:
+        if file.filename.endswith(".csv"):
+            df = pd.read_csv(file.file)
+        else:
+            df = pd.read_excel(file.file)
+    except Exception as e:
+        raise HTTPException(400, f"Error leyendo archivo: {e}")
+
+    if df.empty:
+        raise HTTPException(400, "Archivo vacío")
+
+    detected_columns = detect_sales_columns(df)
+    missing_fields = validate_sales_file(df)
+    
+
+    # 🚫 No parece un archivo de ventas
+    if len(detected_columns) == 0:
+        raise HTTPException(
+            status_code=400,
+            detail="No se detectaron columnas de ventas. Asegúrate de subir un archivo con fechas, productos, cantidades y precios."
+        )
+
+    # 🚫 Demasiados campos obligatorios faltantes
+    # if len(missing_fields) == len(SALES_SCHEMA["required"]):
+    #     raise HTTPException(
+    #         status_code=400,
+    #         detail="Asegúrate de subir un archivo con fechas, productos, cantidades y precios."
+    #     )
+
+    session_id = create_session(df, SALES_SCHEMA)
+
+    return {
+        "status": "ok",
+        "session_id": session_id,
+        "filename": file.filename,
+        "rows": len(df),
+        "detected_columns": detected_columns,
+        "required_fields": SALES_SCHEMA["required"],
+        "all_columns": list(df.columns),
+    }
+
+@app.get("/")
+def upload_page(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request})
+
+# CLEAN
+@app.get("/clean/{session_id}")
+def clean_page(request: Request, session_id: str):
+    return templates.TemplateResponse(
+        "clean.html",
+        {"request": request, "session_id": session_id}
+    )
+
+from app.models.payloads import ColumnMappingPayload
+from app.services.mapping import apply_column_mapping
+
+# MAPPING COLUMNS
+@app.post("/api/map-columns/{session_id}")
+def map_columns(session_id: str, payload: ColumnMappingPayload):
+    df = get_session_original_df(session_id)
+
+    if df is None:
+        raise HTTPException(404, "Sesión no encontrada")
+
+    df = apply_column_mapping(df, payload.mapping)
+    update_session_df(session_id, df)
+
+    return {"status": "ok"}
+
+
+from fastapi import Request, HTTPException
+from fastapi.templating import Jinja2Templates
+
+templates = Jinja2Templates(directory="app/templates")
+
+# MAP 
+from app.services.auto_mapping import auto_map_columns
+
+@app.get("/map/{session_id}")
+def map_page(request: Request, session_id: str):
+    df = get_session_original_df(session_id)
+    
+    print(" File: ")
+    print(df.head(3))
+
+    if df is None:
+        raise HTTPException(status_code=404, detail="Sesión no encontrada")
+
+    auto_mapping = auto_map_columns(
+        SALES_SCHEMA["required"],
+        list(df.columns) 
+    )
+
+    return templates.TemplateResponse(
+        "map.html",
+        {
+            "request": request,
+            "session_id": session_id,
+            "required": SALES_SCHEMA["required"],
+            "columns": list(df.columns),
+            "auto_mapping": auto_mapping
+        }
+    )
+
+# Clean data
+from app.services.cleaner import clean_sales_data
+@app.post("/api/clean-data/{session_id}")
+def clean_data(session_id: str):
+    df = get_session_df(session_id)
+    
+    print("Columnas: ")
+    print(df.columns)
+
+    if df is None:
+        raise HTTPException(404, "Sesión inválida")
+
+    df_clean, report = clean_sales_data(df, SALES_SCHEMA)
+    update_session_df(session_id, df_clean)
+
+    return {
+        "status": "ok",
+        "report": report,
+        "rows": len(df_clean),
+        "preview": df_clean.head(10).to_dict(orient="records")
+    }
+
+# Analyze data
+from app.services.analyzer import analyze_sales_data
+@app.post("/api/analyze/{session_id}")
+def analyze_data(session_id: str):
+    df = get_session_df(session_id)
+
+    if df is None:
+        raise HTTPException(404, "Sesión inválida")
+
+    result = analyze_sales_data(df)
+
+    return {
+        "status": "ok",
+        "analysis": result
+    }
+
+import io
+from fastapi.responses import StreamingResponse
+from datetime import date
+
+# Export Data
+@app.get("/export/{session_id}")
+def export_data(session_id: str):
+    df = get_session_df(session_id)
+
+    if df is None:
+        raise HTTPException(404, "Sesión no encontrada")
+
+    buffer = io.StringIO()
+    df.to_csv(buffer, index=False)
+    buffer.seek(0)
+
+    filename = f"datos_limpios_{date.today()}.csv"
+
+    return StreamingResponse(
+        buffer,
+        media_type="text/csv",
+        headers={"Content-Disposition": f"attachment; filename={filename}"}
+    )

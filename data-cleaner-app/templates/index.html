@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Data Cleaner</title>
+  <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body>
+
+  <main class="container">
+    <h1>Data Cleaner</h1>
+    <p class="subtitle">
+      Sube tu archivo de ventas y descubre qué productos realmente te generan dinero. En minutos y sin análisis complicado.
+    </p>
+
+    <form id="upload-form" class="card">
+      <input type="file" name="file" accept=".csv,.xlsx" required />
+      <button type="submit">Subir archivo</button>
+    </form>
+
+    <div id="upload-error" class="upload-error hidden">
+      <div class="upload-error-title">No se pudo procesar el archivo</div>
+      <div class="upload-error-message">
+        Este archivo no parece contener datos de ventas.
+        Asegúrate de subir un Excel o CSV con columnas como fecha, producto, cantidad o precio.
+      </div>
+    </div>
+
+    <p id="status" class="status"></p>
+    <p class="subtitle">
+      © JGIL DATA LEGACY, LLC.
+    </p>
+  </main>
+
+  <script src="/static/js/upload.js">
+
+  </script>
+</body>
+</html>
+
+

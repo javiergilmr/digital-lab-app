@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Data Cleaner</title>
+  <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body>
+
+<main class="container">
+  <h1>Seleccion de Colummnas</h1>
+  <p class="subtitle">
+    Asigna las columnas de tu archivo a los campos requeridos.
+  </p>
+
+  <form id="map-form" class="card">
+    {% for field in required %}
+      <div class="field">
+
+        <label class="field-label">
+          <span>{{ field }}</span>
+
+          {% if auto_mapping.get(field) %}
+            <span class="badge-auto">AUTO</span>
+          {% endif %}
+        </label>
+        
+        <select
+          name="{{ field }}"
+          class="{% if auto_mapping.get(field) %}auto-selected{% endif %}"
+          data-auto="{% if auto_mapping.get(field) %}true{% else %}false{% endif %}"
+          required
+        >
+
+          <option value="">Selecciona una columna</option>
+
+          {% for col in columns %}
+            <option value="{{ col }}"
+              {% if auto_mapping.get(field) == col %}selected{% endif %}
+            >
+              {{ col }}
+            </option>
+          {% endfor %}
+        </select>
+
+      </div>
+    {% endfor %}
+
+    <div id="mapping-summary" class="hidden"></div>
+
+    <button type="submit">Continuar</button>
+    <p id="form-error" class="form-error" style="display:none;"></p>
+
+    <div id="ready-message" class="ready-message hidden">
+      ✅ Todo listo. Puedes continuar.
+    </div>
+
+  </form>
+
+  <a href="/" class="secondary-btn">
+  ← Volver al inicio
+  </a>
+
+  <p class="subtitle">
+    © JGIL DATA LEGACY, LLC.
+  </p>
+
+  
+
+</main>
+
+<script>
+
+let isDirty = false;
+let triedSubmit = false;
+const form = document.getElementById("map-form");
+const submitBtn = document.querySelector("button[type='submit']");
+const selects = document.querySelectorAll("select");
+const errorBox = document.getElementById("form-error");
+const STATE_KEY = "map_state_{{ session_id }}";
+
+/* =========================
+   SUBMIT
+   ========================= */
+form.addEventListener("submit", async (e) => {
+  if (e.key === "Enter") {
+    e.preventDefault();
+  }
+
+  triedSubmit = true;
+  runValidation();
+
+  if (submitBtn.disabled) return;
+
+  if (!validateDuplicates()) {
+    alert("Una columna está asignada más de una vez");
+    return;
+  }
+
+  const data = {};
+  new FormData(form).forEach((v, k) => {  
+    if (v) data[v] = k;
+  });
+
+  setLoading(true);
+
+  const res = await fetch("/api/map-columns/{{ session_id }}", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ mapping: data })
+  });
+
+  setLoading(false);
+
+  if (res.ok) {
+    // 👇 AQUÍ
+    localStorage.removeItem("map_state");
+
+    window.location.href = `/clean/{{ session_id }}`;
+  }
+
+  if (!res.ok) {
+    setLoading(false);
+    errorBox.textContent = "❌ Ocurrió un error al procesar el archivo. Intenta nuevamente.";
+    errorBox.style.display = "block";
+    return;
+  }
+
+});
+
+/* =========================
+   VALIDACIONES
+   ========================= */
+   
+function toggleSubmit() {
+  const allFilled = [...selects].every(s => s.value !== "");
+  const noDuplicates = !hasDuplicates();
+
+  let message = "";
+
+  if (!allFilled) {
+    message = "⚠️ Debes asignar una columna a todos los campos.";
+    scrollToFirstError();
+  } else if (!noDuplicates) {
+    message = "⚠️ No puedes usar la misma columna más de una vez.";
+    scrollToFirstError();
+  }
+
+  const canSubmit = allFilled && noDuplicates;
+
+  submitBtn.disabled = !canSubmit;
+  submitBtn.style.opacity = canSubmit ? "1" : "0.5";
+
+  errorBox.textContent = canSubmit ? "" : message;
+  errorBox.style.display = canSubmit ? "none" : "block";
+}
+
+function validateFields() {
+  document.querySelectorAll(".field").forEach(field => {
+    const select = field.querySelector("select");
+
+    field.classList.remove("ok", "missing");
+
+    // ⛔ NO pintar errores si no ha tocado nada
+    if (!isDirty && !triedSubmit) {
+      setFieldError(field, null);
+      return;
+    }
+
+    if (!select.value) {
+      field.classList.add("missing");
+      setFieldError(field, "Este campo es obligatorio");
+    } else {
+      field.classList.add("ok");
+      setFieldError(field, null);
+    }
+  });
+}
+
+function validateDuplicates() {
+  const values = {};
+  let hasDuplicates = false;
+
+  document.querySelectorAll(".field").forEach(field => {
+    field.classList.remove("duplicate");
+  });
+
+  document.querySelectorAll("select").forEach(select => {
+    if (!select.value) return;
+
+    if (values[select.value]) {
+      hasDuplicates = true;
+
+      const f1 = select.closest(".field");
+      const f2 = values[select.value].closest(".field");
+
+      f1.classList.add("duplicate");
+      f2.classList.add("duplicate");
+
+      /* 
+      setFieldError(f1, "Esta columna ya fue usada");
+      setFieldError(f2, "Esta columna ya fue usada"); 
+      */
+    } else {
+      values[select.value] = select;
+    }
+  });
+
+  return !hasDuplicates;
+}
+
+function setFieldError(field, message) {
+  let error = field.querySelector(".field-error");
+
+  if (!message) {
+    if (error) error.remove();
+    return;
+  }
+
+  if (!error) {
+    error = document.createElement("div");
+    error.className = "field-error";
+    field.appendChild(error);
+  }
+
+  error.textContent = message;
+}
+
+function scrollToFirstError() {
+  const firstInvalid = document.querySelector(
+    ".field.missing select, .field.duplicate select"
+  );
+
+  if (!firstInvalid) return;
+
+  firstInvalid.scrollIntoView({
+    behavior: "smooth",
+    block: "center"
+  });
+
+  firstInvalid.focus();
+}
+
+function updateReadyState() {
+  const allFilled = [...document.querySelectorAll("select")]
+    .every(s => s.value !== "");
+
+  const noDuplicates = validateDuplicates();
+
+  const ready = allFilled && noDuplicates;
+
+  const msg = document.getElementById("ready-message");
+
+  if (ready) {
+    msg.classList.remove("hidden");
+  } else {
+    msg.classList.add("hidden");
+  }
+}
+
+function updateSummary() {
+  const box = document.getElementById("mapping-summary");
+  const rows = [];
+
+  document.querySelectorAll(".field").forEach(field => {
+    const value = field.querySelector("select").value;
+
+    const labelEl = field.querySelector(".field-label");
+    let label = labelEl ? labelEl.cloneNode(true) : null;
+
+    if (label) {
+      const badge = label.querySelector(".badge-auto");
+      if (badge) badge.remove();
+      label = label.textContent.trim();
+    }
+
+    if (!value) return;
+
+    rows.push(`<div><strong>${label}</strong> → ${value}</div>`);
+  });
+
+  if (rows.length === selects.length && validateDuplicates()) {
+    box.innerHTML = `
+      <div class="summary-title">Columnas seleccionadas: </div>
+      ${rows.join("")}
+    `;
+    box.classList.remove("hidden");
+  } else {
+    box.classList.add("hidden");
+  }
+}
+
+function saveState() {
+  const state = {};
+
+  document.querySelectorAll("select").forEach(select => {
+    state[select.name] = {
+      value: select.value
+    };
+  });
+
+  localStorage.setItem(STATE_KEY, JSON.stringify(state));
+}
+
+function restoreState() {
+  const raw = localStorage.getItem(STATE_KEY);
+  if (!raw) return;
+
+  const state = JSON.parse(raw);
+
+  document.querySelectorAll("select").forEach(select => {
+    const saved = state[select.name];
+    if (!saved) return;
+
+    select.value = saved.value || "";
+    select.dataset.auto = "false";
+    select.classList.remove("auto-selected");
+
+    const badge = select.closest(".field")?.querySelector(".badge-auto");
+    if (badge) badge.remove();
+  });
+
+  validateFields();
+  validateDuplicates();
+  enforceAutoRules();
+  toggleSubmit();
+  updateReadyState();
+  updateSummary(); // 👈 AQUÍ
+  saveState();
+}
+
+function enforceAutoRules() {
+  const hasDuplicates = !validateDuplicates();
+
+  document.querySelectorAll("select").forEach(select => {
+    if (select.dataset.auto !== "true") return;
+
+    const field = select.closest(".field");
+
+    // ❌ si hay duplicados, AUTO muere
+    if (hasDuplicates) {
+      select.dataset.auto = "false";
+      select.classList.remove("auto-selected");
+
+      const badge = field.querySelector(".badge-auto");
+      if (badge) badge.remove();
+    } 
+    // ✅ si todo está bien, AUTO vive
+    else {
+      select.classList.add("auto-selected");
+
+      const label = field.querySelector(".field-label");
+      if (label && !label.querySelector(".badge-auto")) {
+        const badge = document.createElement("span");
+        badge.className = "badge-auto";
+        badge.textContent = "AUTO";
+        label.appendChild(badge);
+      }
+    }
+  });
+}
+
+function lockUsedOptions() {
+  const used = [...selects]
+    .map(s => s.value)
+    .filter(v => v);
+
+  selects.forEach(select => {
+    [...select.options].forEach(opt => {
+      if (!opt.value) return;
+
+      opt.disabled = used.includes(opt.value) && opt.value !== select.value;
+    });
+  });
+}
+
+function setLoading(state) {
+  submitBtn.disabled = state;
+
+  if (state) {
+    submitBtn.dataset.text = submitBtn.textContent;
+    submitBtn.textContent = "Procesando…";
+    submitBtn.classList.add("loading");
+  } else {
+    submitBtn.textContent = submitBtn.dataset.text;
+    submitBtn.classList.remove("loading");
+  }
+}
+
+function runValidation() {
+  validateFields();
+  validateDuplicates();
+  enforceAutoRules();
+  toggleSubmit();
+  updateReadyState();
+  updateSummary();
+}
+
+function hasDuplicates() {
+  const values = new Set();
+
+  for (const select of selects) {
+    if (!select.value) continue;
+    if (values.has(select.value)) return true;
+    values.add(select.value);
+  }
+
+  return false;
+}
+
+
+function updateReadyState() {
+  const allFilled = [...selects].every(s => s.value !== "");
+  const noDuplicates = !hasDuplicates();
+
+  const msg = document.getElementById("ready-message");
+  msg.classList.toggle("hidden", !(allFilled && noDuplicates));
+}
+
+/* =========================
+   AUTO → MANUAL
+   ========================= */
+selects.forEach(select => {
+  select.addEventListener("change", () => {
+    isDirty = true; // 👈 clave
+
+    if (select.dataset.auto === "true") {
+      select.classList.remove("auto-selected");
+      select.dataset.auto = "false";
+
+      const badge = select.closest(".field")?.querySelector(".badge-auto");
+      if (badge) badge.remove();
+    }
+
+    runValidation();
+    saveState();
+    updateSummary(); // 👈 AQUÍ
+  });
+});
+
+/* =========================
+   INIT
+   ========================= */
+
+restoreState();
+runValidation();
+
+document.addEventListener("DOMContentLoaded", () => {
+  restoreState();
+  runValidation();
+});
+
+</script>
+
+</body>
+</html>
+

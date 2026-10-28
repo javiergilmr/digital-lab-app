@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Data Cleaner</title>
+  <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+
+<body>
+
+ <div class="container">
+  <h1 class="title">Data Cleaner</h1>
+  <p class="subtitle">
+    Haz clic en el botón para procesar el archivo y generar la descarga final.
+  </p>
+
+  <button id="clean-btn" class="primary-btn" style="margin-bottom:32px;">
+    Procesar archivo
+  </button>
+
+  <div id="upload-error" class="upload-error hidden">
+    <span id="error-message"></span>
+  </div>
+
+  <div id="ready-message" class="ready-message hidden">
+    <span id="ready-message-text"></span>
+  </div>
+
+  <div id="analysis-container" class="analysis hidden">
+    <h2>📊 Resumen Ejecutivo</h2>
+    <div id="executive-summary"></div>
+
+    <h2>🏆 Rankings</h2>
+    <div id="rankings"></div>
+
+    <h2>📈 Tendencia</h2>
+
+    <div class="chart-container">
+      <canvas id="salesChart"></canvas>
+    </div>
+<!-- 
+    <div id="trend">
+
+      <div class="chart-container">
+        <canvas id="topProductsChart"></canvas>
+      </div>
+
+      <div class="chart-container">
+        <canvas id="salesChart"></canvas>
+      </div>
+
+    </div> -->  
+
+    <h2>🧠 Insights</h2>
+    <ul id="insights"></ul>
+  </div>
+
+  <pre id="preview" class="preview"></pre>
+
+  <a
+    id="download-link"
+    href="/export/{{ session_id }}"
+    class="download-btn"
+    style="display: none;"
+  >
+    Descargar CSV
+  </a>
+
+  <div style="height: 10px;"></div>
+
+  <a href="/" class="secondary-btn">
+  ← Volver al inicio
+  </a>
+
+  <p class="subtitle">
+    © JGIL DATA LEGACY, LLC.
+  </p>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const button = document.getElementById("clean-btn");
+  const downloadLink = document.getElementById("download-link");
+
+  const errorText = document.getElementById("error-message");
+  const readyText = document.getElementById("ready-message-text");
+
+  const errorBox = document.getElementById("upload-error");
+  const readyBox = document.getElementById("ready-message"); 
+
+  const ctx = document.getElementById("topProductsChart");
+
+  let salesChart = null;
+
+  function renderChart(trend) {
+
+    // const labels = trend.map(item => item.year_month);
+    // const sales = trend.map(item => Number(item.total));
+    
+    const labels = trend
+    .filter(item => item.total > 0)
+    .map(item => item.year_month);
+
+    const sales = trend
+      .filter(item => item.total > 0)
+      .map(item => Number(item.total));
+
+    const ctx = document.getElementById("salesChart").getContext("2d");
+
+    if (salesChart) {
+      salesChart.destroy();
+    }
+
+    salesChart = new Chart(ctx, {
+      type: "line",
+      data: {
+        labels: labels,
+        datasets: [{
+          label: "Ventas Mensuales",
+          data: sales,
+          borderWidth: 2,
+          tension: 0.3
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: {
+              callback: function(value) {
+                return "$" + value.toLocaleString();
+              }
+            }
+          }
+        }
+      }
+    });
+
+  }
+
+  function renderAnalysis(data) {
+
+    const container = document.getElementById("analysis-container");
+    container.classList.remove("hidden");
+
+    const summary = data.executive_summary;
+
+    document.getElementById("executive-summary").innerHTML = `
+      <p><strong>Total vendido:</strong> $${summary.total_sold.toFixed(2)}</p>
+      <p><strong>Total transacciones:</strong> ${summary.total_transactions}</p>
+      <p><strong>Producto top:</strong> ${summary.top_product.name} ($${summary.top_product.revenue.toFixed(2)})</p>
+      <p><strong>Mejor mes:</strong> ${summary.best_month.month} ($${summary.best_month.revenue.toFixed(2)})</p>
+      <p><strong>Ticket promedio:</strong> $${summary.avg_ticket.toFixed(2)}</p>
+    `;
+
+    // rankings
+    const rankings = data.rankings;
+
+    let rankingHTML = "<h3>Top 5 Productos por Ingresos</h3><div>";
+    for (const [product, value] of Object.entries(rankings.top5_products_revenue)) {
+      rankingHTML += `<p>${product} — $${value.toFixed(2)}</p>`;
+    }
+    rankingHTML += "</div>";
+
+    document.getElementById("rankings").innerHTML = rankingHTML;
+
+    // gráfico
+    renderChart(data.trend);
+
+    // insights
+    let insightsHTML = "";
+    data.insights.forEach(insight => {
+      insightsHTML += `<p>${insight}</p>`;
+    });
+
+    document.getElementById("insights").innerHTML = insightsHTML;
+  }
+
+  function showAlert(message) {
+    errorText.textContent = message;
+
+    readyBox.classList.add("hidden"); // ocultar verde
+    errorBox.classList.remove("hidden");
+  }
+
+  function showStatus(message) {
+    readyText.textContent = message;
+
+    errorBox.classList.add("hidden"); // ocultar rojo
+    readyBox.classList.remove("hidden");
+  }
+
+  function resetMessages() {
+    errorBox.classList.add("hidden");
+    readyBox.classList.add("hidden");
+  }
+
+  function hideAlert() {
+    alertBox.classList.add("hidden");
+  }
+ 
+  button.addEventListener("click", async () => {
+    resetMessages();
+    showStatus("⏳ Procesando datos...");
+    downloadLink.style.display = "none";
+
+    try {
+
+      // 1️⃣ CLEAN
+      const cleanRes = await fetch("/api/clean-data/{{ session_id }}", {
+        method: "POST"
+      });
+
+      if (!cleanRes.ok) {
+        const err = await cleanRes.json();
+        throw new Error(err.detail || "Error limpiando datos");
+      }
+
+      // 2️⃣ ANALYZE
+      const analyzeRes = await fetch("/api/analyze/{{ session_id }}", {
+        method: "POST"
+      });
+
+      const analysisData = await analyzeRes.json();
+
+      if (!analyzeRes.ok) {
+        throw new Error("Error analizando datos");
+      }
+
+      renderAnalysis(analysisData.analysis);
+
+      showStatus("✅ Análisis generado correctamente.");
+      downloadLink.style.display = "inline-block";
+
+    } catch (error) {
+      showAlert(`❌ ${error.message}`);
+      console.error(error);
+    }
+  });
+});
+</script>
