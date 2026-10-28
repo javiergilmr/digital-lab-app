@@ -79,7 +79,8 @@ CREATE TEMP TABLE nums AS
 SELECT a.n + b.n*10 + c.n*100 + d.n*1000 AS n
 FROM digits a CROSS JOIN digits b CROSS JOIN digits c CROSS JOIN digits d;   -- 0..9999
 
--- ---------- Ingresos ficticios (~3,000 transacciones en 730 días, con tendencia creciente) ----------
+-- Pseudo-aleatorios deterministas a partir de n (hash multiplicativo): datos reproducibles.
+-- ---------- Ingresos ficticios (2,920 transacciones: 4 por día durante 730 días) ----------
 INSERT INTO exec_dash.fact_ingresos (fecha, cliente, producto_id, monto)
 SELECT
     DATEADD(day, -(n % 730), CURRENT_DATE)::DATE                       AS fecha,
@@ -88,17 +89,23 @@ SELECT
          WHEN r1 < .73 THEN 4 WHEN r1 < .83 THEN 5 WHEN r1 < .88 THEN 6
          WHEN r1 < .95 THEN 7 ELSE 8 END                               AS producto_id,
     ROUND((300 + r2 * 1200) * (0.75 + 0.5 * (1 - (n % 730) / 730.0)), 2) AS monto
-FROM (SELECT n, RANDOM() AS r1, RANDOM() AS r2 FROM nums WHERE n < 3000) t;
+FROM (SELECT n,
+             ((n::BIGINT * 2654435761) % 4294967296) / 4294967296.0 AS r1,
+             ((n::BIGINT * 40503 + 12345) % 65536) / 65536.0        AS r2
+      FROM nums WHERE n < 2920) t;
 
--- ---------- Gastos ficticios (~1,200 registros) ----------
+-- ---------- Gastos ficticios (1,460 registros: 2 por día) ----------
 INSERT INTO exec_dash.fact_gastos (fecha, categoria_id, descripcion, monto)
 SELECT
-    DATEADD(day, -((n * 3) % 730), CURRENT_DATE)::DATE                 AS fecha,
+    DATEADD(day, -(n % 730), CURRENT_DATE)::DATE                       AS fecha,
     CASE WHEN r1 < .42 THEN 1 WHEN r1 < .65 THEN 2 WHEN r1 < .80 THEN 3
          WHEN r1 < .90 THEN 4 ELSE 5 END                               AS categoria_id,
     'Gasto #' || n                                                     AS descripcion,
-    ROUND((400 + r2 * 2000) * (0.8 + 0.4 * (1 - ((n * 3) % 730) / 730.0)), 2) AS monto
-FROM (SELECT n, RANDOM() AS r1, RANDOM() AS r2 FROM nums WHERE n < 1200) t;
+    ROUND((350 + r2 * 1500) * (0.8 + 0.4 * (1 - (n % 730) / 730.0)), 2) AS monto
+FROM (SELECT n,
+             ((n::BIGINT * 2246822519 + 7) % 4294967296) / 4294967296.0 AS r1,
+             ((n::BIGINT * 69069 + 1013) % 65536) / 65536.0             AS r2
+      FROM nums WHERE n < 1460) t;
 
 -- ---------- Actividad reciente ----------
 INSERT INTO exec_dash.log_actividad (ts, tipo, titulo, detalle) VALUES

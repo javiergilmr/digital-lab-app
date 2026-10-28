@@ -139,6 +139,9 @@ td .rank{color:var(--faint);margin-right:8px}
 .act span{color:var(--muted);font-size:12.5px;display:block;margin-top:2px}
 .act time{color:var(--faint);font-size:11.5px;display:block;margin-top:2px}
 
+.btn-sm{border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:12px;font-weight:500;padding:6px 10px;border-radius:8px;cursor:pointer;white-space:nowrap}
+.btn-sm:hover{background:var(--surface-2)}
+.btn-sm:disabled{opacity:.6;cursor:default}
 .foot{margin-top:24px;color:var(--faint);font-size:12px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
 .bottom-nav{display:none}
 
@@ -184,6 +187,12 @@ td .rank{color:var(--faint);margin-right:8px}
 @media (max-width:400px){
   .donut-wrap{flex-direction:column;align-items:stretch}
   .donut{margin:0 auto}
+}
+/* La dona se apila sobre la leyenda cuando su tarjeta es angosta (en cualquier pantalla) */
+#sec-exp{container-type:inline-size}
+@container (max-width:440px){
+  .donut-wrap{flex-direction:column;align-items:stretch}
+  .donut{margin:0 auto 4px}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
 </style>
@@ -260,7 +269,7 @@ td .rank{color:var(--faint);margin-right:8px}
       </article>
 
       <article class="card" id="sec-act">
-        <div class="card-head"><h2 class="card-title">Actividad reciente</h2></div>
+        <div class="card-head"><h2 class="card-title">Actividad reciente</h2><button class="btn-sm" id="simBtn" hidden>+ Simular venta</button></div>
         <div class="act-list" id="actList"></div>
       </article>
     </section>
@@ -275,12 +284,20 @@ td .rank{color:var(--faint);margin-right:8px}
 /* =========================================================
    1. CONFIGURACIÓN DE LA FUENTE DE DATOS
    - 'mock' : datos ficticios generados aquí (misma forma que el SQL)
-   - 'api'  : JSON desde api.py (que ejecuta queries.sql en Redshift)
-   Para usar la API: abre dashboard.html?api=http://localhost:5000/api/dashboard
+   - 'api'  : JSON desde server.py, que ejecuta sql/<motor>/02_queries.sql
+              sobre SQLite (base ficticia local) o Amazon Redshift.
+   Para conectarse: python server.py  →  http://localhost:8000
    ========================================================= */
-const CONFIG = { source: 'mock', apiUrl: '' };
 const qs = new URLSearchParams(location.search);
-if (qs.get('api')) { CONFIG.source = 'api'; CONFIG.apiUrl = qs.get('api'); }
+const servedByServer = location.protocol.startsWith('http');
+const CONFIG = {
+  // Servido por server.py → se conecta a la base de datos automáticamente.
+  // Abierto como archivo (file://) → datos demo. ?demo fuerza demo, ?api=<url> usa otra API.
+  source: qs.has('demo') ? 'mock' : (qs.get('api') || servedByServer) ? 'api' : 'mock',
+  apiUrl: qs.get('api') || '/api/dashboard',
+  refreshMs: 60000
+};
+let META = null;
 
 /* Forma del dataset (idéntica a la salida de queries.sql):
    ingresos_categoria : [{mes:'YYYY-MM', categoria, ingresos}]
@@ -342,9 +359,11 @@ function buildMockDB(){
 
 async function loadDB(){
   if (CONFIG.source === 'api') {
-    const r = await fetch(CONFIG.apiUrl, { headers: { Accept: 'application/json' } });
-    if (!r.ok) throw new Error('API ' + r.status);
-    return await r.json();
+    const r = await fetch(CONFIG.apiUrl, { headers: { Accept: 'application/json' }, cache: 'no-store' });
+    const data = await r.json();
+    if (!r.ok || data.error) throw new Error(data.error || 'API ' + r.status);
+    META = data.meta || null;
+    return data;
   }
   return buildMockDB();
 }
@@ -555,7 +574,9 @@ function render(){
   const mes = state.mes, prev = DB.months[idx - 1];
   const [y, m] = mes.split('-').map(Number);
   const last = new Date(y, m, 0).getDate();
-  document.getElementById('periodLabel').textContent = `1 ${MES[m-1].toLowerCase()} – ${last} ${MES[m-1].toLowerCase()} ${y}`;
+  const enCurso = mes === ym(new Date());
+  const hasta = enCurso ? new Date().getDate() : last;
+  document.getElementById('periodLabel').textContent = `1 ${MES[m-1].toLowerCase()} – ${hasta} ${MES[m-1].toLowerCase()} ${y}${enCurso ? ' (en curso)' : ''}`;
   renderKPIs(idx); renderTrend(idx); renderCategories(mes); renderExpenses(mes); renderTop(mes, prev); renderActivity();
 }
 
@@ -578,22 +599,53 @@ function initTheme(){
   });
 }
 
-(async function init(){
-  initTheme(); buildNav();
+// Mes por defecto: el último mes cerrado (el mes en curso está incompleto y distorsiona la comparación)
+function defaultMonth(){
+  const cur = ym(new Date()), M = DB.months;
+  return M[M.length - 1] === cur && M.length > 1 ? M[M.length - 2] : M[M.length - 1];
+}
+
+async function refresh(){
   let note = '';
   try { DB = normalize(await loadDB()); }
-  catch (e) { console.warn('No se pudo cargar la API, usando datos demo:', e); CONFIG.source = 'mock'; note = ' (API no disponible)'; DB = normalize(buildMockDB()); }
-
+  catch (e) {
+    console.warn('No se pudo conectar a la base de datos, usando datos demo:', e);
+    CONFIG.source = 'mock'; META = null; note = ' (sin conexión a la base)';
+    DB = normalize(buildMockDB());
+  }
   const live = CONFIG.source === 'api';
+  const label = live ? (META && META.label) || 'Base de datos' : 'Datos demo' + note;
   document.getElementById('srcDot').classList.toggle('live', live);
-  document.getElementById('srcLabel').textContent = live ? 'Conectado a Redshift' : 'Datos demo' + note;
-  document.getElementById('footSrc').textContent = live ? 'Fuente: Amazon Redshift · exec_dash' : 'Fuente: datos ficticios' + note;
-  document.getElementById('footTime').textContent = 'Actualizado ' + new Date().toLocaleTimeString('es-PA', { hour: '2-digit', minute: '2-digit' });
+  document.getElementById('srcLabel').textContent = live ? 'Conectado · ' + label : label;
+  document.getElementById('footSrc').textContent = 'Fuente: ' + (live ? label : 'datos ficticios en el navegador' + note);
+  document.getElementById('footTime').textContent = 'Actualizado ' + new Date().toLocaleTimeString('es-PA', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+  document.getElementById('simBtn').hidden = !live;
 
   const sel = document.getElementById('monthSel');
-  sel.innerHTML = [...DB.months].reverse().map(m => `<option value="${m}">${monthLabel(m, true)}</option>`).join('');
-  state.mes = DB.months[DB.months.length - 1];
+  const keep = state.mes && DB.months.includes(state.mes) ? state.mes : defaultMonth();
+  sel.innerHTML = [...DB.months].reverse().map(m =>
+    `<option value="${m}">${monthLabel(m, true)}${m === ym(new Date()) ? ' (en curso)' : ''}</option>`).join('');
+  state.mes = keep; sel.value = keep;
+  render();
+}
+
+(async function init(){
+  initTheme(); buildNav();
+  const sel = document.getElementById('monthSel');
   sel.addEventListener('change', () => { state.mes = sel.value; render(); });
+
+  const simBtn = document.getElementById('simBtn');
+  simBtn.addEventListener('click', async () => {
+    simBtn.disabled = true; simBtn.textContent = 'Registrando…';
+    try {
+      const r = await fetch(CONFIG.apiUrl.replace(/dashboard$/, 'simular-venta'), { method: 'POST' });
+      if (!r.ok) throw new Error('API ' + r.status);
+      state.mes = ym(new Date());          // muestra el mes en curso, donde cayó la venta
+      await refresh();
+      simBtn.textContent = '✓ Venta registrada';
+    } catch (e) { console.error(e); simBtn.textContent = 'Error al registrar'; }
+    setTimeout(() => { simBtn.disabled = false; simBtn.textContent = '+ Simular venta'; }, 1600);
+  });
 
   document.querySelectorAll('#rangeSeg button').forEach(b => b.addEventListener('click', () => {
     state.range = +b.dataset.r;
@@ -604,7 +656,9 @@ function initTheme(){
   let wasMobile = innerWidth < 760;
   addEventListener('resize', () => { const mob = innerWidth < 760; if (mob !== wasMobile) { wasMobile = mob; renderTrend(DB.months.indexOf(state.mes)); } });
 
-  render();
+  await refresh();
+  // Refresco periódico solo cuando hay conexión a la base
+  setInterval(() => { if (CONFIG.source === 'api' && !document.hidden) refresh(); }, CONFIG.refreshMs);
 })();
 </script>
 </body>
