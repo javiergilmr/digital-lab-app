@@ -11,7 +11,7 @@ SELECT TO_CHAR(DATE_TRUNC('month', f.fecha), 'YYYY-MM') AS mes,
 FROM exec_dash.fact_ingresos f
 JOIN exec_dash.dim_producto p          ON p.producto_id  = f.producto_id
 JOIN exec_dash.dim_categoria_ingreso c ON c.categoria_id = p.categoria_id
-WHERE f.fecha >= DATEADD(month, -23, DATE_TRUNC('month', CURRENT_DATE))
+WHERE f.fecha >= DATEADD(month, -23, DATE_TRUNC('month', (SELECT MAX(fecha) FROM exec_dash.fact_ingresos)))
 GROUP BY 1, 2
 ORDER BY 1, 2;
 
@@ -21,7 +21,7 @@ SELECT TO_CHAR(DATE_TRUNC('month', g.fecha), 'YYYY-MM') AS mes,
        ROUND(SUM(g.monto), 0)                           AS gastos
 FROM exec_dash.fact_gastos g
 JOIN exec_dash.dim_categoria_gasto c ON c.categoria_id = g.categoria_id
-WHERE g.fecha >= DATEADD(month, -23, DATE_TRUNC('month', CURRENT_DATE))
+WHERE g.fecha >= DATEADD(month, -23, DATE_TRUNC('month', (SELECT MAX(fecha) FROM exec_dash.fact_ingresos)))
 GROUP BY 1, 2
 ORDER BY 1, 2;
 
@@ -33,7 +33,7 @@ SELECT TO_CHAR(DATE_TRUNC('month', f.fecha), 'YYYY-MM') AS mes,
 FROM exec_dash.fact_ingresos f
 JOIN exec_dash.dim_producto p          ON p.producto_id  = f.producto_id
 JOIN exec_dash.dim_categoria_ingreso c ON c.categoria_id = p.categoria_id
-WHERE f.fecha >= DATEADD(month, -23, DATE_TRUNC('month', CURRENT_DATE))
+WHERE f.fecha >= DATEADD(month, -23, DATE_TRUNC('month', (SELECT MAX(fecha) FROM exec_dash.fact_ingresos)))
 GROUP BY 1, 2, 3
 ORDER BY 1, 4 DESC;
 
@@ -66,3 +66,44 @@ SELECT TO_CHAR(mes, 'YYYY-MM')                                               AS 
        ROUND(100.0 * (gastos   / NULLIF(LAG(gastos)   OVER (ORDER BY mes), 0) - 1), 1) AS var_gastos_pct
 FROM m
 ORDER BY mes;
+
+
+-- name: resumen_mensual
+SELECT TO_CHAR(DATE_TRUNC('month', fecha), 'YYYY-MM') AS mes,
+       COUNT(*)                                       AS articulos,
+       COUNT(DISTINCT cliente)                        AS clientes,
+       ROUND(SUM(monto), 0)                           AS ingresos
+FROM exec_dash.fact_ingresos
+WHERE fecha >= DATEADD(month, -23, DATE_TRUNC('month', (SELECT MAX(fecha) FROM exec_dash.fact_ingresos)))
+GROUP BY 1
+ORDER BY 1;
+
+-- name: supuestos_gastos
+SELECT c.nombre AS categoria, MAX(g.descripcion) AS descripcion
+FROM exec_dash.fact_gastos g
+JOIN exec_dash.dim_categoria_gasto c ON c.categoria_id = g.categoria_id
+GROUP BY c.categoria_id, c.nombre
+ORDER BY c.categoria_id;
+
+-- name: resumen_categoria
+SELECT TO_CHAR(DATE_TRUNC('month', f.fecha), 'YYYY-MM') AS mes,
+       c.nombre                                         AS categoria,
+       COUNT(*)                                         AS articulos,
+       COUNT(DISTINCT f.cliente)                        AS clientes
+FROM exec_dash.fact_ingresos f
+JOIN exec_dash.dim_producto p          ON p.producto_id  = f.producto_id
+JOIN exec_dash.dim_categoria_ingreso c ON c.categoria_id = p.categoria_id
+WHERE f.fecha >= DATEADD(month, -23, DATE_TRUNC('month', (SELECT MAX(fecha) FROM exec_dash.fact_ingresos)))
+GROUP BY 1, 2
+ORDER BY 1, 2;
+
+-- name: resumen_producto
+SELECT TO_CHAR(DATE_TRUNC('month', f.fecha), 'YYYY-MM') AS mes,
+       p.nombre                                         AS producto,
+       COUNT(*)                                         AS articulos,
+       COUNT(DISTINCT f.cliente)                        AS clientes
+FROM exec_dash.fact_ingresos f
+JOIN exec_dash.dim_producto p ON p.producto_id = f.producto_id
+WHERE f.fecha >= DATEADD(month, -23, DATE_TRUNC('month', (SELECT MAX(fecha) FROM exec_dash.fact_ingresos)))
+GROUP BY 1, 2
+ORDER BY 1, 2;

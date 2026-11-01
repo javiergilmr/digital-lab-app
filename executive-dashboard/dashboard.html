@@ -60,6 +60,33 @@ h1{font-size:28px;font-weight:700;letter-spacing:-.02em;margin:6px 0 4px}
 .controls{display:flex;align-items:center;gap:10px}
 .select{position:relative;display:flex;align-items:center;gap:8px;height:38px;padding:0 12px;border:1px solid var(--border);border-radius:10px;background:var(--surface);color:var(--muted)}
 .select select{appearance:none;-webkit-appearance:none;border:0;background:transparent;color:var(--text);font:inherit;font-weight:500;cursor:pointer;outline:none;padding-right:22px}
+/* Segmentador (categorías › productos), estilo Power BI */
+.slicer{position:relative}
+.slicer-btn{cursor:pointer;font:inherit;max-width:290px;text-align:left}
+.slicer-btn:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+#slicerLabel{color:var(--text);font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding-right:22px;min-width:0}
+.slicer-panel{position:absolute;top:calc(100% + 6px);right:0;width:330px;max-width:calc(100vw - 32px);background:var(--surface);border:1px solid var(--border);border-radius:12px;box-shadow:0 12px 32px rgba(15,23,42,.16);z-index:30;padding:10px;display:flex;flex-direction:column;gap:8px}
+.slicer-search{display:flex;align-items:center;gap:8px;height:36px;padding:0 10px;border:1px solid var(--border);border-radius:9px;background:var(--surface-2);color:var(--muted)}
+.slicer-search:focus-within{border-color:var(--accent)}
+.slicer-search input{flex:1;min-width:0;border:0;background:transparent;font:inherit;color:var(--text);outline:none}
+.slicer-list{max-height:320px;overflow:auto;display:flex;flex-direction:column;overscroll-behavior:contain}
+.sl-row{display:flex;align-items:center;gap:8px;padding:6px;border-radius:7px;font-size:13px}
+.sl-row:hover{background:var(--surface-2)}
+label.sl-row,.sl-row label{cursor:pointer}
+.sl-row label{display:flex;align-items:center;gap:8px;flex:1;min-width:0}
+.sl-row span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sl-row input{accent-color:var(--accent);width:15px;height:15px;flex:none;margin:0;cursor:pointer}
+.sl-all{border-bottom:1px solid var(--border);border-radius:7px 7px 0 0;margin-bottom:4px;padding-bottom:8px;font-weight:500}
+.sl-cat{font-weight:600}
+.sl-prod{padding-left:58px}
+.sl-caret{width:22px;height:22px;border:0;background:none;color:var(--muted);display:grid;place-items:center;cursor:pointer;border-radius:5px;flex:none}
+.sl-caret:hover{color:var(--text)}
+.sl-caret svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;transition:transform .15s}
+.sl-caret[aria-expanded="true"] svg{transform:rotate(90deg)}
+.sl-n{color:var(--faint);font-size:11.5px;font-weight:500;flex:none}
+.sl-row mark{background:color-mix(in srgb,var(--amber) 35%,transparent);color:inherit;border-radius:2px}
+.sl-empty{color:var(--muted);font-size:12.5px;padding:10px 6px}
+.slicer-foot{display:flex;justify-content:space-between;align-items:center;gap:8px;border-top:1px solid var(--border);padding-top:8px;font-size:12px;color:var(--muted)}
 .select .chev{position:absolute;right:10px;width:15px;height:15px;pointer-events:none}
 .icon-btn{width:38px;height:38px;border:1px solid var(--border);border-radius:10px;background:var(--surface);color:var(--muted);display:grid;place-items:center;cursor:pointer}
 .icon-btn:hover{color:var(--text)}
@@ -73,7 +100,9 @@ h1{font-size:28px;font-weight:700;letter-spacing:-.02em;margin:6px 0 4px}
 
 /* KPIs */
 .kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-bottom:16px}
+.kpis.six{grid-template-columns:repeat(3,minmax(0,1fr))}
 .kpi-top{display:flex;align-items:center;gap:10px;color:var(--muted);font-weight:500}
+.tag{font-size:10.5px;font-weight:600;letter-spacing:.02em;color:var(--muted);background:var(--surface-2);border:1px solid var(--border);border-radius:999px;padding:1px 7px;margin-left:auto;white-space:nowrap}
 .kpi-ico{width:30px;height:30px;border-radius:8px;display:grid;place-items:center;color:var(--c);background:color-mix(in srgb,var(--c) 12%,transparent);flex:none}
 .kpi-ico .ico{width:16px;height:16px}
 .kpi-value{font-size:28px;font-weight:700;letter-spacing:-.02em;margin:14px 0 10px;font-variant-numeric:tabular-nums;white-space:nowrap}
@@ -83,6 +112,10 @@ h1{font-size:28px;font-weight:700;letter-spacing:-.02em;margin:6px 0 4px}
 .delta.bad{color:var(--down);background:var(--down-bg)}
 .delta.flat{color:var(--muted);background:var(--surface-2)}
 .vs{display:block;font-size:11.5px;color:var(--faint);margin-top:6px}
+[hidden]{display:none!important}
+.deltas{display:flex;flex-direction:column;gap:6px}
+.deltas>div{display:flex;align-items:center;gap:6px}
+.deltas .vs{display:inline;margin:0}
 .spark{width:84px;height:32px;flex:none;overflow:visible}
 
 /* Grids */
@@ -93,14 +126,18 @@ h1{font-size:28px;font-weight:700;letter-spacing:-.02em;margin:6px 0 4px}
 .seg{display:inline-flex;background:var(--surface-2);border-radius:9px;padding:3px}
 .seg button{border:0;background:none;font-size:12px;font-weight:500;color:var(--muted);padding:5px 10px;border-radius:7px;cursor:pointer}
 .seg button.on{background:var(--surface);color:var(--text);box-shadow:0 1px 2px rgba(0,0,0,.08)}
-.legend{display:flex;gap:16px;font-size:12.5px;color:var(--muted);margin-bottom:10px}
+.trend-sub{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:10px}
+.legend{display:flex;gap:16px;font-size:12.5px;color:var(--muted)}
 .legend i{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;background:var(--c)}
 .chart-wrap{position:relative;height:270px}
 
 /* Categories */
 .cat-list{display:flex;flex-direction:column;gap:20px}
-.cat-row{display:grid;grid-template-columns:88px minmax(0,1fr) 84px 50px;align-items:center;gap:14px;font-variant-numeric:tabular-nums}
+.cat-row{display:grid;grid-template-columns:120px minmax(0,1fr) 92px 50px;align-items:center;gap:14px;font-variant-numeric:tabular-nums}
 .cat-row.head{font-size:12px;color:var(--faint);margin-bottom:-6px}
+.cat-row{transition:opacity .2s}
+.cat-row.dim{opacity:.4}
+.cat-row.sel{font-weight:600}
 .bar{height:8px;background:var(--surface-2);border-radius:999px;overflow:hidden}
 .bar span{display:block;height:100%;border-radius:inherit;background:var(--c);transition:width .6s ease}
 .r{text-align:right}
@@ -118,6 +155,10 @@ h1{font-size:28px;font-weight:700;letter-spacing:-.02em;margin:6px 0 4px}
 .leg-row{display:grid;grid-template-columns:8px minmax(0,1fr) auto auto;gap:8px;align-items:center}
 .leg-row i{width:8px;height:8px;border-radius:50%;background:var(--c)}
 .leg-row .name{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.leg-row .name small{display:block;color:var(--faint);font-size:11px;overflow:hidden;text-overflow:ellipsis}
+.note{margin-top:14px;padding-top:12px;border-top:1px solid var(--border);font-size:11.5px;color:var(--faint);line-height:1.45}
+td .sub-cat{display:block;color:var(--faint);font-size:11.5px;margin-top:2px;padding-left:18px}
+tr.sel td{font-weight:600}
 .leg-row .p{color:var(--muted);min-width:42px;text-align:right}
 
 /* Table */
@@ -147,7 +188,7 @@ td .rank{color:var(--faint);margin-right:8px}
 
 /* Responsive: tablet */
 @media (max-width:1180px){
-  .kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .kpis,.kpis.six{grid-template-columns:repeat(2,minmax(0,1fr))}
   .grid-3{grid-template-columns:repeat(2,minmax(0,1fr))}
   .grid-3>:last-child{grid-column:1/-1}
 }
@@ -164,8 +205,12 @@ td .rank{color:var(--faint);margin-right:8px}
   .topbar{flex-direction:column;align-items:stretch;gap:14px;margin-bottom:18px}
   h1{font-size:22px}
   .controls .avatar{display:none}
-  .controls .select{flex:1}
-  .select select{width:100%}
+  .controls{flex-wrap:wrap}
+  .controls .select{flex:1 1 150px;min-width:0}
+  .controls .slicer{flex:1 1 100%;order:3;min-width:0}
+  .slicer-btn{max-width:none;width:100%}
+  .slicer-panel{left:0;right:0;width:auto;max-width:none}
+  .select select{width:100%;min-width:0;text-overflow:ellipsis}
   .kpis{gap:10px;margin-bottom:10px}
   .kpi.card{padding:14px}
   .kpi-top{font-size:12px;gap:8px}
@@ -178,7 +223,7 @@ td .rank{color:var(--faint);margin-right:8px}
   .grid-3{grid-template-columns:1fr}
   .card{padding:16px;border-radius:14px}
   .chart-wrap{height:210px}
-  .cat-row{grid-template-columns:72px minmax(0,1fr) 72px 42px;gap:10px;font-size:13px}
+  .cat-row{grid-template-columns:96px minmax(0,1fr) 84px 42px;gap:10px;font-size:13px}
   .donut{width:128px;height:128px}
   .bottom-nav{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:10;background:color-mix(in srgb,var(--surface) 92%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-top:1px solid var(--border);padding:8px 8px calc(8px + env(safe-area-inset-bottom));justify-content:space-around}
   .bn{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:11px;font-weight:500;color:var(--faint);border:0;background:none;padding:4px 10px;cursor:pointer}
@@ -200,22 +245,22 @@ td .rank{color:var(--faint);margin-right:8px}
 <body>
 <div class="app">
   <aside class="sidebar">
-    <div class="brand"><span class="logo">A</span>Acme Corp</div>
+    <div class="brand"><span class="logo">O</span>Olist Store</div>
     <nav class="nav" id="sideNav"></nav>
     <div class="side-foot"><span class="dot" id="srcDot"></span><span id="srcLabel">Cargando…</span></div>
   </aside>
 
   <main class="main" id="top">
     <div class="m-brand">
-      <div class="brand"><span class="logo">A</span>Acme Corp</div>
+      <div class="brand"><span class="logo">O</span>Olist Store</div>
       <div class="avatar">JG</div>
     </div>
 
     <header class="topbar">
       <div>
-        <p class="eyebrow">Resumen ejecutivo</p>
+        <p class="eyebrow">Resumen ejecutivo · E-commerce</p>
         <h1>Executive Dashboard</h1>
-        <p class="sub">Rendimiento de la empresa · <span id="periodLabel">—</span></p>
+        <p class="sub"><span id="subLabel">Ventas del marketplace en Brasil</span> · <span id="periodLabel">—</span></p>
       </div>
       <div class="controls">
         <label class="select" title="Mes">
@@ -223,6 +268,22 @@ td .rank{color:var(--faint);margin-right:8px}
           <select id="monthSel" aria-label="Mes"></select>
           <svg class="ico chev" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>
         </label>
+        <div class="slicer" id="slicer">
+          <button type="button" class="select slicer-btn" id="slicerBtn" aria-haspopup="true" aria-expanded="false" aria-controls="slicerPanel"
+                  title="Categorías y productos: filtra los indicadores, la gráfica, las categorías y el Top 5">
+            <svg class="ico" viewBox="0 0 24 24"><path d="M22 3H2l8 9.46V19l4 2v-8.54z"/></svg>
+            <span id="slicerLabel">Todas las categorías</span>
+            <svg class="ico chev" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>
+          </button>
+          <div class="slicer-panel" id="slicerPanel" hidden>
+            <label class="slicer-search">
+              <svg class="ico" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+              <input type="search" id="slicerSearch" placeholder="Buscar categoría o producto…" aria-label="Buscar categoría o producto" autocomplete="off">
+            </label>
+            <div class="slicer-list" id="slicerList"></div>
+            <div class="slicer-foot"><span id="slicerCount"></span><button type="button" class="btn-sm" id="slicerClear">Limpiar</button></div>
+          </div>
+        </div>
         <button class="icon-btn" id="themeBtn" aria-label="Cambiar tema"></button>
         <div class="avatar">JG</div>
       </div>
@@ -233,17 +294,22 @@ td .rank{color:var(--faint);margin-right:8px}
     <section class="grid-2">
       <article class="card" id="sec-trend">
         <div class="card-head">
-          <h2 class="card-title">Ingresos vs. Gastos</h2>
+          <h2 class="card-title"><span id="trendTitle">Ingresos vs. Gastos</span> <span class="card-meta" id="trendMeta"></span></h2>
           <div class="seg" id="rangeSeg">
             <button data-r="6">6M</button><button data-r="12" class="on">12M</button><button data-r="24">24M</button>
           </div>
         </div>
-        <div class="legend"><span><i style="--c:var(--accent)"></i>Ingresos</span><span><i style="--c:var(--violet)"></i>Gastos</span></div>
+        <div class="trend-sub">
+          <div class="legend" id="trendLegend"></div>
+          <div class="seg" id="viewSeg" title="Comparar ingresos con gastos (modelados en Olist) o con clientes (dato real)">
+            <button data-v="fin" class="on">Gastos</button><button data-v="cli">Clientes</button>
+          </div>
+        </div>
         <div class="chart-wrap"><canvas id="trendChart" aria-label="Ingresos vs gastos por mes"></canvas></div>
       </article>
 
       <article class="card" id="sec-cat">
-        <div class="card-head"><h2 class="card-title">Desempeño por categoría</h2><span class="card-meta" id="catMeta"></span></div>
+        <div class="card-head"><h2 class="card-title">Ingresos por macro-categoría</h2><span class="card-meta" id="catMeta"></span></div>
         <div class="cat-list" id="catList"></div>
         <div class="cat-total"><span>Total ingresos</span><b id="catTotal">—</b></div>
       </article>
@@ -251,19 +317,20 @@ td .rank{color:var(--faint);margin-right:8px}
 
     <section class="grid-3">
       <article class="card" id="sec-exp">
-        <div class="card-head"><h2 class="card-title">Distribución de gastos</h2></div>
+        <div class="card-head"><h2 class="card-title">Distribución de gastos</h2><span class="tag" id="expTag" title="Olist no publica costos" hidden>Modelado</span></div>
         <div class="donut-wrap">
           <div class="donut"><canvas id="donutChart" aria-label="Distribución de gastos"></canvas>
             <div class="donut-center"><b id="donutTotal">—</b><small>Total gastos</small></div>
           </div>
           <div class="leg-list" id="expLegend"></div>
         </div>
+        <p class="note" id="expNote" hidden>Olist no publica costos. Los gastos se estiman con los supuestos de load_olist.py; ingresos, clientes y fletes son datos reales.</p>
       </article>
 
       <article class="card" id="sec-top">
-        <div class="card-head"><h2 class="card-title">Top 5 productos / servicios</h2></div>
+        <div class="card-head"><h2 class="card-title">Top 5 categorías de producto</h2><span class="card-meta" id="topMeta"></span></div>
         <table>
-          <thead><tr><th>Producto</th><th class="r">Ingresos</th><th class="r">Var.</th></tr></thead>
+          <thead><tr><th>Categoría</th><th class="r">Ingresos</th><th class="r">Var.</th></tr></thead>
           <tbody id="topBody"></tbody>
         </table>
       </article>
@@ -303,41 +370,78 @@ let META = null;
    ingresos_categoria : [{mes:'YYYY-MM', categoria, ingresos}]
    gastos_categoria   : [{mes:'YYYY-MM', categoria, gastos}]
    ingresos_producto  : [{mes:'YYYY-MM', producto, categoria, ingresos}]
-   actividad          : [{ts, tipo, titulo, detalle}]                       */
+   actividad          : [{ts, tipo, titulo, detalle}]
+   resumen_mensual    : [{mes:'YYYY-MM', articulos, clientes, ingresos}]    (opcional)
+   supuestos_gastos   : [{categoria, descripcion}]                          (opcional)
+   Con Olist (load_olist.py): categoria = macro-categoría, producto = categoría
+   original de Olist y los gastos son modelados (meta.gastos_modelados).   */
 
 /* =========================================================
    2. DATOS FICTICIOS (simulan el resultado de las consultas SQL)
    ========================================================= */
 function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
 
+// Muestra con la forma que deja load_olist.py en data/olist.db (ene-2017 a ago-2018)
 function buildMockDB(){
-  const rnd = mulberry32(20261027);
-  const now = new Date();
+  const rnd = mulberry32(20180831);
   const months = [];
-  const d = new Date(now.getFullYear(), now.getMonth() - 23, 1);
-  for (let i = 0; i < 24; i++) { months.push(ym(d)); d.setMonth(d.getMonth() + 1); }
+  for (let i = 0; i < 20; i++) months.push(ym(new Date(2017, i, 1)));
 
+  // [categoría Olist (= producto), macro-categoría, peso]
   const PRODUCTOS = [
-    ['Desarrollo de Software','Ventas',.30], ['Implementaciones','Ventas',.20],
-    ['Consultoría Premium','Servicios',.14], ['Soporte Técnico','Servicios',.09],
-    ['Licencias','Productos',.10], ['Hosting','Productos',.05],
-    ['Capacitación','Otros',.07], ['Auditoría','Otros',.05]
+    ['Cama, mesa y baño','Hogar y muebles',.100], ['Muebles y decoración','Hogar y muebles',.080],
+    ['Artículos para el hogar','Hogar y muebles',.045], ['Pequeños electrodomésticos','Hogar y muebles',.025],
+    ['Informática','Tecnología',.070], ['Telefonía','Tecnología',.030], ['Electrónica','Tecnología',.015], ['Consolas y videojuegos','Tecnología',.012],
+    ['Belleza y salud','Salud y belleza',.095], ['Perfumería','Salud y belleza',.030], ['Bebés','Salud y belleza',.030],
+    ['Relojes y regalos','Moda y ocio',.090], ['Deporte y ocio','Moda y ocio',.080], ['Juguetes','Moda y ocio',.040], ['Artículos novedosos','Moda y ocio',.040],
+    ['Herramientas y jardín','Otros',.045], ['Automotriz','Otros',.040], ['Mascotas','Otros',.020], ['Muebles de oficina','Otros',.020], ['Papelería','Otros',.015]
   ];
-  const GASTOS = [['Personal',.42],['Operaciones',.23],['Marketing',.15],['Tecnología',.10],['Otros',.10]];
+  const W = PRODUCTOS.reduce((s, p) => s + p[2], 0);
+  // Mismos supuestos que SUPUESTOS en load_olist.py (p = precios, f = fletes)
+  const SUPUESTOS = [
+    ['Costo de mercancía', (p, f) => .60 * p,        '60% del precio de venta'],
+    ['Logística',          (p, f) => f,              'Flete real de cada pedido (dato real)'],
+    ['Marketing',          (p, f) => .07 * p,        '7% del precio de venta'],
+    ['Comisiones de pago', (p, f) => .025 * (p + f), '2.5% de lo cobrado'],
+    ['Operaciones',        () => 25000,              'Costo fijo de R$25,000 al mes']
+  ];
 
-  const ingresos_producto = [], gastos_categoria = [];
+  // Proporción de flete sobre lo cobrado, por macro-categoría (los muebles pagan más flete)
+  const FLETE = { 'Hogar y muebles':.19, 'Tecnología':.10, 'Salud y belleza':.12, 'Moda y ocio':.13, 'Otros':.16 };
+
+  const ingresos_producto = [], gastos_categoria = [], resumen_mensual = [], resumen_categoria = [], gastos_por_categoria_ingreso = [];
+  const resumen_producto = [], gastos_por_producto = [];
   months.forEach((mes, i) => {
-    const mm = +mes.slice(5);
-    const season = 1 + 0.06 * Math.sin((mm - 3) / 12 * 2 * Math.PI);
-    const total = (82000 + i * 1900) * season * (0.95 + rnd() * 0.1);
-    let sum = 0;
-    PRODUCTOS.forEach(([producto, categoria, w]) => {
-      const v = Math.round(total * w * (0.85 + rnd() * 0.3));
-      sum += v;
+    const total = 1.15e6 / (1 + Math.exp(-(i - 5) / 2.5)) * (mes === '2017-11' ? 1.3 : 1) * (0.95 + rnd() * 0.1);
+    const filas = PRODUCTOS.map(([producto, categoria, w]) => ({ producto, categoria, v: Math.round(total * w / W * (0.85 + rnd() * 0.3)) }));
+    const sum = filas.reduce((s, f) => s + f.v, 0);
+    // Igual que load_olist.py: parte variable con el precio/flete de cada producto,
+    // parte fija repartida según su participación en los ingresos del mes
+    const porTipo = {}, gasMacro = {}, cliMacro = {};
+    filas.forEach(({ producto, categoria, v }) => {
       ingresos_producto.push({ mes, producto, categoria, ingresos: v });
+      const flete = v * (FLETE[categoria] + rnd() * 0.04), precio = v - flete;
+      let g = 0;
+      SUPUESTOS.forEach(([tipo, calc]) => {
+        const fijo = calc(0, 0), monto = calc(precio, flete) - fijo + fijo * v / sum;
+        porTipo[tipo] = (porTipo[tipo] || 0) + monto; g += monto;
+      });
+      gasMacro[categoria] = (gasMacro[categoria] || 0) + g;
+      gastos_por_producto.push({ mes, producto, gastos: Math.round(g) });
+      const clientes = Math.round(v / (150 + rnd() * 20));
+      cliMacro[categoria] = (cliMacro[categoria] || 0) + clientes;
+      resumen_producto.push({ mes, producto, articulos: Math.round(clientes * (1.11 + rnd() * 0.05)), clientes });
     });
-    const gTotal = sum * (0.56 + rnd() * 0.09);
-    GASTOS.forEach(([categoria, w]) => gastos_categoria.push({ mes, categoria, gastos: Math.round(gTotal * w * (0.9 + rnd() * 0.2)) }));
+    let clientesMes = 0;
+    Object.keys(gasMacro).forEach(categoria => {
+      gastos_por_categoria_ingreso.push({ mes, categoria, gastos: Math.round(gasMacro[categoria]) });
+      const clientes = Math.round(cliMacro[categoria] * 0.98);   // algunos clientes compran varios productos
+      clientesMes += clientes;
+      resumen_categoria.push({ mes, categoria, articulos: Math.round(clientes * (1.11 + rnd() * 0.05)), clientes });
+    });
+    SUPUESTOS.forEach(([tipo]) => gastos_categoria.push({ mes, categoria: tipo, gastos: Math.round(porTipo[tipo]) }));
+    const clientes = Math.round(clientesMes * 0.97);   // algunos clientes compran en varias categorías
+    resumen_mensual.push({ mes, articulos: Math.round(clientes * (1.11 + rnd() * 0.05)), clientes, ingresos: sum });
   });
 
   // ingresos_categoria = SUM(ingresos) GROUP BY mes, categoria
@@ -345,16 +449,17 @@ function buildMockDB(){
   ingresos_producto.forEach(r => { const k = r.mes + '|' + r.categoria; agg[k] = (agg[k] || 0) + r.ingresos; });
   const ingresos_categoria = Object.entries(agg).map(([k, v]) => { const [mes, categoria] = k.split('|'); return { mes, categoria, ingresos: v }; });
 
-  const H = 3600e3, t = Date.now();
-  const prevMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
   const actividad = [
-    { ts: new Date(t - 2*H).toISOString(),  tipo: 'venta',   titulo: 'Nueva venta registrada',  detalle: 'Cliente: TechSolutions' },
-    { ts: new Date(t - 4*H).toISOString(),  tipo: 'pago',    titulo: 'Pago recibido',           detalle: '$4,800 · Consultoría Premium' },
-    { ts: new Date(t - 6*H).toISOString(),  tipo: 'cliente', titulo: 'Nuevo cliente',           detalle: 'Global Systems Inc.' },
-    { ts: new Date(t - 8*H).toISOString(),  tipo: 'reporte', titulo: 'Reporte mensual generado', detalle: monthLabel(ym(prevMonth), true) },
-    { ts: new Date(t - 27*H).toISOString(), tipo: 'venta',   titulo: 'Nueva venta registrada',  detalle: 'Cliente: Nova Retail' }
+    { ts: '2018-08-29T15:00:37', tipo: 'venta',  titulo: 'Nueva venta registrada', detalle: 'Sao Paulo, SP · Belleza y salud · R$146' },
+    { ts: '2018-08-29T14:52:00', tipo: 'venta',  titulo: 'Nueva venta registrada', detalle: 'Rio De Janeiro, RJ · Informática · R$212' },
+    { ts: '2018-08-29T12:14:51', tipo: 'venta',  titulo: 'Nueva venta registrada', detalle: 'Curitiba, PR · Cama, mesa y baño · R$98' },
+    { ts: '2018-08-31T00:00:00', tipo: 'resena', titulo: 'Reseña de 1 estrella',  detalle: 'Muebles y decoración · “Produto não entregue”' },
+    { ts: '2018-08-30T00:00:00', tipo: 'resena', titulo: 'Reseña de 2 estrellas', detalle: 'Relojes y regalos · “Veio diferente do anunciado”' }
   ];
-  return { ingresos_categoria, gastos_categoria, ingresos_producto, actividad };
+  const supuestos_gastos = SUPUESTOS.map(([categoria, , descripcion]) => ({ categoria, descripcion }));
+  const meta = { label: 'muestra con la forma de Olist', empresa: 'Olist Store', moneda: 'R$', readonly: true, gastos_modelados: true };
+  return { ingresos_categoria, gastos_categoria, ingresos_producto, actividad, resumen_mensual, supuestos_gastos,
+           resumen_categoria, gastos_por_categoria_ingreso, resumen_producto, gastos_por_producto, meta };
 }
 
 async function loadDB(){
@@ -365,20 +470,45 @@ async function loadDB(){
     META = data.meta || null;
     return data;
   }
-  return buildMockDB();
+  const mock = buildMockDB();
+  META = mock.meta;
+  return mock;
 }
 
 function normalize(raw){
-  const num = rows => (rows || []).map(r => { const o = { ...r }; ['ingresos','gastos'].forEach(k => { if (k in o) o[k] = Number(o[k]); }); return o; });
+  const num = rows => (rows || []).map(r => { const o = { ...r }; ['ingresos','gastos','articulos','clientes'].forEach(k => { if (k in o) o[k] = Number(o[k]); }); return o; });
   const db = {
     ingresos_categoria: num(raw.ingresos_categoria),
     gastos_categoria:   num(raw.gastos_categoria),
     ingresos_producto:  num(raw.ingresos_producto),
-    actividad:          raw.actividad || []
+    actividad:          raw.actividad || [],
+    resumen_mensual:    num(raw.resumen_mensual)
   };
+  db.resumen = Object.fromEntries(db.resumen_mensual.map(r => [r.mes, r]));
+  // Por categoría de ingreso (filtro "Categoría"), con clave 'mes|categoria'
+  // ... y por producto (opción dentro de cada categoría), con clave 'mes|producto'
+  const byKey = (rows, campo, f) => Object.fromEntries(rows.map(r => [r.mes + '|' + r[campo], f(r)]));
+  const gastosCat = num(raw.gastos_por_categoria_ingreso), gastosProd = num(raw.gastos_por_producto);
+  db.revCat = byKey(db.ingresos_categoria, 'categoria', r => r.ingresos);
+  db.expCat = byKey(gastosCat, 'categoria', r => r.gastos);
+  db.cliCat = byKey(num(raw.resumen_categoria), 'categoria', r => r.clientes);
+  db.revProd = byKey(db.ingresos_producto, 'producto', r => r.ingresos);
+  db.expProd = byKey(gastosProd, 'producto', r => r.gastos);
+  db.cliProd = byKey(num(raw.resumen_producto), 'producto', r => r.clientes);
+  // Sin gastos atribuidos (base ficticia): se prorratean según los ingresos
+  db.expProrrateo = !gastosCat.length;
+  db.expProdProrrateo = !gastosProd.length;
+  // Productos de cada categoría, en orden alfabético (para la lista del filtro)
+  db.prodCat = Object.fromEntries(db.ingresos_producto.map(r => [r.producto, r.categoria]));
+  db.prodsDe = {};
+  Object.keys(db.prodCat).sort((a, b) => a.localeCompare(b, 'es')).forEach(p => (db.prodsDe[db.prodCat[p]] ||= []).push(p));
+  db.supuestos = Object.fromEntries((raw.supuestos_gastos || []).map(r => [r.categoria, r.descripcion]));
   db.months = [...new Set([...db.ingresos_categoria, ...db.gastos_categoria].map(r => r.mes))].sort();
   db.revByMonth = sumBy(db.ingresos_categoria, 'mes', 'ingresos');
   db.expByMonth = sumBy(db.gastos_categoria, 'mes', 'gastos');
+  const rank = obj => Object.entries(obj).sort((a, b) => b[1] - a[1]).map(e => e[0]);
+  db.catOrder = rank(sumBy(db.ingresos_categoria, 'categoria', 'ingresos'));
+  db.expOrder = rank(sumBy(db.gastos_categoria, 'categoria', 'gastos'));
   return db;
 }
 
@@ -390,8 +520,15 @@ const MES_L = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto'
 function ym(d){ return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0'); }
 function monthLabel(m, long){ const [y, mm] = m.split('-').map(Number); return long ? `${MES_L[mm-1]} ${y}` : `${MES[mm-1]} ${String(y).slice(2)}`; }
 function sumBy(rows, key, val){ return rows.reduce((a, r) => (a[r[key]] = (a[r[key]] || 0) + r[val], a), {}); }
-const fmt = n => '$' + Math.round(n).toLocaleString('en-US');
+let CUR = '$';   // moneda: la define meta.moneda de la API (ej. R$ para Olist)
+const fmt = n => CUR + Math.round(n).toLocaleString('en-US');
+const fmtN = n => Math.round(n).toLocaleString('en-US');
+const fmtShort = v => CUR + (Math.abs(v) >= 1e6 ? +(v / 1e6).toFixed(1) + 'M' : Math.abs(v) >= 1e3 ? Math.round(v / 1e3) + 'K' : v);
 const pctChg = (a, b) => (b ? (a / b - 1) * 100 : null);
+// Escapa texto de la base antes de insertarlo como HTML (ej. comentarios de reseñas)
+const esc = v => String(v ?? '').replace(/[&<>"']/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]));
+// Mismo mes del año anterior ('2018-03' -> '2017-03')
+const yearAgo = m => (+m.slice(0, 4) - 1) + m.slice(4);
 const cssVar = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
 function rgba(color, a){
   if (color.startsWith('#')) { let h = color.slice(1); if (h.length === 3) h = [...h].map(c => c + c).join(''); const n = parseInt(h, 16); return `rgba(${n>>16&255},${n>>8&255},${n&255},${a})`; }
@@ -401,7 +538,9 @@ function relTime(ts){
   const diff = (Date.now() - new Date(ts).getTime()) / 3600e3;
   if (diff < 1) return 'Hace unos minutos';
   if (diff < 24) return `Hace ${Math.round(diff)} h`;
-  const d = Math.round(diff / 24); return d === 1 ? 'Ayer' : `Hace ${d} días`;
+  const d = Math.round(diff / 24);
+  if (d > 30) return new Date(ts).toLocaleDateString('es-PA', { day: 'numeric', month: 'short', year: 'numeric' });
+  return d === 1 ? 'Ayer' : `Hace ${d} días`;
 }
 
 const ICON = {
@@ -419,26 +558,40 @@ const ICON = {
   trend:'<path d="m22 7-8.5 8.5-5-5L2 17"/><path d="M16 7h6v6"/>',
   percent:'<path d="M19 5 5 19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/>',
   user:'<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>',
-  file:'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/>'
+  file:'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/>',
+  star:'<path d="m12 2 3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"/>'
 };
 const svg = k => `<svg class="ico" viewBox="0 0 24 24">${ICON[k]}</svg>`;
 
-const CAT_COLORS = { 'Ventas':'--accent', 'Servicios':'--teal', 'Productos':'--violet', 'Otros':'--amber' };
-const EXP_COLORS = { 'Personal':'--accent', 'Operaciones':'--teal', 'Marketing':'--violet', 'Tecnología':'--amber', 'Otros':'--slate' };
+// Un mapa por fuente: Olist (macro-categorías y SUPUESTOS de load_olist.py) y la base ficticia
+const CAT_COLORS = [
+  { 'Hogar y muebles':'--accent', 'Tecnología':'--violet', 'Salud y belleza':'--teal', 'Moda y ocio':'--amber', 'Otros':'--slate' },
+  { 'Ventas':'--accent', 'Servicios':'--teal', 'Productos':'--violet', 'Otros':'--amber' }
+];
+const EXP_COLORS = [
+  { 'Costo de mercancía':'--accent', 'Logística':'--teal', 'Marketing':'--violet', 'Comisiones de pago':'--amber', 'Operaciones':'--slate' },
+  { 'Personal':'--accent', 'Operaciones':'--teal', 'Marketing':'--violet', 'Tecnología':'--amber', 'Otros':'--slate' }
+];
 const FALLBACK = ['--accent','--teal','--violet','--amber','--slate','--rose'];
-const colorOf = (map, name, i) => map[name] || FALLBACK[i % FALLBACK.length];
-const ACT = { venta:['cart','--teal'], pago:['dollar','--accent'], cliente:['user','--violet'], reporte:['file','--slate'] };
+// Colores estables: se usa el primer mapa que cubre todas las categorías;
+// si ninguno (otro dataset), se asignan por orden de tamaño total, sin repetir.
+function colorOf(maps, name, order){
+  const map = maps.find(m => order.every(n => m[n]));
+  return map ? map[name] : FALLBACK[Math.max(0, order.indexOf(name)) % FALLBACK.length];
+}
+const ACT = { venta:['cart','--teal'], pago:['dollar','--accent'], cliente:['user','--violet'], reporte:['file','--slate'], resena:['star','--rose'] };
 
 /* =========================================================
    4. ESTADO Y RENDER
    ========================================================= */
-let DB, state = { mes: null, range: 12 }, charts = {};
+// sel: productos elegidos en el segmentador (vacío = sin filtro, como en Power BI)
+let DB, state = { mes: null, sel: new Set(), open: new Set(), q: '', range: 12, view: 'fin' }, charts = {};
 
 const NAV = [
-  ['home','Inicio','top'], ['wallet','Finanzas','sec-trend'], ['cart','Ventas','sec-cat'],
-  ['ops','Operaciones','sec-exp'], ['chart','Reportes','sec-top'], ['sliders','Configuración', null]
+  ['home','Inicio','top'], ['wallet','Finanzas','sec-trend'], ['cart','Categorías','sec-cat'],
+  ['pie','Gastos','sec-exp'], ['chart','Productos','sec-top'], ['star','Actividad','sec-act']
 ];
-const BNAV = [['home','Inicio','top'], ['wallet','Finanzas','sec-trend'], ['cart','Ventas','sec-cat'], ['pie','Gastos','sec-exp']];
+const BNAV = [['home','Inicio','top'], ['wallet','Finanzas','sec-trend'], ['cart','Categorías','sec-cat'], ['pie','Gastos','sec-exp']];
 
 function buildNav(){
   document.getElementById('sideNav').innerHTML = NAV.map(([i, l, t], n) =>
@@ -462,40 +615,109 @@ function spark(vals, colorVar){
     <path d="${line}" style="fill:none;stroke:var(${colorVar})" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke"/></svg>`;
 }
 
+/* Filtro del segmentador. La selección se reduce a "unidades": una categoría completa
+   (todos sus productos marcados) o un producto suelto. Ingresos y gastos son la suma de
+   las unidades. Clientes únicos también, así que con más de una unidad es aproximado:
+   un cliente que compró en dos unidades se cuenta dos veces. */
+const filtroActivo = () => state.sel.size > 0 && state.sel.size < Object.keys(DB.prodCat).length;
+function unidades(){
+  const u = [];
+  DB.catOrder.forEach(cat => {
+    const ps = DB.prodsDe[cat] || [], elegidos = ps.filter(p => state.sel.has(p));
+    if (elegidos.length === ps.length && ps.length) u.push({ cat });
+    else elegidos.forEach(prod => u.push({ cat, prod }));
+  });
+  return u;
+}
+// Texto del filtro activo, ej. 'Tecnología, Juguetes' o 'Tecnología y 3 más'
+function filtroLabel(){
+  const n = unidades().map(u => u.prod || u.cat);
+  return n.length <= 2 ? n.join(', ') : `${n[0]} y ${n.length - 1} más`;
+}
+
+const prorate = (total, part, whole) => (whole ? (total || 0) * part / whole : 0);
+function metrics(){
+  if (!filtroActivo()) return {
+    ing: m => DB.revByMonth[m] || 0,
+    gas: m => DB.expByMonth[m] || 0,
+    cli: m => (DB.resumen[m] || {}).clientes || 0,
+    aprox: false
+  };
+  const us = unidades().map(serieDe);
+  const sum = f => m => us.reduce((s, u) => s + u[f](m), 0);
+  return { ing: sum('ing'), gas: sum('gas'), cli: sum('cli'), aprox: us.length > 1 };
+}
+// Series mensuales de una unidad: categoría completa ({cat}) o producto ({cat, prod})
+function serieDe({ cat: c, prod: p }){
+  const kc = m => m + '|' + c;
+  const ingC = m => DB.revCat[kc(m)] || 0;
+  const gasC = DB.expProrrateo ? m => prorate(DB.expByMonth[m], ingC(m), DB.revByMonth[m]) : m => DB.expCat[kc(m)] || 0;
+  if (!p) return { ing: ingC, gas: gasC, cli: m => DB.cliCat[kc(m)] || 0 };
+  const kp = m => m + '|' + p;
+  const ing = m => DB.revProd[kp(m)] || 0;
+  return {
+    ing,
+    gas: DB.expProdProrrateo ? m => prorate(gasC(m), ing(m), ingC(m)) : m => DB.expProd[kp(m)] || 0,
+    cli: m => DB.cliProd[kp(m)] || 0
+  };
+}
+
 function renderKPIs(idx){
   const M = DB.months, mes = M[idx], prev = M[idx - 1];
-  const ing = m => DB.revByMonth[m] || 0, gas = m => DB.expByMonth[m] || 0;
+  const { ing, gas, cli, aprox } = metrics();
   const uti = m => ing(m) - gas(m), mar = m => (ing(m) ? uti(m) / ing(m) * 100 : 0);
+  const tic = m => (cli(m) ? ing(m) / cli(m) : 0);
+  const modelado = !!(META && META.gastos_modelados);
+  const prorrateo = filtroActivo() && (DB.expProrrateo || (DB.expProdProrrateo && unidades().some(u => u.prod)));
+  const tag = modelado ? ['Modelado', 'Olist no publica costos: estimado con supuestos']
+            : prorrateo ? ['Prorrateado', 'Gastos repartidos según la participación de la categoría en los ingresos'] : null;
   const defs = [
     { label:'Ingresos totales',   icon:'dollar',  c:'--accent', f:ing, show:fmt, goodUp:true },
-    { label:'Gastos totales',     icon:'receipt', c:'--rose',   f:gas, show:fmt, goodUp:false },
-    { label:'Utilidad neta',      icon:'trend',   c:'--teal',   f:uti, show:fmt, goodUp:true },
-    { label:'Margen de utilidad', icon:'percent', c:'--violet', f:mar, show:v => v.toFixed(1) + '%', goodUp:true, pp:true }
+    ...(DB.resumen_mensual.length ? [
+      { label:'Clientes únicos',    icon:'user', c:'--amber', f:cli, show:fmtN, goodUp:true, aprox },
+      { label:'Ticket por cliente', icon:'cart', c:'--slate', f:tic, show:fmt,  goodUp:true, aprox }
+    ] : []),
+    { label:'Gastos totales',     icon:'receipt', c:'--rose',   f:gas, show:fmt, goodUp:false, model:true },
+    { label:'Utilidad neta',      icon:'trend',   c:'--teal',   f:uti, show:fmt, goodUp:true, model:true },
+    { label:'Margen de utilidad', icon:'percent', c:'--violet', f:mar, show:v => v.toFixed(1) + '%', goodUp:true, pp:true, model:true }
   ];
+  document.getElementById('kpis').classList.toggle('six', defs.length === 6);
   const hist = M.slice(Math.max(0, idx - 6), idx + 1);
+  // El mes anterior capta la tendencia; el año anterior aísla la estacionalidad (ej. Black Friday)
+  const ago = DB.months.includes(yearAgo(mes)) ? yearAgo(mes) : null;
+  const delta = (k, cur, base) => {
+    const d = !base ? null : k.pp ? cur - k.f(base) : pctChg(cur, k.f(base));
+    if (d === null) return '<span class="delta flat">—</span>';
+    const good = (d >= 0) === k.goodUp;
+    return `<span class="delta ${good ? 'good' : 'bad'}">${d >= 0 ? '↑' : '↓'} ${Math.abs(d).toFixed(1)}${k.pp ? ' pp' : '%'}</span>`;
+  };
   document.getElementById('kpis').innerHTML = defs.map(k => {
     const cur = k.f(mes);
-    let deltaHTML = '<span class="delta flat">—</span>';
-    if (prev) {
-      const d = k.pp ? cur - k.f(prev) : pctChg(cur, k.f(prev));
-      if (d !== null) {
-        const good = (d >= 0) === k.goodUp;
-        deltaHTML = `<span class="delta ${good ? 'good' : 'bad'}">${d >= 0 ? '↑' : '↓'} ${Math.abs(d).toFixed(1)}${k.pp ? ' pp' : '%'}</span>`;
-      }
-    }
     return `<div class="card kpi">
-      <div class="kpi-top"><span class="kpi-ico" style="--c:var(${k.c})">${svg(k.icon)}</span>${k.label}</div>
+      <div class="kpi-top"><span class="kpi-ico" style="--c:var(${k.c})">${svg(k.icon)}</span>${k.label}${k.model && tag ? `<span class="tag" title="${tag[1]}">${tag[0]}</span>` : ''}${k.aprox ? '<span class="tag" title="Suma de varias categorías o productos: un cliente que compró en más de uno se cuenta más de una vez">≈ Aprox.</span>' : ''}</div>
       <div class="kpi-value">${k.show(cur)}</div>
-      <div class="kpi-foot"><div>${deltaHTML}<span class="vs">vs. mes anterior</span></div>${spark(hist.map(k.f), k.c)}</div>
+      <div class="kpi-foot"><div class="deltas">
+        <div>${delta(k, cur, prev)}<span class="vs">vs. mes ant.</span></div>
+        <div>${delta(k, cur, ago)}<span class="vs">vs. año ant.</span></div>
+      </div>${spark(hist.map(k.f), k.c)}</div>
     </div>`;
   }).join('');
 }
 
 function renderTrend(idx){
   const months = DB.months.slice(Math.max(0, idx - state.range + 1), idx + 1);
+  const { ing, gas, cli } = metrics();
+  const view = DB.resumen_mensual.length ? state.view : 'fin';
+  document.getElementById('viewSeg').hidden = !DB.resumen_mensual.length;
+  document.querySelectorAll('#viewSeg button').forEach(x => x.classList.toggle('on', x.dataset.v === view));
+  document.getElementById('trendTitle').textContent = view === 'cli' ? 'Ingresos y clientes' : 'Ingresos vs. Gastos';
+  document.getElementById('trendMeta').textContent = filtroActivo() ? '· ' + filtroLabel() : '';
+  const second = view === 'cli' ? ['Clientes', '--amber'] : ['Gastos', '--violet'];
+  document.getElementById('trendLegend').innerHTML =
+    `<span><i style="--c:var(--accent)"></i>Ingresos</span><span><i style="--c:var(${second[1]})"></i>${second[0]}</span>`;
   if (!window.Chart) return;
   charts.trend && charts.trend.destroy();
-  const accent = cssVar('--accent'), violet = cssVar('--violet'), muted = cssVar('--faint'), grid = cssVar('--border');
+  const accent = cssVar('--accent'), violet = cssVar('--violet'), amber = cssVar('--amber'), muted = cssVar('--faint'), grid = cssVar('--border');
   const fill = color => c => {
     const { ctx, chartArea } = c.chart; if (!chartArea) return 'transparent';
     const g = ctx.createLinearGradient(0, chartArea.top, 0, chartArea.bottom);
@@ -505,16 +727,20 @@ function renderTrend(idx){
   charts.trend = new Chart(document.getElementById('trendChart'), {
     type: 'line',
     data: { labels: months.map(m => monthLabel(m)), datasets: [
-      ds('Ingresos', months.map(m => DB.revByMonth[m] || 0), accent),
-      ds('Gastos',   months.map(m => DB.expByMonth[m] || 0), violet)
+      ds('Ingresos', months.map(ing), accent),
+      view === 'cli'
+        ? { ...ds('Clientes', months.map(cli), amber), fill: false, yAxisID: 'y1' }
+        : ds('Gastos', months.map(gas), violet)
     ]},
     options: {
       responsive: true, maintainAspectRatio: false,
       interaction: { mode: 'index', intersect: false },
-      plugins: { legend: { display: false }, tooltip: { padding: 10, boxPadding: 4, callbacks: { label: c => ` ${c.dataset.label}: ${fmt(c.parsed.y)}` } } },
+      plugins: { legend: { display: false }, tooltip: { padding: 10, boxPadding: 4, callbacks: { label: c => ` ${c.dataset.label}: ${c.dataset.yAxisID === 'y1' ? fmtN(c.parsed.y) : fmt(c.parsed.y)}` } } },
       scales: {
         x: { grid: { display: false }, border: { display: false }, ticks: { color: muted, maxRotation: 0, autoSkip: true, maxTicksLimit: innerWidth < 760 ? 6 : 12, font: { family: 'Inter', size: 11 } } },
-        y: { beginAtZero: true, grid: { color: grid }, border: { display: false }, ticks: { color: muted, maxTicksLimit: 5, font: { family: 'Inter', size: 11 }, callback: v => '$' + (v / 1000) + 'K' } }
+        y: { beginAtZero: true, grid: { color: grid }, border: { display: false }, ticks: { color: muted, maxTicksLimit: 5, font: { family: 'Inter', size: 11 }, callback: fmtShort } },
+        y1: { display: view === 'cli', position: 'right', beginAtZero: true, grid: { display: false }, border: { display: false },
+              ticks: { color: muted, maxTicksLimit: 5, font: { family: 'Inter', size: 11 }, callback: v => fmtN(v) } }
       }
     }
   });
@@ -525,9 +751,9 @@ function renderCategories(mes){
   const total = rows.reduce((s, r) => s + r.ingresos, 0), max = Math.max(...rows.map(r => r.ingresos), 1);
   document.getElementById('catList').innerHTML =
     `<div class="cat-row head"><span>Categoría</span><span></span><span class="r">Ingresos</span><span class="r">%</span></div>` +
-    rows.map((r, i) => `<div class="cat-row">
-      <span>${r.categoria}</span>
-      <div class="bar"><span style="--c:var(${colorOf(CAT_COLORS, r.categoria, i)});width:${(r.ingresos / max * 100).toFixed(1)}%"></span></div>
+    rows.map((r, i) => `<div class="cat-row${filtroActivo() ? ((DB.prodsDe[r.categoria] || []).some(p => state.sel.has(p)) ? ' sel' : ' dim') : ''}">
+      <span>${esc(r.categoria)}</span>
+      <div class="bar"><span style="--c:var(${colorOf(CAT_COLORS, r.categoria, DB.catOrder)});width:${(r.ingresos / max * 100).toFixed(1)}%"></span></div>
       <span class="r">${fmt(r.ingresos)}</span><span class="pct">${(r.ingresos / total * 100).toFixed(1)}%</span></div>`).join('');
   document.getElementById('catTotal').textContent = fmt(total);
   document.getElementById('catMeta').textContent = monthLabel(mes, true);
@@ -536,10 +762,13 @@ function renderCategories(mes){
 function renderExpenses(mes){
   const rows = DB.gastos_categoria.filter(r => r.mes === mes).sort((a, b) => b.gastos - a.gastos);
   const total = rows.reduce((s, r) => s + r.gastos, 0);
-  const colors = rows.map((r, i) => colorOf(EXP_COLORS, r.categoria, i));
+  const colors = rows.map(r => colorOf(EXP_COLORS, r.categoria, DB.expOrder));
+  const modelado = !!(META && META.gastos_modelados);
+  document.getElementById('expTag').hidden = !modelado;
+  document.getElementById('expNote').hidden = !modelado;
   document.getElementById('donutTotal').textContent = fmt(total);
   document.getElementById('expLegend').innerHTML = rows.map((r, i) => `<div class="leg-row">
-    <i style="--c:var(${colors[i]})"></i><span class="name">${r.categoria}</span>
+    <i style="--c:var(${colors[i]})"></i><span class="name" title="${esc(DB.supuestos[r.categoria])}">${esc(r.categoria)}${modelado && DB.supuestos[r.categoria] ? `<small>${esc(DB.supuestos[r.categoria])}</small>` : ''}</span>
     <span class="p">${(r.gastos / total * 100).toFixed(1)}%</span><span class="r">${fmt(r.gastos)}</span></div>`).join('');
   if (!window.Chart) return;
   charts.donut && charts.donut.destroy();
@@ -551,22 +780,93 @@ function renderExpenses(mes){
 }
 
 function renderTop(mes, prev){
-  const cur = DB.ingresos_producto.filter(r => r.mes === mes).sort((a, b) => b.ingresos - a.ingresos).slice(0, 5);
+  const cur = DB.ingresos_producto.filter(r => r.mes === mes && (!filtroActivo() || state.sel.has(r.producto)))
+    .sort((a, b) => b.ingresos - a.ingresos).slice(0, 5);
+  document.getElementById('topMeta').textContent = filtroActivo() ? filtroLabel() : '';
   const prevMap = prev ? sumBy(DB.ingresos_producto.filter(r => r.mes === prev), 'producto', 'ingresos') : {};
   document.getElementById('topBody').innerHTML = cur.map((r, i) => {
     const d = pctChg(r.ingresos, prevMap[r.producto]);
     const chg = d === null ? '<span class="chg">—</span>' : `<span class="chg ${d >= 0 ? 'good' : 'bad'}">${d >= 0 ? '↑' : '↓'} ${Math.abs(d).toFixed(1)}%</span>`;
-    return `<tr><td class="name"><span class="rank">${i + 1}</span>${r.producto}</td><td class="r">${fmt(r.ingresos)}</td><td class="r">${chg}</td></tr>`;
+    return `<tr><td class="name"><span class="rank">${i + 1}</span>${esc(r.producto)}<span class="sub-cat">${esc(r.categoria)}</span></td><td class="r">${fmt(r.ingresos)}</td><td class="r">${chg}</td></tr>`;
   }).join('');
 }
 
 function renderActivity(){
-  const rows = [...DB.actividad].sort((a, b) => new Date(b.ts) - new Date(a.ts)).slice(0, 5);
+  const rows = [...DB.actividad].sort((a, b) => new Date(b.ts) - new Date(a.ts)).slice(0, 6);
   document.getElementById('actList').innerHTML = rows.map(r => {
     const [icon, c] = ACT[r.tipo] || ['file', '--slate'];
     return `<div class="act"><span class="act-ico" style="--c:var(${c})">${svg(icon)}</span>
-      <div><b>${r.titulo}</b><span>${r.detalle || ''}</span><time datetime="${r.ts}">${relTime(r.ts)}</time></div></div>`;
+      <div><b>${esc(r.titulo)}</b><span>${esc(r.detalle)}</span><time datetime="${esc(r.ts)}">${relTime(r.ts)}</time></div></div>`;
   }).join('');
+}
+
+/* =========================================================
+   SEGMENTADOR (categorías › productos + buscador)
+   ========================================================= */
+const norm = t => String(t).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+const CARET = '<svg viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></svg>';
+
+function renderSlicer(){
+  const q = norm(state.q.trim());
+  const match = t => !q || norm(t).includes(q);
+  // Resalta la coincidencia (sin distinguir acentos ni mayúsculas)
+  const hl = t => {
+    const i = q ? norm(t).indexOf(q) : -1;
+    return i < 0 ? esc(t) : esc(t.slice(0, i)) + '<mark>' + esc(t.slice(i, i + q.length)) + '</mark>' + esc(t.slice(i + q.length));
+  };
+  const total = Object.keys(DB.prodCat).length, n = state.sel.size;
+  let html = q ? '' : `<label class="sl-row sl-all"><input type="checkbox" data-all ${n === total ? 'checked' : ''} data-ind="${n > 0 && n < total ? 1 : 0}"><span>Seleccionar todo</span></label>`;
+  [...DB.catOrder].sort((a, b) => a.localeCompare(b, 'es')).forEach(c => {
+    const ps = DB.prodsDe[c] || [];
+    // Si coincide la categoría se muestran todos sus productos; si no, solo los que coinciden
+    const visibles = match(c) ? ps : ps.filter(match);
+    if (!visibles.length) return;
+    const k = ps.filter(p => state.sel.has(p)).length, open = !!q || state.open.has(c);
+    html += `<div class="sl-row sl-cat">
+      <button type="button" class="sl-caret" data-toggle="${esc(c)}" aria-expanded="${open}" aria-label="${open ? 'Contraer' : 'Expandir'} ${esc(c)}">${CARET}</button>
+      <label><input type="checkbox" data-cat="${esc(c)}" ${k === ps.length ? 'checked' : ''} data-ind="${k > 0 && k < ps.length ? 1 : 0}"><span>${hl(c)}</span></label>
+      <span class="sl-n">${k ? k + '/' : ''}${ps.length}</span></div>`;
+    if (open) html += visibles.map(p =>
+      `<label class="sl-row sl-prod"><input type="checkbox" data-prod="${esc(p)}" ${state.sel.has(p) ? 'checked' : ''}><span>${hl(p)}</span></label>`).join('');
+  });
+  const list = document.getElementById('slicerList');
+  list.innerHTML = html || `<p class="sl-empty">Sin resultados para “${esc(state.q.trim())}”.</p>`;
+  list.querySelectorAll('[data-ind="1"]').forEach(i => { i.indeterminate = true; });
+  document.getElementById('slicerLabel').textContent = filtroActivo() ? filtroLabel() : 'Todas las categorías';
+  document.getElementById('slicerCount').textContent = filtroActivo() ? `${n} de ${total} productos` : 'Sin filtro · todos los productos';
+}
+
+function initSlicer(){
+  const slicer = document.getElementById('slicer'), btn = document.getElementById('slicerBtn');
+  const panel = document.getElementById('slicerPanel'), list = document.getElementById('slicerList');
+  const search = document.getElementById('slicerSearch');
+  const setOpen = open => {
+    panel.hidden = !open; btn.setAttribute('aria-expanded', open);
+    if (open) search.focus();
+  };
+  btn.addEventListener('click', () => setOpen(panel.hidden));
+  // Cierra al hacer clic fuera (composedPath: la lista se vuelve a dibujar tras cada cambio)
+  document.addEventListener('click', e => { if (!panel.hidden && !e.composedPath().includes(slicer)) setOpen(false); });
+  slicer.addEventListener('keydown', e => { if (e.key === 'Escape' && !panel.hidden) { setOpen(false); btn.focus(); } });
+  search.addEventListener('input', () => { state.q = search.value; renderSlicer(); });
+
+  list.addEventListener('click', e => {
+    const t = e.target.closest('[data-toggle]'); if (!t) return;
+    const c = t.dataset.toggle;
+    state.open.has(c) ? state.open.delete(c) : state.open.add(c);
+    renderSlicer();
+  });
+  list.addEventListener('change', e => {
+    const i = e.target;
+    if (i.hasAttribute('data-all')) state.sel = i.checked ? new Set(Object.keys(DB.prodCat)) : new Set();
+    else if (i.dataset.cat) (DB.prodsDe[i.dataset.cat] || []).forEach(p => (i.checked ? state.sel.add(p) : state.sel.delete(p)));
+    else if (i.dataset.prod) i.checked ? state.sel.add(i.dataset.prod) : state.sel.delete(i.dataset.prod);
+    renderSlicer(); render();
+  });
+  document.getElementById('slicerClear').addEventListener('click', () => {
+    state.sel = new Set(); state.q = ''; search.value = '';
+    renderSlicer(); render(); search.focus();
+  });
 }
 
 function render(){
@@ -610,22 +910,33 @@ async function refresh(){
   try { DB = normalize(await loadDB()); }
   catch (e) {
     console.warn('No se pudo conectar a la base de datos, usando datos demo:', e);
-    CONFIG.source = 'mock'; META = null; note = ' (sin conexión a la base)';
-    DB = normalize(buildMockDB());
+    CONFIG.source = 'mock'; note = ' (sin conexión a la base)';
+    const mock = buildMockDB(); META = mock.meta;
+    DB = normalize(mock);
   }
   const live = CONFIG.source === 'api';
-  const label = live ? (META && META.label) || 'Base de datos' : 'Datos demo' + note;
+  const label = live ? (META && META.label) || 'Base de datos' : 'Datos demo · ' + META.label + note;
   document.getElementById('srcDot').classList.toggle('live', live);
   document.getElementById('srcLabel').textContent = live ? 'Conectado · ' + label : label;
-  document.getElementById('footSrc').textContent = 'Fuente: ' + (live ? label : 'datos ficticios en el navegador' + note);
+  document.getElementById('footSrc').textContent = 'Fuente: ' + (live ? label : 'datos ficticios en el navegador' + note) +
+    (META && META.atribucion ? ' · ' + META.atribucion : '');
   document.getElementById('footTime').textContent = 'Actualizado ' + new Date().toLocaleTimeString('es-PA', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-  document.getElementById('simBtn').hidden = !live;
+  document.getElementById('simBtn').hidden = !live || !!(META && META.readonly);
+  CUR = (META && META.moneda) || '$';
+  const empresa = (META && META.empresa) || 'Olist Store';
+  document.getElementById('subLabel').textContent = META && META.gastos_modelados ? 'Ventas del marketplace en Brasil' : 'Rendimiento de la empresa';
+  document.querySelectorAll('.brand').forEach(b => { b.lastChild.textContent = empresa; b.querySelector('.logo').textContent = empresa[0]; });
+  document.title = 'Executive Dashboard · ' + empresa;
 
   const sel = document.getElementById('monthSel');
   const keep = state.mes && DB.months.includes(state.mes) ? state.mes : defaultMonth();
   sel.innerHTML = [...DB.months].reverse().map(m =>
     `<option value="${m}">${monthLabel(m, true)}${m === ym(new Date()) ? ' (en curso)' : ''}</option>`).join('');
   state.mes = keep; sel.value = keep;
+
+  // Conserva la selección del segmentador entre refrescos (solo productos que siguen existiendo)
+  state.sel = new Set([...state.sel].filter(p => p in DB.prodCat));
+  renderSlicer();
   render();
 }
 
@@ -633,6 +944,10 @@ async function refresh(){
   initTheme(); buildNav();
   const sel = document.getElementById('monthSel');
   sel.addEventListener('change', () => { state.mes = sel.value; render(); });
+  initSlicer();
+  document.querySelectorAll('#viewSeg button').forEach(b => b.addEventListener('click', () => {
+    state.view = b.dataset.v; renderTrend(DB.months.indexOf(state.mes));
+  }));
 
   const simBtn = document.getElementById('simBtn');
   simBtn.addEventListener('click', async () => {
@@ -657,8 +972,8 @@ async function refresh(){
   addEventListener('resize', () => { const mob = innerWidth < 760; if (mob !== wasMobile) { wasMobile = mob; renderTrend(DB.months.indexOf(state.mes)); } });
 
   await refresh();
-  // Refresco periódico solo cuando hay conexión a la base
-  setInterval(() => { if (CONFIG.source === 'api' && !document.hidden) refresh(); }, CONFIG.refreshMs);
+  // Refresco periódico solo con conexión a una base que cambia (Olist es histórico y de solo lectura)
+  setInterval(() => { if (CONFIG.source === 'api' && !document.hidden && !(META && META.readonly)) refresh(); }, CONFIG.refreshMs);
 })();
 </script>
 </body>
