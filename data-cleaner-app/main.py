@@ -78,13 +78,13 @@ async def upload_file(file: UploadFile = File(...)):
 
 @app.get("/")
 def upload_page(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request})
+    return templates.TemplateResponse(request, "index.html", {"request": request})
 
 # CLEAN
 @app.get("/clean/{session_id}")
 def clean_page(request: Request, session_id: str):
     return templates.TemplateResponse(
-        "clean.html",
+        request, "clean.html",
         {"request": request, "session_id": session_id}
     )
 
@@ -129,7 +129,7 @@ def map_page(request: Request, session_id: str):
     )
 
     return templates.TemplateResponse(
-        "map.html",
+        request, "map.html",
         {
             "request": request,
             "session_id": session_id,
@@ -200,3 +200,9 @@ def export_data(session_id: str):
         media_type="text/csv",
         headers={"Content-Disposition": f"attachment; filename={filename}"}
     )
+
+
+if __name__ == "__main__":
+    import uvicorn
+    print("Abre http://127.0.0.1:8000 en tu navegador")
+    uvicorn.run("main:app", host="127.0.0.1", port=8000, reload=True)
