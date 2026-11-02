@@ -1,5 +1,5 @@
 import unicodedata
-from app.services.schema import ALIASES
+from services.schema import ALIASES
 
 def normalize(text: str) -> str:
     text = text.lower().strip()

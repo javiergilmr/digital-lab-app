@@ -1,8 +1,8 @@
 import re
 import pandas as pd
 from fastapi import HTTPException
-from app.services.schema import REQUIRED_FIELDS
-from app.services.schema import SALES_SCHEMA
+from services.schema import REQUIRED_FIELDS
+from services.schema import SALES_SCHEMA
 
 def normalize_column(col: str) -> str:
     """

@@ -1,23 +1,23 @@
 from fastapi import FastAPI, UploadFile, File, HTTPException
 import pandas as pd
-from app.services.column_validator import detect_sales_columns, validate_sales_file, validate_column_types
-from app.services.schema import SALES_SCHEMA, ALIASES
-from app.routers.api import router as api_router
+from services.column_validator import detect_sales_columns, validate_sales_file, validate_column_types
+from services.schema import SALES_SCHEMA, ALIASES
+from routers.api import router as api_router
 
 from fastapi import FastAPI, Request
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
 app = FastAPI()
-templates = Jinja2Templates(directory="app/templates")
+templates = Jinja2Templates(directory="templates")
 app.include_router(api_router, prefix="/api")
 
-from app.routers.pages import router as pages_router
+from routers.pages import router as pages_router
 
-app.mount("/static", StaticFiles(directory="app/static"), name="static")
+app.mount("/static", StaticFiles(directory="static"), name="static")
 app.include_router(pages_router)
 
-from app.services.sessions import (
+from services.sessions import (
     create_session,
     get_session_df,
     update_session_df,
@@ -88,8 +88,8 @@ def clean_page(request: Request, session_id: str):
         {"request": request, "session_id": session_id}
     )
 
-from app.models.payloads import ColumnMappingPayload
-from app.services.mapping import apply_column_mapping
+from models.payloads import ColumnMappingPayload
+from services.mapping import apply_column_mapping
 
 # MAPPING COLUMNS
 @app.post("/api/map-columns/{session_id}")
@@ -108,10 +108,10 @@ def map_columns(session_id: str, payload: ColumnMappingPayload):
 from fastapi import Request, HTTPException
 from fastapi.templating import Jinja2Templates
 
-templates = Jinja2Templates(directory="app/templates")
+templates = Jinja2Templates(directory="templates")
 
 # MAP 
-from app.services.auto_mapping import auto_map_columns
+from services.auto_mapping import auto_map_columns
 
 @app.get("/map/{session_id}")
 def map_page(request: Request, session_id: str):
@@ -140,7 +140,7 @@ def map_page(request: Request, session_id: str):
     )
 
 # Clean data
-from app.services.cleaner import clean_sales_data
+from services.cleaner import clean_sales_data
 @app.post("/api/clean-data/{session_id}")
 def clean_data(session_id: str):
     df = get_session_df(session_id)
@@ -162,7 +162,7 @@ def clean_data(session_id: str):
     }
 
 # Analyze data
-from app.services.analyzer import analyze_sales_data
+from services.analyzer import analyze_sales_data
 @app.post("/api/analyze/{session_id}")
 def analyze_data(session_id: str):
     df = get_session_df(session_id)
