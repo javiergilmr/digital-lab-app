@@ -6,7 +6,8 @@ def create_session(df, schema):
     SESSIONS[session_id] = {
         "df": df,
         "df_original": df.copy(),
-        "schema": schema
+        "schema": schema,
+        "report_name": ""
     }
     # print("CREATE_SESSION")
     # print("SESSION_ID:", session_id)
@@ -29,4 +30,14 @@ def get_session_original_df(session_id: str):
     if not session:
         return None
     return session["df_original"]
+
+def set_session_report_name(session_id, report_name):
+    if session_id in SESSIONS:
+        SESSIONS[session_id]["report_name"] = report_name
+
+def get_session_report_name(session_id: str):
+    session = SESSIONS.get(session_id)
+    if not session:
+        return ""
+    return session["report_name"]
 

@@ -5,6 +5,31 @@ from fastapi import HTTPException
 from fastapi import HTTPException
 import pandas as pd
 
+def parse_number(value):
+    """Convierte '19,99', '1.500,75' o '$1,500.75' a número. Devuelve el texto si no es un número."""
+    if not isinstance(value, str):
+        return value
+
+    text = re.sub(r"[\s$€£]", "", value)
+    last_comma, last_dot = text.rfind(","), text.rfind(".")
+
+    if last_comma >= 0 and last_dot >= 0:
+        # Con ambos separadores, el último es el decimal
+        thousands, decimal = (".", ",") if last_comma > last_dot else (",", ".")
+        text = text.replace(thousands, "").replace(decimal, ".")
+    elif text.count(",") > 1 or text.count(".") > 1:
+        # Un separador repetido solo puede ser de miles: 1.500.000
+        text = text.replace(",", "").replace(".", "")
+    elif last_comma >= 0:
+        # Una sola coma con 3 cifras detrás se toma como miles: 1,500
+        digits_after = len(text) - last_comma - 1
+        text = text.replace(",", "" if digits_after == 3 else ".")
+
+    try:
+        return float(text)
+    except ValueError:
+        return value
+
 def clean_sales_data(df, schema):
     report = {}
 
@@ -26,7 +51,7 @@ def clean_sales_data(df, schema):
         if col in df.columns:
             before = len(df)
 
-            df[col] = pd.to_numeric(df[col], errors="coerce")
+            df[col] = pd.to_numeric(df[col].map(parse_number), errors="coerce")
             df = df[df[col].notna()]
 
             removed = before - len(df)

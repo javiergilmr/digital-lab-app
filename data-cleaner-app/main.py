@@ -21,7 +21,9 @@ from services.sessions import (
     create_session,
     get_session_df,
     update_session_df,
-    get_session_original_df
+    get_session_original_df,
+    set_session_report_name,
+    get_session_report_name
 )
 
 @app.get("/api/health")
@@ -101,6 +103,7 @@ def map_columns(session_id: str, payload: ColumnMappingPayload):
 
     df = apply_column_mapping(df, payload.mapping)
     update_session_df(session_id, df)
+    set_session_report_name(session_id, payload.report_name.strip())
 
     return {"status": "ok"}
 
@@ -180,6 +183,7 @@ def analyze_data(session_id: str):
 import io
 from fastapi.responses import StreamingResponse
 from datetime import date
+from services.pdf_report import report_slug
 
 # Export Data
 @app.get("/export/{session_id}")
@@ -193,11 +197,39 @@ def export_data(session_id: str):
     df.to_csv(buffer, index=False)
     buffer.seek(0)
 
-    filename = f"datos_limpios_{date.today()}.csv"
+    slug = report_slug(get_session_report_name(session_id))
+    filename = f"{slug}_data.csv" if slug else f"datos_limpios_{date.today()}.csv"
 
     return StreamingResponse(
         buffer,
         media_type="text/csv",
+        headers={"Content-Disposition": f"attachment; filename={filename}"}
+    )
+
+
+from services.pdf_report import build_sales_report_pdf
+
+# Export PDF
+@app.get("/export-pdf/{session_id}")
+def export_pdf(session_id: str):
+    df = get_session_df(session_id)
+
+    if df is None:
+        raise HTTPException(404, "Sesión no encontrada")
+
+    # La fecha solo es datetime después de limpiar los datos
+    if "date" not in df.columns or not pd.api.types.is_datetime64_any_dtype(df["date"]):
+        raise HTTPException(409, "Primero procesa el archivo para generar el PDF.")
+
+    report_name = get_session_report_name(session_id)
+    pdf = build_sales_report_pdf(analyze_sales_data(df), report_name)
+
+    slug = report_slug(report_name)
+    filename = f"{slug}_report.pdf" if slug else f"reporte_ventas_{date.today()}.pdf"
+
+    return StreamingResponse(
+        io.BytesIO(pdf),
+        media_type="application/pdf",
         headers={"Content-Disposition": f"attachment; filename={filename}"}
     )
 

@@ -3,6 +3,10 @@ import pandas as pd
 from fastapi import HTTPException
 from services.schema import REQUIRED_FIELDS
 from services.schema import SALES_SCHEMA
+from services.cleaner import parse_number
+
+def is_numeric_column(series) -> bool:
+    return pd.to_numeric(series.map(parse_number), errors="coerce").notna().all()
 
 def normalize_column(col: str) -> str:
     """
@@ -71,11 +75,11 @@ def validate_column_types(df, detected):
                 errors.append("La columna de fecha no contiene fechas válidas.")
 
         elif canonical == "quantity":
-            if not pd.api.types.is_numeric_dtype(series):
+            if not is_numeric_column(series):
                 errors.append("La columna de cantidad debe ser numérica.")
 
         elif canonical == "price":
-            if not pd.api.types.is_numeric_dtype(series):
+            if not is_numeric_column(series):
                 errors.append("La columna de precio debe ser numérica.")
 
         elif canonical == "product":

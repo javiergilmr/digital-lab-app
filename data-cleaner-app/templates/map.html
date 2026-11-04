@@ -2,18 +2,60 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Data Cleaner</title>
+  <title>Data Cleaner &amp; Sales Report</title>
   <link rel="stylesheet" href="/static/css/styles.css">
+
+  <style>
+    .report-name {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .report-name-hint {
+      font-size: 0.8rem;
+      color: #6b7280;
+    }
+
+    .report-name input {
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #d1d5db;
+      background: #fff;
+      font-size: 0.95rem;
+      transition: border-color 0.2s ease;
+    }
+
+    .report-name input:focus {
+      outline: none;
+      border-color: #111827;
+    }
+  </style>
 </head>
 <body>
 
 <main class="container">
-  <h1>Seleccion de Colummnas</h1>
+  <h1>Selección de columnas</h1>
   <p class="subtitle">
     Asigna las columnas de tu archivo a los campos requeridos.
   </p>
 
   <form id="map-form" class="card">
+    <!-- Sin name ni clase .field: no es una columna y no debe entrar al mapeo ni a su validación -->
+    <div class="report-name">
+      <label class="field-label" for="report-name">
+        <span>Nombre del informe</span>
+        <span class="report-name-hint" id="report-name-hint"></span>
+      </label>
+      <input
+        type="text"
+        id="report-name"
+        maxlength="18"
+        placeholder="Ej: Fridays Company"
+        autocomplete="off"
+      >
+    </div>
+
     {% for field in required %}
       <div class="field">
 
@@ -62,7 +104,7 @@
   </a>
 
   <p class="subtitle">
-    © JGIL DATA LEGACY, LLC.
+    © JAGM Data Cleaner &amp; Sales Report 2026. Todos los derechos reservados.
   </p>
 
   
@@ -78,14 +120,29 @@ const submitBtn = document.querySelector("button[type='submit']");
 const selects = document.querySelectorAll("select");
 const errorBox = document.getElementById("form-error");
 const STATE_KEY = "map_state_{{ session_id }}";
+const REPORT_NAME_KEY = "report_name_{{ session_id }}";
+const reportNameInput = document.getElementById("report-name");
+
+const reportNameHint = document.getElementById("report-name-hint");
+
+function updateReportNameHint() {
+  reportNameHint.textContent = `Opcional · ${reportNameInput.value.length}/${reportNameInput.maxLength}`;
+}
+
+// maxlength no aplica a valores puestos por código: se recorta lo guardado antes de esta regla
+reportNameInput.value = (localStorage.getItem(REPORT_NAME_KEY) || "").slice(0, reportNameInput.maxLength);
+updateReportNameHint();
+
+reportNameInput.addEventListener("input", () => {
+  localStorage.setItem(REPORT_NAME_KEY, reportNameInput.value);
+  updateReportNameHint();
+});
 
 /* =========================
    SUBMIT
    ========================= */
 form.addEventListener("submit", async (e) => {
-  if (e.key === "Enter") {
-    e.preventDefault();
-  }
+  e.preventDefault();
 
   triedSubmit = true;
   runValidation();
@@ -107,7 +164,7 @@ form.addEventListener("submit", async (e) => {
   const res = await fetch("/api/map-columns/{{ session_id }}", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ mapping: data })
+    body: JSON.stringify({ mapping: data, report_name: reportNameInput.value })
   });
 
   setLoading(false);

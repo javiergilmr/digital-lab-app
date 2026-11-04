@@ -2,6 +2,9 @@
 
 import pandas as pd
 
+def to_decimal(value):
+    return round(float(value), 2)
+
 def analyze_sales_data(df: pd.DataFrame):
 
     df = df.copy()
@@ -38,17 +41,17 @@ def analyze_sales_data(df: pd.DataFrame):
     best_month_value = monthly_sales.max()
 
     executive_summary = {
-        "total_sold": float(total_sold),
+        "total_sold": to_decimal(total_sold),
         "total_transactions": int(total_transactions),
         "top_product": {
             "name": top_product,
-            "revenue": float(top_product_value)
+            "revenue": to_decimal(top_product_value)
         },
         "best_month": {
             "month": str(best_month),
-            "revenue": float(best_month_value)
+            "revenue": to_decimal(best_month_value)
         },
-        "avg_ticket": float(avg_ticket)
+        "avg_ticket": to_decimal(avg_ticket)
     }
 
     # =========================
@@ -71,9 +74,9 @@ def analyze_sales_data(df: pd.DataFrame):
     )
 
     rankings = {
-        "top5_products_revenue": top5_revenue.to_dict(),
-        "top5_products_quantity": top5_quantity.to_dict(),
-        "top5_months": {str(k): float(v) for k, v in top5_months.items()}
+        "top5_products_revenue": {k: to_decimal(v) for k, v in top5_revenue.items()},
+        "top5_products_quantity": {k: to_decimal(v) for k, v in top5_quantity.items()},
+        "top5_months": {str(k): to_decimal(v) for k, v in top5_months.items()}
     }
 
     # =========================
@@ -82,9 +85,10 @@ def analyze_sales_data(df: pd.DataFrame):
 
     monthly_df = monthly_sales.reset_index()
     monthly_df["year_month"] = monthly_df["year_month"].astype(str)
+    monthly_df["total"] = monthly_df["total"].astype(float)
     monthly_df["pct_change"] = monthly_df["total"].pct_change() * 100
 
-    trend = monthly_df.fillna(0).to_dict(orient="records")
+    trend = monthly_df.fillna(0).round(2).to_dict(orient="records")
 
     # =========================
     # 4️⃣ INSIGHTS
@@ -118,7 +122,7 @@ def generate_insights(product_revenue, monthly_sales, total_sold):
         productos = ", ".join(top2.index.tolist())
 
         insights.append(
-            f"El {round(top2_share*100,1)}% de tus ingresos provienen de solo 2 productos: {productos}."
+            f"El {top2_share*100:.2f}% de tus ingresos provienen de solo 2 productos: {productos}."
         )
 
     # Crecimiento entre primer y último mes
@@ -130,11 +134,11 @@ def generate_insights(product_revenue, monthly_sales, total_sold):
 
         if growth > 0:
             insights.append(
-                f"Tus ventas crecieron {round(growth*100,1)}% entre el primer y último mes."
+                f"Tus ventas crecieron {growth*100:.2f}% entre el primer y último mes."
             )
         elif growth < 0:
             insights.append(
-                f"Tus ventas cayeron {round(abs(growth)*100,1)}% en el periodo analizado."
+                f"Tus ventas cayeron {abs(growth)*100:.2f}% en el periodo analizado."
             )
 
     return insights
