@@ -51,6 +51,8 @@ VALUE = ParagraphStyle("value", fontName="Helvetica-Bold", fontSize=11, leading=
 NOTE = ParagraphStyle("note", fontName="Helvetica", fontSize=8, leading=11, textColor=MUTED)
 BODY = ParagraphStyle("body", fontName="Helvetica", fontSize=10, leading=14, textColor=INK)
 BODY_RIGHT = ParagraphStyle("body_right", parent=BODY, fontName="Helvetica-Bold", alignment=TA_RIGHT)
+MUTED_RIGHT = ParagraphStyle("muted_right", parent=BODY, textColor=MUTED, alignment=TA_RIGHT)
+LABEL_RIGHT = ParagraphStyle("label_right", parent=LABEL, alignment=TA_RIGHT)
 
 
 def format_number(value):
@@ -58,7 +60,11 @@ def format_number(value):
 
 
 def format_money(value):
-    return "$" + format_number(value)
+    return ("-$" if value < 0 else "$") + format_number(abs(value))
+
+
+def format_pct(value):
+    return format_number(value) + "%"
 
 
 def text(value, style):
@@ -81,20 +87,53 @@ def stat(label, value, note=None):
     return cell
 
 
-def stats_table(summary):
-    table = Table(
-        [[
-            stat("Total transacciones", f"{summary['total_transactions']:,}"),
-            stat("Ticket promedio", format_money(summary["avg_ticket"])),
-            stat("Producto top", summary["top_product"]["name"], format_money(summary["top_product"]["revenue"])),
-            stat("Mejor mes", summary["best_month"]["month"], format_money(summary["best_month"]["revenue"])),
-        ]],
-        colWidths=[PAGE_WIDTH / 4] * 4,
-    )
+def stats_table(summary, has_profit):
+    rows = [[
+        stat("Total transacciones", f"{summary['total_transactions']:,}"),
+        stat("Ticket promedio", format_money(summary["avg_ticket"])),
+        stat("Producto top", summary["top_product"]["name"], format_money(summary["top_product"]["revenue"])),
+        stat("Mejor mes", summary["best_month"]["month"], format_money(summary["best_month"]["revenue"])),
+    ]]
+    if has_profit:
+        rows.append([
+            stat("Utilidad", format_money(summary["total_profit"])),
+            stat("Margen", format_pct(summary["margin_pct"])),
+            "",
+            "",
+        ])
+
+    table = Table(rows, colWidths=[PAGE_WIDTH / 4] * 4)
     table.setStyle(TableStyle([
         ("VALIGN", (0, 0), (-1, -1), "TOP"),
         ("LEFTPADDING", (0, 0), (-1, -1), 0),
         ("RIGHTPADDING", (0, 0), (-1, -1), 8),
+        ("TOPPADDING", (0, 1), (-1, -1), 12),
+    ]))
+    return table
+
+
+def breakdown_table(title, rows, has_profit):
+    """Categorías, tiendas o ciudades: ventas, % del total y, si hay costos, utilidad y margen."""
+    header = [title, "Ventas", "% del total"] + (["Utilidad", "Margen"] if has_profit else [])
+    data = [[text(h, LABEL if i == 0 else LABEL_RIGHT) for i, h in enumerate(header)]]
+    for row in rows:
+        cells = [text(row["name"], BODY), text(format_money(row["revenue"]), BODY_RIGHT),
+                 text(format_pct(row["share_pct"]), MUTED_RIGHT)]
+        if has_profit:
+            cells += [text(format_money(row["profit"]), BODY_RIGHT), text(format_pct(row["margin_pct"]), MUTED_RIGHT)]
+        data.append(cells)
+
+    widths = [0.32, 0.18, 0.14, 0.18, 0.18] if has_profit else [0.5, 0.28, 0.22]
+    table = Table(data, colWidths=[PAGE_WIDTH * w for w in widths], repeatRows=1)
+    table.setStyle(TableStyle([
+        ("VALIGN", (0, 0), (-1, -1), "TOP"),
+        ("LEFTPADDING", (0, 0), (-1, -1), 0),
+        ("RIGHTPADDING", (0, 0), (-1, -1), 0),
+        ("LEFTPADDING", (1, 0), (-1, -1), 8),
+        ("TOPPADDING", (0, 0), (-1, -1), 5),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 5),
+        ("LINEBELOW", (0, 0), (-1, 0), 0.75, LINE),
+        ("LINEBELOW", (0, 1), (-1, -2), 0.5, LINE_SOFT),
     ]))
     return table
 
@@ -187,6 +226,8 @@ def build_sales_report_pdf(analysis, report_name="") -> bytes:
     summary = analysis["executive_summary"]
     insights = analysis["insights"]
     has_sales = any(item["total"] > 0 for item in analysis["trend"])
+    has_profit = analysis.get("has_profit", False)
+    profit_ranking = analysis["rankings"].get("top5_products_profit") or {}
 
     title = report_title(report_name) if report_name else APP_NAME
     generated = f"Generado el {date.today():%Y-%m-%d}"
@@ -199,13 +240,26 @@ def build_sales_report_pdf(analysis, report_name="") -> bytes:
             text("Total vendido", HEADING),
             text(format_money(summary["total_sold"]), HERO),
             Spacer(1, 14),
-            stats_table(summary),
+            stats_table(summary, has_profit),
         ),
         section(
             text("Top 5 productos por ingresos", HEADING),
             ranking_table(analysis["rankings"]["top5_products_revenue"]),
         ),
     ]
+
+    if profit_ranking:
+        story.append(section(text("Top 5 productos por utilidad", HEADING), ranking_table(profit_ranking)))
+
+    # Solo aparecen si el archivo trae categoría, tienda o ciudad
+    for key, heading, column in [
+        ("by_category", "Ventas por categoría", "Categoría"),
+        ("by_store", "Ventas por tienda", "Tienda"),
+        ("by_city", "Ventas por ciudad", "Ciudad"),
+    ]:
+        rows = analysis.get(key) or []
+        if rows:
+            story.append(section(text(heading, HEADING), breakdown_table(column, rows, has_profit)))
 
     if has_sales:
         story.append(section(text("Ventas mensuales", HEADING), sales_chart(analysis["trend"])))

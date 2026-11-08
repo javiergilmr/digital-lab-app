@@ -95,6 +95,72 @@
       background: transparent;
     }
 
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.95rem;
+    }
+
+    .data-table th {
+      padding: 0 0 8px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: #6b7280;
+      text-align: right;
+      white-space: nowrap;
+    }
+
+    .data-table td {
+      padding: 10px 0;
+      text-align: right;
+      white-space: nowrap;
+    }
+
+    .data-table th + th,
+    .data-table td + td {
+      padding-left: 16px;
+    }
+
+    .data-table th:first-child,
+    .data-table td:first-child {
+      text-align: left;
+      white-space: normal;
+      overflow-wrap: anywhere;
+    }
+
+    .data-table tbody tr + tr td {
+      border-top: 1px solid #f3f4f6;
+    }
+
+    .data-table .muted {
+      color: #6b7280;
+    }
+
+    .cleaning-summary {
+      margin: 0 0 12px;
+    }
+
+    .cleaning li {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 8px 0;
+      font-size: 0.9rem;
+    }
+
+    .cleaning li + li {
+      border-top: 1px solid #f3f4f6;
+    }
+
+    .cleaning li span:last-child {
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
     #insights li {
       line-height: 1.5;
     }
@@ -198,6 +264,7 @@
 </head>
 
 <body>
+{% include "_user_bar.html" %}
 
 <main class="container">
   <h1>Data Cleaner &amp; Sales Report</h1>
@@ -236,6 +303,26 @@
       <ol class="ranking" id="rankings"></ol>
     </section>
 
+    <section id="profit-section" hidden>
+      <h2>Top 5 productos por utilidad</h2>
+      <ol class="ranking" id="profit-rankings"></ol>
+    </section>
+
+    <section id="category-section" hidden>
+      <h2>Ventas por categoría</h2>
+      <div class="table-wrap" id="by-category"></div>
+    </section>
+
+    <section id="store-section" hidden>
+      <h2>Ventas por tienda</h2>
+      <div class="table-wrap" id="by-store"></div>
+    </section>
+
+    <section id="city-section" hidden>
+      <h2>Ventas por ciudad</h2>
+      <div class="table-wrap" id="by-city"></div>
+    </section>
+
     <section>
       <h2>Ventas mensuales</h2>
       <div class="chart-container">
@@ -246,6 +333,12 @@
     <section>
       <h2>Insights</h2>
       <ul id="insights"></ul>
+    </section>
+
+    <section id="cleaning-section" hidden>
+      <h2>Limpieza de datos</h2>
+      <p class="cleaning-summary" id="cleaning-summary"></p>
+      <ul class="cleaning" id="cleaning-actions"></ul>
     </section>
   </div>
 
@@ -301,7 +394,11 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function formatMoney(value) {
-    return "$" + formatNumber(value);
+    return (value < 0 ? "-$" : "$") + formatNumber(Math.abs(value));
+  }
+
+  function formatPct(value) {
+    return formatNumber(value) + "%";
   }
 
   // Los nombres vienen del archivo subido: se escapan antes de insertarlos como HTML
@@ -378,27 +475,86 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  function renderAnalysis(data) {
+  function rankingItems(entries) {
+    return Object.entries(entries)
+      .map(([product, value]) => `<li><span>${escapeHtml(product)}</span><span>${formatMoney(value)}</span></li>`)
+      .join("");
+  }
+
+  // Tabla de categorías, tiendas o ciudades; las columnas de utilidad solo si hay costos
+  function renderBreakdown(sectionId, containerId, title, rows, hasProfit) {
+    const section = document.getElementById(sectionId);
+    section.hidden = !rows.length;
+    if (!rows.length) return;
+
+    const head = `<th>${title}</th><th>Ventas</th><th>% del total</th>` +
+      (hasProfit ? "<th>Utilidad</th><th>Margen</th>" : "");
+
+    const body = rows.map(row => `
+      <tr>
+        <td>${escapeHtml(row.name)}</td>
+        <td>${formatMoney(row.revenue)}</td>
+        <td class="muted">${formatPct(row.share_pct)}</td>
+        ${hasProfit ? `<td>${formatMoney(row.profit)}</td><td class="muted">${formatPct(row.margin_pct)}</td>` : ""}
+      </tr>`).join("");
+
+    document.getElementById(containerId).innerHTML =
+      `<table class="data-table"><thead><tr>${head}</tr></thead><tbody>${body}</tbody></table>`;
+  }
+
+  function renderCleaning(report) {
+    const section = document.getElementById("cleaning-section");
+    section.hidden = !report;
+    if (!report) return;
+
+    const removed = report.rows_initial - report.rows_final;
+    document.getElementById("cleaning-summary").textContent =
+      `${report.rows_initial.toLocaleString("en-US")} filas recibidas, ${report.rows_final.toLocaleString("en-US")} válidas` +
+      (removed ? ` (${removed.toLocaleString("en-US")} ${removed === 1 ? "eliminada" : "eliminadas"}).` : ".");
+
+    document.getElementById("cleaning-actions").innerHTML = report.actions.length
+      ? report.actions.map(action => {
+          const [text, count] = action.message.split(/: (?=[^:]+$)/);
+          return `<li><span>${escapeHtml(text)}</span><span>${escapeHtml(count || "")}</span></li>`;
+        }).join("")
+      : "<li><span>No se encontraron errores que corregir.</span><span></span></li>";
+  }
+
+  function renderAnalysis(data, report) {
     const summary = data.executive_summary;
 
     document.getElementById("analysis-container").classList.remove("hidden");
     document.getElementById("total-sold").textContent = formatMoney(summary.total_sold);
 
-    document.getElementById("executive-summary").innerHTML =
+    let stats =
       stat("Total transacciones", summary.total_transactions.toLocaleString("en-US")) +
       stat("Ticket promedio", formatMoney(summary.avg_ticket)) +
       stat("Producto top", summary.top_product.name, formatMoney(summary.top_product.revenue)) +
       stat("Mejor mes", summary.best_month.month, formatMoney(summary.best_month.revenue));
 
-    document.getElementById("rankings").innerHTML =
-      Object.entries(data.rankings.top5_products_revenue)
-        .map(([product, value]) => `<li><span>${escapeHtml(product)}</span><span>${formatMoney(value)}</span></li>`)
-        .join("");
+    if (data.has_profit) {
+      stats +=
+        stat("Utilidad", formatMoney(summary.total_profit)) +
+        stat("Margen", formatPct(summary.margin_pct));
+    }
+    document.getElementById("executive-summary").innerHTML = stats;
+
+    document.getElementById("rankings").innerHTML = rankingItems(data.rankings.top5_products_revenue);
+
+    const profitRanking = data.rankings.top5_products_profit || {};
+    document.getElementById("profit-section").hidden = !Object.keys(profitRanking).length;
+    document.getElementById("profit-rankings").innerHTML = rankingItems(profitRanking);
+
+    renderBreakdown("category-section", "by-category", "Categoría", data.by_category || [], data.has_profit);
+    renderBreakdown("store-section", "by-store", "Tienda", data.by_store || [], data.has_profit);
+    renderBreakdown("city-section", "by-city", "Ciudad", data.by_city || [], data.has_profit);
 
     renderChart(data.trend);
 
     document.getElementById("insights").innerHTML =
       data.insights.map(insight => `<li>${escapeHtml(insight)}</li>`).join("");
+
+    renderCleaning(report);
   }
 
   function showAlert(message) {
@@ -449,13 +605,15 @@ document.addEventListener("DOMContentLoaded", () => {
       throw new Error(await readError(cleanRes, "Error limpiando datos"));
     }
 
+    const { report } = await cleanRes.json();
+
     const analyzeRes = await fetch("/api/analyze/{{ session_id }}", { method: "POST" });
 
     if (!analyzeRes.ok) {
       throw new Error(await readError(analyzeRes, "Error analizando datos"));
     }
 
-    return (await analyzeRes.json()).analysis;
+    return { analysis: (await analyzeRes.json()).analysis, report };
   }
 
   button.addEventListener("click", async () => {
@@ -465,10 +623,10 @@ document.addEventListener("DOMContentLoaded", () => {
     startLoading();
 
     try {
-      const [analysis] = await Promise.all([processFile(), wait(MIN_LOADING_MS)]);
+      const [{ analysis, report }] = await Promise.all([processFile(), wait(MIN_LOADING_MS)]);
       await finishLoading();
 
-      renderAnalysis(analysis);
+      renderAnalysis(analysis, report);
 
       showStatus("✅ Análisis generado correctamente.");
       downloadActions.classList.remove("hidden");

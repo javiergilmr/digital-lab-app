@@ -1,0 +1,8 @@
+{% if request.state.user %}
+  <div class="user-bar">
+    <span>{{ request.state.user.email }}</span>
+    <form method="post" action="/logout">
+      <button type="submit">Cerrar sesión</button>
+    </form>
+  </div>
+{% endif %}

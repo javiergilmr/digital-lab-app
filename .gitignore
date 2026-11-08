@@ -1,0 +1,6 @@
+# Claves y configuración local: nunca subir a GitHub
+.env
+.env.*
+
+# Entorno virtual de Python
+venv/

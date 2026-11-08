@@ -411,3 +411,32 @@ canvas {
 #insights p {
   margin: 8px 0;
 }
+
+/* ================= USER BAR ================= */
+
+.user-bar {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 14px 20px;
+  font-size: 0.85rem;
+  color: #6b7280;
+}
+
+.user-bar form {
+  margin: 0;
+}
+
+/* Gana a los estilos globales de button[type="submit"] */
+.user-bar button[type="submit"],
+.user-bar button[type="submit"]:not(:disabled):hover {
+  padding: 0;
+  background: none;
+  box-shadow: none;
+  transform: none;
+  color: #111827;
+  font-size: 0.85rem;
+  text-decoration: underline;
+}

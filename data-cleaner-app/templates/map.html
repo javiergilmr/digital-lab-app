@@ -30,9 +30,29 @@
       outline: none;
       border-color: #111827;
     }
+
+    .optional-heading {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      margin-top: 8px;
+      padding-top: 16px;
+      border-top: 1px solid #e5e7eb;
+      text-align: left;
+    }
+
+    .optional-heading span {
+      font-weight: 600;
+    }
+
+    .optional-heading small {
+      font-size: 0.8rem;
+      color: #6b7280;
+    }
   </style>
 </head>
 <body>
+{% include "_user_bar.html" %}
 
 <main class="container">
   <h1>Selección de columnas</h1>
@@ -56,25 +76,25 @@
       >
     </div>
 
-    {% for field in required %}
+    {% macro field_select(field, is_required) %}
       <div class="field">
 
         <label class="field-label">
-          <span>{{ field }}</span>
+          <span>{{ labels[field] }}</span>
 
           {% if auto_mapping.get(field) %}
             <span class="badge-auto">AUTO</span>
           {% endif %}
         </label>
-        
+
         <select
           name="{{ field }}"
           class="{% if auto_mapping.get(field) %}auto-selected{% endif %}"
           data-auto="{% if auto_mapping.get(field) %}true{% else %}false{% endif %}"
-          required
+          {% if is_required %}required{% endif %}
         >
 
-          <option value="">Selecciona una columna</option>
+          <option value="">{{ "Selecciona una columna" if is_required else "No usar" }}</option>
 
           {% for col in columns %}
             <option value="{{ col }}"
@@ -86,6 +106,19 @@
         </select>
 
       </div>
+    {% endmacro %}
+
+    {% for field in required %}
+      {{ field_select(field, true) }}
+    {% endfor %}
+
+    <div class="optional-heading">
+      <span>Columnas opcionales</span>
+      <small>Si tu archivo las trae, el análisis suma utilidad, categorías y tiendas.</small>
+    </div>
+
+    {% for field in optional %}
+      {{ field_select(field, false) }}
     {% endfor %}
 
     <div id="mapping-summary" class="hidden"></div>
@@ -107,7 +140,7 @@
     © JAGM Data Cleaner &amp; Sales Report 2026. Todos los derechos reservados.
   </p>
 
-  
+
 
 </main>
 
@@ -116,8 +149,9 @@
 let isDirty = false;
 let triedSubmit = false;
 const form = document.getElementById("map-form");
-const submitBtn = document.querySelector("button[type='submit']");
+const submitBtn = form.querySelector("button[type='submit']");
 const selects = document.querySelectorAll("select");
+const requiredSelects = [...selects].filter(s => s.required);
 const errorBox = document.getElementById("form-error");
 const STATE_KEY = "map_state_{{ session_id }}";
 const REPORT_NAME_KEY = "report_name_{{ session_id }}";
@@ -178,7 +212,8 @@ form.addEventListener("submit", async (e) => {
 
   if (!res.ok) {
     setLoading(false);
-    errorBox.textContent = "❌ Ocurrió un error al procesar el archivo. Intenta nuevamente.";
+    const detail = await res.json().then(d => d.detail).catch(() => null);
+    errorBox.textContent = `❌ ${typeof detail === "string" ? detail : "Ocurrió un error al procesar el archivo. Intenta nuevamente."}`;
     errorBox.style.display = "block";
     return;
   }
@@ -188,15 +223,15 @@ form.addEventListener("submit", async (e) => {
 /* =========================
    VALIDACIONES
    ========================= */
-   
+
 function toggleSubmit() {
-  const allFilled = [...selects].every(s => s.value !== "");
+  const allFilled = requiredSelects.every(s => s.value !== "");
   const noDuplicates = !hasDuplicates();
 
   let message = "";
 
   if (!allFilled) {
-    message = "⚠️ Debes asignar una columna a todos los campos.";
+    message = "⚠️ Debes asignar una columna a todos los campos obligatorios.";
     scrollToFirstError();
   } else if (!noDuplicates) {
     message = "⚠️ No puedes usar la misma columna más de una vez.";
@@ -225,8 +260,13 @@ function validateFields() {
     }
 
     if (!select.value) {
-      field.classList.add("missing");
-      setFieldError(field, "Este campo es obligatorio");
+      // Un campo opcional vacío es válido: simplemente no se usa
+      if (select.required) {
+        field.classList.add("missing");
+        setFieldError(field, "Este campo es obligatorio");
+      } else {
+        setFieldError(field, null);
+      }
     } else {
       field.classList.add("ok");
       setFieldError(field, null);
@@ -299,8 +339,7 @@ function scrollToFirstError() {
 }
 
 function updateReadyState() {
-  const allFilled = [...document.querySelectorAll("select")]
-    .every(s => s.value !== "");
+  const allFilled = requiredSelects.every(s => s.value !== "");
 
   const noDuplicates = validateDuplicates();
 
@@ -336,7 +375,7 @@ function updateSummary() {
     rows.push(`<div><strong>${label}</strong> → ${value}</div>`);
   });
 
-  if (rows.length === selects.length && validateDuplicates()) {
+  if (requiredSelects.every(s => s.value) && validateDuplicates()) {
     box.innerHTML = `
       <div class="summary-title">Columnas seleccionadas: </div>
       ${rows.join("")}
@@ -467,7 +506,7 @@ function hasDuplicates() {
 
 
 function updateReadyState() {
-  const allFilled = [...selects].every(s => s.value !== "");
+  const allFilled = requiredSelects.every(s => s.value !== "");
   const noDuplicates = !hasDuplicates();
 
   const msg = document.getElementById("ready-message");

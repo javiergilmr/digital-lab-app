@@ -2,23 +2,195 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Data Cleaner &amp; Sales Report</title>
   <link rel="stylesheet" href="/static/css/styles.css">
+
+  <!-- Estilos solo de esta página: styles.css se comparte con map, clean y auth -->
+  <style>
+    /* El pie de página queda abajo aunque haya poco contenido */
+    body {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    .upload-page {
+      flex: 1;
+      width: 100%;
+      min-height: auto;
+      margin: 56px auto 0;
+    }
+
+    .page-footer {
+      margin-top: auto;
+      margin-bottom: 24px;
+      padding-top: 40px;
+      font-size: 0.8rem;
+    }
+
+    /* ================= ZONA DE CARGA ================= */
+
+    .dropzone {
+      width: 100%;
+      max-width: 480px;
+      padding: 36px 24px;
+      border: 2px dashed #d1d5db;
+      border-radius: 14px;
+      background: #fff;
+      cursor: pointer;
+      transition: border-color 0.2s ease, background-color 0.2s ease;
+    }
+
+    .dropzone:hover {
+      border-color: #9ca3af;
+    }
+
+    .dropzone.is-dragover {
+      border-color: #0d6efd;
+      background: #f0f6ff;
+    }
+
+    .dropzone[data-state="uploading"] {
+      border-style: solid;
+      border-color: #e5e7eb;
+      cursor: default;
+    }
+
+    .dropzone[data-state="idle"] .dz-uploading,
+    .dropzone[data-state="uploading"] .dz-idle {
+      display: none;
+    }
+
+    .dz-icon {
+      width: 44px;
+      height: 44px;
+      margin-bottom: 8px;
+      color: #6b7280;
+      transition: color 0.2s ease;
+    }
+
+    .is-dragover .dz-icon {
+      color: #0d6efd;
+    }
+
+    .dz-title {
+      margin: 0;
+      font-size: 1.05rem;
+      font-weight: 600;
+    }
+
+    .dz-hint {
+      margin: 4px 0 0;
+      font-size: 0.85rem;
+      color: #6b7280;
+    }
+
+    .dz-divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      max-width: 220px;
+      margin: 18px auto;
+      font-size: 0.8rem;
+      color: #6b7280;
+    }
+
+    .dz-divider::before,
+    .dz-divider::after {
+      content: "";
+      flex: 1;
+      border-top: 1px solid #e5e7eb;
+    }
+
+    .load-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 11px 22px;
+      border-radius: 10px;
+      font-weight: 600;
+    }
+
+    .load-btn svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .load-btn:focus-visible {
+      outline: 2px solid #0d6efd;
+      outline-offset: 2px;
+    }
+
+    .dz-file {
+      margin: 0;
+      font-weight: 600;
+      overflow-wrap: anywhere;
+    }
+
+    .dz-track {
+      height: 6px;
+      margin: 14px 0 10px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: #e5e7eb;
+    }
+
+    .dz-bar {
+      width: 0;
+      height: 100%;
+      border-radius: 999px;
+      background: #0d6efd;
+      transition: width 0.2s ease;
+    }
+
+    .dz-status {
+      margin: 0;
+      font-size: 0.9rem;
+      color: #6b7280;
+    }
+  </style>
 </head>
 <body>
+{% include "_user_bar.html" %}
 
-  <main class="container">
+  <main class="container upload-page">
     <h1>Data Cleaner &amp; Sales Report</h1>
     <p class="subtitle">
       Sube tu archivo de ventas y descubre qué productos realmente te generan dinero. En minutos y sin análisis complicado.
     </p>
 
-    <form id="upload-form" class="card">
-      <input type="file" name="file" accept=".csv,.xlsx" required />
-      <button type="submit">Subir archivo</button>
-    </form>
+    <div id="dropzone" class="dropzone" data-state="idle">
+      <input type="file" id="file-input" accept=".csv,.xlsx" hidden>
 
-    <div id="upload-error" class="upload-error hidden">
+      <div class="dz-idle">
+        <svg class="dz-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M7 18a4.5 4.5 0 0 1-.6-8.96A6 6 0 0 1 18 8.5a4 4 0 0 1-.5 9.5"/>
+          <path d="M12 12v8M8.5 15.5 12 12l3.5 3.5"/>
+        </svg>
+        <p class="dz-title" id="dz-title">Arrastra tu archivo aquí</p>
+        <p class="dz-hint">CSV o Excel (.xlsx)</p>
+
+        <div class="dz-divider">o</div>
+
+        <button type="button" class="load-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 20V9M7.5 13.5 12 9l4.5 4.5M5 4h14"/>
+          </svg>
+          Cargar archivo
+        </button>
+      </div>
+
+      <div class="dz-uploading">
+        <p class="dz-file" id="dz-file"></p>
+        <div class="dz-track">
+          <div class="dz-bar" id="dz-bar"></div>
+        </div>
+        <p class="dz-status" id="status" aria-live="polite"></p>
+      </div>
+    </div>
+
+    <div id="upload-error" class="upload-error hidden" role="alert">
       <div class="upload-error-title">No se pudo procesar el archivo</div>
       <div class="upload-error-message">
         Este archivo no parece contener datos de ventas.
@@ -26,16 +198,11 @@
       </div>
     </div>
 
-    <p id="status" class="status"></p>
-    <p class="subtitle">
+    <p class="subtitle page-footer">
       © JAGM Data Cleaner &amp; Sales Report 2026. Todos los derechos reservados.
     </p>
   </main>
 
-  <script src="/static/js/upload.js">
-
-  </script>
+  <script src="/static/js/upload.js"></script>
 </body>
 </html>
-
-

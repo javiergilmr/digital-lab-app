@@ -1,42 +1,18 @@
-import re
 import pandas as pd
 from fastapi import HTTPException
-from services.schema import REQUIRED_FIELDS
 from services.schema import SALES_SCHEMA
-from services.cleaner import parse_number
+from services.cleaner import parse_dates, parse_numbers
+from services.auto_mapping import match_columns
 
-def is_numeric_column(series) -> bool:
-    return pd.to_numeric(series.map(parse_number), errors="coerce").notna().all()
+# Una columna se acepta si al menos este porcentaje de sus valores es válido;
+# las filas sueltas con errores las corrige o elimina la limpieza y quedan en el reporte
+MIN_VALID_SHARE = 0.8
 
-def normalize_column(col: str) -> str:
-    """
-    Normaliza nombres de columnas:
-    - minúsculas
-    - sin espacios
-    - sin símbolos
-    """
-    col = col.strip().lower()
-    col = re.sub(r"[^\w]", "_", col)
-    return col
+def valid_share(parsed) -> float:
+    return parsed.notna().mean() if len(parsed) else 1.0
 
 def detect_sales_columns(df):
-    normalized_cols = {
-        normalize_column(col): col for col in df.columns
-    }
-
-    detected = {}
-
-    for canonical, aliases in SALES_SCHEMA["required"].items():
-        for alias in aliases:
-            alias_norm = normalize_column(alias)
-            for col_norm, original in normalized_cols.items():
-                if alias_norm in col_norm:
-                    detected[canonical] = original
-                    break
-            if canonical in detected:
-                break
-
-    return detected
+    return match_columns(SALES_SCHEMA["required"], df.columns)
 
 def validate_sales_file(df):
 
@@ -57,7 +33,6 @@ def validate_sales_file(df):
             "Asegúrate de subir un archivo con fechas, productos, cantidades y precios."
         )
 
-    # 🔹 NUEVO: validar tipos reales
     validate_column_types(df, detected)
 
     return detected
@@ -69,17 +44,15 @@ def validate_column_types(df, detected):
         series = df[original_col].dropna()
 
         if canonical == "date":
-            try:
-                pd.to_datetime(series, errors="raise")
-            except:
+            if valid_share(parse_dates(series)) < MIN_VALID_SHARE:
                 errors.append("La columna de fecha no contiene fechas válidas.")
 
         elif canonical == "quantity":
-            if not is_numeric_column(series):
+            if valid_share(parse_numbers(series)) < MIN_VALID_SHARE:
                 errors.append("La columna de cantidad debe ser numérica.")
 
         elif canonical == "price":
-            if not is_numeric_column(series):
+            if valid_share(parse_numbers(series)) < MIN_VALID_SHARE:
                 errors.append("La columna de precio debe ser numérica.")
 
         elif canonical == "product":

@@ -1,92 +1,183 @@
-const form = document.getElementById("upload-form");
+const ACCEPTED_EXTENSIONS = [".csv", ".xlsx"];
+
+const dropzone = document.getElementById("dropzone");
+const fileInput = document.getElementById("file-input");
+const dropTitle = document.getElementById("dz-title");
+const fileLabel = document.getElementById("dz-file");
+const progressBar = document.getElementById("dz-bar");
 const statusEl = document.getElementById("status");
 
 const errorBox = document.getElementById("upload-error");
 const errorMsg = errorBox.querySelector(".upload-error-message");
 
+let uploading = false;
+
 function showUploadError(message) {
   errorMsg.textContent =
     message ||
     "El archivo no pudo ser procesado. Revisa el formato e inténtalo nuevamente.";
-
-  errorBox.style.opacity = "1";
   errorBox.classList.remove("hidden");
-
-  requestAnimationFrame(() => {
-    errorBox.style.opacity = "1";
-  });
 }
 
 function hideUploadError() {
   errorBox.classList.add("hidden");
-  errorBox.style.opacity = "0";
-}
-
-function showStatus(text) {
-  statusEl.textContent = text;
-  statusEl.style.opacity = "1";
-}
-
-function hideStatus() {
-  statusEl.style.opacity = "0";
 }
 
 function wait(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-form.addEventListener("submit", async (e) => {
-  e.preventDefault();
+function formatSize(bytes) {
+  if (bytes < 1024 * 1024) return `${Math.max(1, Math.round(bytes / 1024))} KB`;
+  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+}
 
-  // reset visual
-  hideUploadError();
-  showStatus("Subiendo archivo…");
+function setProgress(percent, text) {
+  progressBar.style.width = `${percent}%`;
+  statusEl.textContent = text;
+}
 
-  const formData = new FormData(form);
+function resetDropzone() {
+  uploading = false;
+  fileInput.value = "";
+  dropzone.dataset.state = "idle";
+}
 
-  try {
-    const res = await fetch("/api/upload", {
-      method: "POST",
-      body: formData,
+/* ======================
+   ELEGIR ARCHIVO
+   ====================== */
+function pickFile(files) {
+  if (uploading || !files.length) return;
+
+  if (files.length > 1) {
+    showUploadError("Sube un solo archivo a la vez.");
+    return;
+  }
+
+  const file = files[0];
+  const name = file.name.toLowerCase();
+
+  if (!ACCEPTED_EXTENSIONS.some(ext => name.endsWith(ext))) {
+    showUploadError("Ese formato no es compatible. Sube un archivo CSV o Excel (.xlsx).");
+    return;
+  }
+
+  uploadFile(file);
+}
+
+/* ======================
+   SUBIR (XMLHttpRequest permite mostrar el progreso real de la subida)
+   ====================== */
+function sendFile(file, onProgress) {
+  return new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", "/api/upload");
+
+    xhr.upload.addEventListener("progress", e => {
+      if (e.lengthComputable) onProgress(e.loaded / e.total);
     });
 
-    const data = await res.json();
+    xhr.addEventListener("load", () => {
+      let data = {};
+      try {
+        data = JSON.parse(xhr.responseText);
+      } catch {}
+      resolve({ ok: xhr.status >= 200 && xhr.status < 300, status: xhr.status, data });
+    });
 
-    /* ======================
-       ❌ ERROR BACKEND
-       ====================== */
+    xhr.addEventListener("error", () => reject(new Error("network")));
+
+    const formData = new FormData();
+    formData.append("file", file);
+    xhr.send(formData);
+  });
+}
+
+async function uploadFile(file) {
+  uploading = true;
+  hideUploadError();
+
+  fileLabel.textContent = `${file.name} · ${formatSize(file.size)}`;
+  setProgress(0, "Subiendo archivo…");
+  dropzone.dataset.state = "uploading";
+
+  try {
+    const res = await sendFile(file, fraction => {
+      // La subida llena hasta 90%; el resto es la revisión de columnas en el servidor
+      if (fraction < 1) {
+        setProgress(fraction * 90, `Subiendo archivo… ${Math.round(fraction * 100)}%`);
+      } else {
+        setProgress(90, "Revisando columnas…");
+      }
+    });
+
+    /* ❌ ERROR BACKEND */
     if (!res.ok) {
-      await wait(100);
-      hideStatus();
-      showUploadError(data.detail);
+      resetDropzone();
+      if (res.status === 401) {
+        window.location.href = "/login?next=/";
+        return;
+      }
+      showUploadError(res.data.detail);
       return;
     }
 
-    /* ======================
-       ✅ ÉXITO
-       ====================== */
-    if (data.session_id) {
-      showStatus("Procesando archivo…");
-      await wait(600);
-
-      showStatus("✔ Archivo cargado");
-      await wait(400);
-
-      hideStatus();
-      await wait(200);
-
-      window.location.href = `/map/${data.session_id}`;
+    /* ⚠️ RESPUESTA RARA */
+    if (!res.data.session_id) {
+      resetDropzone();
+      showUploadError("Respuesta inesperada del servidor.");
       return;
     }
 
-    /* ======================
-       ⚠️ RESPUESTA RARA
-       ====================== */
-    hideStatus();
-    showUploadError("Respuesta inesperada del servidor.");
+    /* ✅ ÉXITO */
+    setProgress(100, "✔ Archivo cargado");
+    await wait(600);
+    window.location.href = `/map/${res.data.session_id}`;
 
   } catch (err) {
-    hideStatus();
+    resetDropzone();
     showUploadError("Error de conexión. Intenta nuevamente.");
   }
+}
+
+/* ======================
+   CLIC Y BOTÓN (el botón está dentro de la zona: su clic llega aquí)
+   ====================== */
+dropzone.addEventListener("click", () => {
+  if (!uploading) fileInput.click();
 });
+
+fileInput.addEventListener("change", () => pickFile(fileInput.files));
+
+/* ======================
+   ARRASTRAR Y SOLTAR
+   ====================== */
+function setDragover(active) {
+  dropzone.classList.toggle("is-dragover", active && !uploading);
+  dropTitle.textContent = active && !uploading ? "Suelta el archivo aquí" : "Arrastra tu archivo aquí";
+}
+
+dropzone.addEventListener("dragenter", e => {
+  e.preventDefault();
+  setDragover(true);
+});
+
+dropzone.addEventListener("dragover", e => {
+  e.preventDefault();
+  e.dataTransfer.dropEffect = uploading ? "none" : "copy";
+  setDragover(true);
+});
+
+dropzone.addEventListener("dragleave", e => {
+  if (!dropzone.contains(e.relatedTarget)) setDragover(false);
+});
+
+dropzone.addEventListener("drop", e => {
+  e.preventDefault();
+  setDragover(false);
+  pickFile(e.dataTransfer.files);
+});
+
+// Si el archivo cae fuera de la zona, el navegador no lo abre en la pestaña
+window.addEventListener("dragover", e => e.preventDefault());
+window.addEventListener("drop", e => e.preventDefault());
