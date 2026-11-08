@@ -1,12 +1,4 @@
 # Columnas canónicas del sistema
-REQUIRED_FIELDS = {
-    "fecha": ["fecha", "date", "día", "fecha_venta"],
-    "producto": ["producto", "item", "descripcion", "descripción"],
-    "cantidad": ["cantidad", "qty", "unidades"],
-    "precio_unitario": ["precio_unitario", "precio", "unit_price"],
-    "total": ["total", "importe", "monto"]
-}
-
 SALES_SCHEMA = {
     # Sin estas columnas no hay análisis posible
     "required": {
@@ -54,12 +46,3 @@ SALES_SCHEMA = {
 }
 
 ALL_FIELDS = {**SALES_SCHEMA["required"], **SALES_SCHEMA["optional"]}
-
-ALIASES = {
-    "date": ["date", "createdat", "day","fecha"],
-    "product": ["product", "item", "sku", "name","producto"],
-    "cliente": ["customer", "client", "buyer"],
-    "quantity": ["qty", "quantity", "units", "unitssold","cantidad"],
-    "price": ["price", "amount", "cost", "value","precio"],
-    "region": ["region", "zone", "area"]
-}

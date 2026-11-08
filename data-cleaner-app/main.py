@@ -1,7 +1,7 @@
 from fastapi import FastAPI, UploadFile, File, HTTPException
 import pandas as pd
 from services.column_validator import detect_sales_columns, validate_sales_file, validate_column_types
-from services.schema import SALES_SCHEMA, ALIASES
+from services.schema import SALES_SCHEMA
 from routers.api import router as api_router
 
 from fastapi import FastAPI, Request
