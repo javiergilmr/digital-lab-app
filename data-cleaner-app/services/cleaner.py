@@ -75,17 +75,28 @@ class CleaningReport:
     def __init__(self, rows_initial):
         self.rows_initial = rows_initial
         self.actions = []
+        # Índices de las filas tocadas: una fila con varias correcciones cuenta una sola vez
+        self.fixed_rows = set()
+        self.removed_rows = set()
 
-    def add(self, count, message, unit=ROWS):
-        # "Acción: N filas" concuerda en singular y plural sin conjugar verbos
-        count = int(count)
+    def add(self, mask, message, removed=False, values=None):
+        """mask = filas afectadas (Serie booleana); values = celdas cambiadas, si se cuenta por valor.
+        "Acción: N filas" concuerda en singular y plural sin conjugar verbos."""
+        (self.removed_rows if removed else self.fixed_rows).update(mask[mask].index)
+        count, unit = (int(mask.sum()), ROWS) if values is None else (int(values), VALUES)
         if count:
-            self.actions.append({"count": count, "message": f"{message}: {count} {unit[count != 1]}"})
+            self.actions.append({
+                "count": count,
+                "message": f"{message}: {count} {unit[count != 1]}",
+                "kind": "removed" if removed else "fixed",
+            })
 
     def to_dict(self, rows_final):
         return {
             "rows_initial": int(self.rows_initial),
             "rows_final": int(rows_final),
+            "rows_removed": int(self.rows_initial - rows_final),
+            "rows_fixed": len(self.fixed_rows - self.removed_rows),
             "actions": self.actions,
         }
 
@@ -101,13 +112,16 @@ def _label(col):
     return LABELS.get(col, col)
 
 def _trim_text(df, report):
+    rows = pd.Series(False, index=df.index)
     changed = 0
     for col in [c for c in df.columns if _is_text(df[c])]:
         original = df[col]
         cleaned = original.map(lambda v: " ".join(v.split()) or None if isinstance(v, str) else v)
-        changed += int((original.notna() & (cleaned.astype(object) != original.astype(object))).sum())
+        mask = original.notna() & (cleaned.astype(object) != original.astype(object))
+        changed += int(mask.sum())
+        rows |= mask
         df[col] = cleaned
-    report.add(changed, "Espacios de sobra quitados", VALUES)
+    report.add(rows, "Espacios de sobra quitados", values=changed)
     return df
 
 def _unify_spellings(df, report):
@@ -122,19 +136,19 @@ def _unify_spellings(df, report):
         preferred = values.groupby(keys).agg(lambda s: s.value_counts().idxmax())
         unified = df[col].map(lambda v: preferred.get(text_key(v), v) if isinstance(v, str) else v)
 
-        changed = int((df[col].notna() & (unified.astype(object) != df[col].astype(object))).sum())
+        mask = df[col].notna() & (unified.astype(object) != df[col].astype(object))
         df[col] = unified
-        report.add(changed, f"Escritura unificada en «{_label(col)}» (mayúsculas, tildes o espacios)", VALUES)
+        report.add(mask, f"Escritura unificada en «{_label(col)}» (mayúsculas, tildes o espacios)", values=mask.sum())
     return df
 
 def _fix_by_majority(df, key_col, value_col):
     """Cada key (ej. código de producto) toma el valor más frecuente de value_col si hay mayoría clara."""
+    fixed = pd.Series(False, index=df.index)
     pairs = df[[key_col, value_col]].dropna()
     if pairs.empty:
-        return df, 0
+        return df, fixed
 
     counts = pairs.groupby([key_col, value_col]).size()
-    fixed = 0
     for key, group in counts.groupby(level=0):
         top = group.max()
         if top < MIN_MAJORITY_ROWS or top / group.sum() <= 0.5:
@@ -142,12 +156,12 @@ def _fix_by_majority(df, key_col, value_col):
         top_value = group.idxmax()[1]
         values = df[value_col].astype(object)
         mask = (df[key_col].astype(object) == key) & (values.isna() | (values != top_value))
-        fixed += int(mask.sum())
+        fixed |= mask
         df.loc[mask, value_col] = top_value
     return df, fixed
 
 def _drop(df, mask, report, message):
-    report.add(mask.sum(), message)
+    report.add(mask, message, removed=True)
     return df[~mask]
 
 def _fix_prices(df, report):
@@ -161,7 +175,7 @@ def _fix_prices(df, report):
     fixable = replacement.notna()
 
     df.loc[replacement[fixable].index, "price"] = replacement[fixable]
-    report.add(fixable.sum(), "Precio negativo o vacío reemplazado por el precio habitual del producto")
+    report.add(fixable, "Precio negativo o vacío reemplazado por el precio habitual del producto")
 
     still_bad = df["price"].isna() | (df["price"] < 0)
     return _drop(df, still_bad, report, "Eliminadas por precio inválido sin forma de deducirlo")
@@ -181,7 +195,7 @@ def _fix_quantities(df, report):
         exact = (derived - derived.round()).abs() < 0.01
         fixable = bad & derived.notna() & exact & (derived.round() > 0)
         df.loc[fixable, "quantity"] = derived[fixable].round()
-        report.add(fixable.sum(), "Cantidad 0 o inválida corregida con costo total ÷ costo unitario")
+        report.add(fixable, "Cantidad 0 o inválida corregida con costo total ÷ costo unitario")
         bad &= ~fixable
 
     return _drop(df, bad, report, "Eliminadas por cantidad 0 o inválida sin forma de deducirla")
@@ -194,18 +208,18 @@ def _fix_totals(df, report):
         expected = (df["quantity"] * df["unit_cost"]).round(2)
         wrong = expected.notna() & (df["total_cost"].isna() | ((df["total_cost"] - expected).abs() > TOLERANCE))
         df.loc[wrong, "total_cost"] = expected[wrong]
-        report.add(wrong.sum(), "Costo total recalculado (cantidad × costo unitario)")
+        report.add(wrong, "Costo total recalculado (cantidad × costo unitario)")
 
     if "net_sales" in cols:
         empty = df["net_sales"].isna()
         df.loc[empty, "net_sales"] = (df["quantity"] * df["price"]).round(2)[empty]
-        report.add(empty.sum(), "Venta neta vacía estimada como cantidad × precio")
+        report.add(empty, "Venta neta vacía estimada como cantidad × precio")
 
     if {"profit", "net_sales", "total_cost"} <= cols:
         expected = (df["net_sales"] - df["total_cost"]).round(2)
         wrong = expected.notna() & (df["profit"].isna() | ((df["profit"] - expected).abs() > TOLERANCE))
         df.loc[wrong, "profit"] = expected[wrong]
-        report.add(wrong.sum(), "Utilidad recalculada (venta neta − costo total)")
+        report.add(wrong, "Utilidad recalculada (venta neta − costo total)")
 
     return df
 
@@ -215,7 +229,8 @@ def _fix_totals(df, report):
 # =========================
 
 def clean_sales_data(df, schema):
-    df = df.copy()
+    # Índice limpio para poder contar cada fila corregida una sola vez
+    df = df.reset_index(drop=True)
     report = CleaningReport(len(df))
 
     # 1️⃣ Filas completamente vacías
@@ -243,11 +258,10 @@ def clean_sales_data(df, schema):
         df[col] = parse_numbers(original)
         if col not in REQUIRED:
             invalid = df[col].isna() & original.notna()
-            report.add(invalid.sum(), f"Valores no numéricos en «{_label(col)}» dejados en blanco", VALUES)
+            report.add(invalid, f"Valores no numéricos en «{_label(col)}» dejados en blanco", values=invalid.sum())
 
-    # 5️⃣ Coherencia entre columnas: el valor más frecuente para el mismo código, producto o tienda
+    # 5️⃣ Coherencia entre columnas: el valor más frecuente para el mismo producto o tienda
     for key_col, value_col, message in [
-        ("product_id", "product", "Nombre de producto corregido según su código"),
         ("product", "category", "Categoría corregida según el producto"),
         ("store_id", "store_city", "Ciudad corregida según la tienda"),
     ]:

@@ -17,7 +17,6 @@ SALES_SCHEMA = {
     },
     # Si vienen, enriquecen la limpieza y el análisis; si no, todo sigue funcionando
     "optional": {
-        "product_id": ["product_id", "id_producto", "codigo_producto", "sku_id"],
         "category": ["category", "categoria", "rubro", "linea", "familia"],
         "store_id": ["store_id", "id_tienda", "tienda_id", "sucursal_id", "codigo_tienda"],
         "store_city": ["store_city", "city", "ciudad", "ciudad_tienda", "municipio"],
@@ -31,7 +30,6 @@ SALES_SCHEMA = {
         "product": "str",
         "quantity": "int",
         "price": "float",
-        "product_id": "str",
         "category": "str",
         "store_id": "str",
         "store_city": "str",
@@ -45,7 +43,6 @@ SALES_SCHEMA = {
         "product": "Producto",
         "quantity": "Cantidad",
         "price": "Precio unitario",
-        "product_id": "Código de producto",
         "category": "Categoría",
         "store_id": "Tienda",
         "store_city": "Ciudad",

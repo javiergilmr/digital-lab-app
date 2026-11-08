@@ -9,6 +9,22 @@ def to_decimal(value):
 def share_pct(part, total):
     return to_decimal(part / total * 100) if total else 0.0
 
+MONTHS = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio",
+          "agosto", "septiembre", "octubre", "noviembre", "diciembre"]
+
+def format_money(value):
+    return f"-${abs(value):,.2f}" if value < 0 else f"${value:,.2f}"
+
+def plural(count, singular, plural_form):
+    return f"{count:,} {singular if count == 1 else plural_form}"
+
+def date_text(date, with_year=True):
+    text = f"{date.day} de {MONTHS[date.month - 1]}"
+    return f"{text} de {date.year}" if with_year else text
+
+def month_text(period):
+    return f"{MONTHS[period.month - 1]} de {period.year}"
+
 def revenue_of(df):
     # La venta neta ya descuenta promociones; sin ella se usa cantidad × precio
     gross = df["quantity"] * df["price"]
@@ -165,12 +181,19 @@ def analyze_sales_data(df: pd.DataFrame):
             by_city = breakdown(df, "store_city", has_profit)
 
     # =========================
-    # 5️⃣ INSIGHTS
+    # 5️⃣ DESCRIPCIÓN DEL INFORME
+    # =========================
+
+    overview = build_overview(df, executive_summary, best_month, monthly_sales, has_profit)
+
+    # =========================
+    # 6️⃣ INSIGHTS
     # =========================
 
     insights = generate_insights(product_revenue, monthly_sales, total_sold, by_category, by_store, has_profit)
 
     return {
+        "overview": overview,
         "executive_summary": executive_summary,
         "rankings": rankings,
         "trend": trend,
@@ -180,6 +203,46 @@ def analyze_sales_data(df: pd.DataFrame):
         "has_profit": has_profit,
         "insights": insights
     }
+
+def build_overview(df, summary, best_month, monthly_sales, has_profit):
+    """Párrafo que presenta el informe (alcance, periodo y resultado) y nota de cómo se calculó."""
+    start, end = df["date"].min(), df["date"].max()
+    if start.date() == end.date():
+        period = f"el {date_text(start)}"
+    else:
+        period = f"entre el {date_text(start, start.year != end.year)} y el {date_text(end)}"
+
+    scope = [plural(df["product"].nunique(), "producto", "productos")]
+    if "category" in df.columns:
+        scope.append(plural(df["category"].nunique(), "categoría", "categorías"))
+    if "store_id" in df.columns:
+        scope.append(plural(df["store_id"].nunique(), "tienda", "tiendas"))
+    scope_text = ", ".join(scope[:-1]) + f" y {scope[-1]}" if len(scope) > 1 else scope[0]
+
+    months = len(monthly_sales)
+    text = (
+        f"Este informe resume {plural(summary['total_transactions'], 'transacción registrada', 'transacciones registradas')} "
+        f"{period} ({plural(months, 'mes', 'meses')}), con {scope_text}. "
+        f"En el periodo se vendieron {format_money(summary['total_sold'])}"
+    )
+    if has_profit:
+        text += (
+            f", con una utilidad de {format_money(summary['total_profit'])} "
+            f"y un margen de {summary['margin_pct']:.2f}%"
+        )
+    text += f". El producto con más ingresos fue {summary['top_product']['name']}"
+    text += f" y el mejor mes, {month_text(best_month)}." if months > 1 else "."
+
+    notes = []
+    if "net_sales" in df.columns:
+        notes.append("Las ventas corresponden a la venta neta, después de descuentos.")
+    else:
+        notes.append("Las ventas se calculan como cantidad × precio unitario.")
+    if has_profit:
+        notes.append("La utilidad es la venta menos el costo, y el margen es la utilidad sobre las ventas.")
+    notes.append("Los datos se limpiaron antes del análisis; el detalle está al final del informe.")
+
+    return {"text": text, "note": " ".join(notes)}
 
 def generate_insights(product_revenue, monthly_sales, total_sold, by_category, by_store, has_profit):
 

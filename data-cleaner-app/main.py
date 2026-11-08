@@ -254,7 +254,7 @@ def export_data(request: Request, session_id: str):
     buffer.seek(0)
 
     slug = report_slug(get_session_report_name(session_id, owner_id))
-    filename = f"{slug}_data.csv" if slug else f"datos_limpios_{date.today()}.csv"
+    filename = f"{slug}_data_{date.today()}.csv" if slug else f"datos_limpios_{date.today()}.csv"
 
     return StreamingResponse(
         buffer,
@@ -282,7 +282,7 @@ def export_pdf(request: Request, session_id: str):
     pdf = build_sales_report_pdf(analyze_sales_data(df), report_name)
 
     slug = report_slug(report_name)
-    filename = f"{slug}_report.pdf" if slug else f"reporte_ventas_{date.today()}.pdf"
+    filename = f"{slug}_report_{date.today()}.pdf" if slug else f"reporte_ventas_{date.today()}.pdf"
 
     return StreamingResponse(
         io.BytesIO(pdf),
