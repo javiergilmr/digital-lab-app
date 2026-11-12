@@ -10,7 +10,7 @@ SALES_SCHEMA = {
     # Si vienen, enriquecen la limpieza y el análisis; si no, todo sigue funcionando
     "optional": {
         "category": ["category", "categoria", "rubro", "linea", "familia"],
-        "store_id": ["store_id", "id_tienda", "tienda_id", "sucursal_id", "codigo_tienda"],
+        "store_id": ["store_id", "id_tienda", "tienda_id", "sucursal_id", "codigo_tienda", "tienda", "sucursal", "store"],
         "store_city": ["store_city", "city", "ciudad", "ciudad_tienda", "municipio"],
         "net_sales": ["net_sales", "venta_neta", "ventas_netas", "total_neto", "net_amount"],
         "unit_cost": ["unit_cost", "costo_unitario", "cost", "costo"],

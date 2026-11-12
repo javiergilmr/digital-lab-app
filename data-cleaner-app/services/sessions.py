@@ -1,13 +1,15 @@
 import uuid
 SESSIONS = {}
 
-def create_session(df, schema, owner_id):
+def create_session(df, schema, owner_id, filename=""):
     session_id = str(uuid.uuid4())
     SESSIONS[session_id] = {
         "df": df,
         "df_original": df.copy(),
         "schema": schema,
         "report_name": "",
+        "filename": filename,
+        "clean_report": None,
         "owner_id": owner_id
     }
     # print("CREATE_SESSION")
@@ -46,6 +48,28 @@ def get_session_mapped_df(session_id: str, owner_id: str):
     if not session:
         return None
     return session.get("df_mapped", session["df"])
+
+def claim_once(session_id, owner_id, key) -> bool:
+    """True solo la primera vez para cada key: procesar de nuevo (ej. al recargar)
+    no vuelve a sumar a los stats ni repite el informe en el historial."""
+    session = _get_session(session_id, owner_id)
+    if not session or session.get(key):
+        return False
+    session[key] = True
+    return True
+
+def set_session_clean_report(session_id, owner_id, report):
+    session = _get_session(session_id, owner_id)
+    if session:
+        session["clean_report"] = report
+
+def get_session_clean_report(session_id: str, owner_id: str):
+    session = _get_session(session_id, owner_id)
+    return session["clean_report"] if session else None
+
+def get_session_filename(session_id: str, owner_id: str):
+    session = _get_session(session_id, owner_id)
+    return session["filename"] if session else ""
 
 def get_session_original_df(session_id: str, owner_id: str):
     session = _get_session(session_id, owner_id)

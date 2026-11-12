@@ -429,6 +429,17 @@ canvas {
   margin: 0;
 }
 
+.user-bar a {
+  color: #0d6efd;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.user-bar a:hover,
+.user-bar a[aria-current="page"] {
+  text-decoration: underline;
+}
+
 /* Gana a los estilos globales de button[type="submit"] */
 .user-bar button[type="submit"],
 .user-bar button[type="submit"]:not(:disabled):hover {

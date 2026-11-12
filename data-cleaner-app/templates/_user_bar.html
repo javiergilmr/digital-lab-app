@@ -1,5 +1,6 @@
 {% if request.state.user %}
   <div class="user-bar">
+    <a href="/panel"{% if request.url.path == "/panel" %} aria-current="page"{% endif %}>Mi panel</a>
     <span>{{ request.state.user.email }}</span>
     <form method="post" action="/logout">
       <button type="submit">Cerrar sesión</button>

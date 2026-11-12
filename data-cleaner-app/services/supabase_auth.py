@@ -57,31 +57,54 @@ class AuthError(Exception):
         return ERROR_MESSAGES.get(self.code, "No se pudo completar la operación. Inténtalo de nuevo.")
 
 
-def _call(method, path, body=None, token=None, query=None):
-    url = f"{SUPABASE_URL}/auth/v1{path}"
+def _call(method, path, body=None, token=None, query=None, api="auth", content_type=None, binary=False):
+    """api="auth" es Supabase Auth, "rest" la API de datos y "storage" los archivos.
+    body puede ser un dict (se envía como JSON) o bytes con su content_type; binary=True devuelve bytes."""
+    url = f"{SUPABASE_URL}/{api}/v1{path}"
     if query:
         url += "?" + urlencode(query)
 
-    headers = {"apikey": SUPABASE_KEY, "Content-Type": "application/json"}
+    headers = {"apikey": SUPABASE_KEY, "Content-Type": content_type or "application/json"}
     if token:
         headers["Authorization"] = f"Bearer {token}"
 
-    data = json.dumps(body).encode() if body is not None else None
+    if isinstance(body, bytes):
+        data = body
+    else:
+        data = json.dumps(body).encode() if body is not None else None
 
     try:
-        with urlopen(Request(url, data=data, headers=headers, method=method), timeout=10) as res:
+        with urlopen(Request(url, data=data, headers=headers, method=method), timeout=20) as res:
             raw = res.read()
+            if binary:
+                return raw
             return json.loads(raw) if raw else {}
     except HTTPError as e:
         try:
             info = json.loads(e.read() or b"{}")
         except ValueError:
             info = {}
-        code = info.get("error_code") or info.get("error") or ""
+        if not isinstance(info, dict):
+            info = {}
+        code = info.get("error_code") or info.get("error") or info.get("code") or ""
         detail = info.get("msg") or info.get("error_description") or info.get("message") or ""
         raise AuthError(code, detail, e.code) from None
     except URLError:
         raise AuthError("network") from None
+
+
+def rest_call(method, path, body=None, token=None, query=None):
+    """Llama a la API de datos como el usuario del token: las políticas RLS se aplican a su nombre."""
+    return _call(method, path, body, token, query, api="rest")
+
+
+def storage_upload(bucket, path, data, content_type, token):
+    """Sube un archivo a Supabase Storage como el usuario del token (aplican las políticas del bucket)."""
+    _call("POST", f"/object/{bucket}/{path}", data, token, api="storage", content_type=content_type)
+
+
+def storage_download(bucket, path, token) -> bytes:
+    return _call("GET", f"/object/authenticated/{bucket}/{path}", token=token, api="storage", binary=True)
 
 
 # =========================

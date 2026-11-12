@@ -1,0 +1,19 @@
+﻿fecha,producto,cantidad,precio,categoria,tienda,ciudad,costo_unitario
+2026-01-05,Café molido 400 g,3,6.50,Abarrotes,S001,Panamá,4.10
+2026-01-05,Shampoo 400 ml,1,4.25,Cuidado personal,S002,San Miguelito,2.60
+2026-01-06,Pechuga de pollo kg,2,6.20,Carnes,S001,Panamá,4.35
+2026-01-08,Arroz 5 lb,4,3.95,Abarrotes,S003,David,2.70
+2026-01-12,Leche entera 1 L,6,1.45,Lácteos,S002,San Miguelito,0.98
+2026-01-15,Detergente 1 kg,2,5.80,Limpieza,S001,Panamá,3.90
+2026-01-20,Café molido 400 g,1,6.50,Abarrotes,S003,David,4.10
+2026-02-02,Carne molida kg,3,7.10,Carnes,S002,San Miguelito,5.05
+2026-02-03,Shampoo 400 ml,2,4.25,Cuidado personal,S001,Panamá,2.60
+2026-02-09,Leche entera 1 L,10,1.45,Lácteos,S003,David,0.98
+2026-02-14,Pechuga de pollo kg,1,6.20,Carnes,S001,Panamá,4.35
+2026-02-21,Arroz 5 lb,5,3.95,Abarrotes,S002,San Miguelito,2.70
+2026-03-01,Detergente 1 kg,1,5.80,Limpieza,S003,David,3.90
+2026-03-04,Café molido 400 g,2,6.50,Abarrotes,S002,San Miguelito,4.10
+2026-03-10,Carne molida kg,2,7.10,Carnes,S001,Panamá,5.05
+2026-03-18,Leche entera 1 L,8,1.45,Lácteos,S001,Panamá,0.98
+2026-03-25,Shampoo 400 ml,3,4.25,Cuidado personal,S003,David,2.60
+2026-03-30,Arroz 5 lb,2,3.95,Abarrotes,S001,Panamá,2.70

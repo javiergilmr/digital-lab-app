@@ -1,4 +1,4 @@
-from fastapi import FastAPI, UploadFile, File, HTTPException
+from fastapi import FastAPI, UploadFile, File, HTTPException, BackgroundTasks
 import pandas as pd
 from services.column_validator import detect_sales_columns, validate_sales_file, validate_column_types
 from services.schema import SALES_SCHEMA
@@ -77,8 +77,14 @@ from services.sessions import (
     set_session_mapped_df,
     get_session_mapped_df,
     set_session_report_name,
-    get_session_report_name
+    get_session_report_name,
+    claim_once,
+    set_session_clean_report,
+    get_session_clean_report,
+    get_session_filename
 )
+from services.user_stats import record_activity, get_stats, StatsUnavailable
+from services.report_history import save_report, list_reports, get_report_pdf, HistoryUnavailable
 
 @app.get("/api/health")
 def health():
@@ -86,7 +92,7 @@ def health():
 
 # UPLOAD 
 @app.post("/api/upload")
-async def upload_file(request: Request, file: UploadFile = File(...)):
+async def upload_file(request: Request, background_tasks: BackgroundTasks, file: UploadFile = File(...)):
 
     if not file.filename.lower().endswith((".csv", ".xlsx")):
         raise HTTPException(400, "Este archivo no parece ser de ventas. Sube un Excel o CSV con tus ventas.")
@@ -120,7 +126,9 @@ async def upload_file(request: Request, file: UploadFile = File(...)):
     #         detail="Asegúrate de subir un archivo con fechas, productos, cantidades y precios."
     #     )
 
-    session_id = create_session(df, SALES_SCHEMA, current_user_id(request))
+    session_id = create_session(df, SALES_SCHEMA, current_user_id(request), file.filename)
+    # Se guarda después de responder para no hacer esperar al usuario
+    background_tasks.add_task(record_activity, request.state.access_token, files=1)
 
     return {
         "status": "ok",
@@ -135,6 +143,44 @@ async def upload_file(request: Request, file: UploadFile = File(...)):
 @app.get("/")
 def upload_page(request: Request):
     return templates.TemplateResponse(request, "index.html", {"request": request})
+
+# PANEL DEL USUARIO
+@app.get("/panel")
+def panel_page(request: Request):
+    user = request.state.user
+    token = request.state.access_token
+    try:
+        stats = get_stats(token, user["id"])
+    except StatsUnavailable:
+        stats = None
+    try:
+        reports = list_reports(token)
+    except HistoryUnavailable:
+        reports = None
+
+    return templates.TemplateResponse(
+        request, "panel.html",
+        {
+            "request": request,
+            "stats": stats,
+            "reports": reports,
+            "last_sign_in_at": user.get("last_sign_in_at"),
+            "member_since": user.get("created_at"),
+        }
+    )
+
+@app.get("/panel/reports/{report_id}/pdf")
+def panel_report_pdf(request: Request, report_id: str):
+    result = get_report_pdf(request.state.access_token, report_id)
+    if result is None:
+        raise HTTPException(404, "No encontramos el PDF de este informe.")
+
+    filename, pdf = result
+    return StreamingResponse(
+        io.BytesIO(pdf),
+        media_type="application/pdf",
+        headers={"Content-Disposition": f"attachment; filename={filename}"}
+    )
 
 # CLEAN
 @app.get("/clean/{session_id}")
@@ -199,7 +245,7 @@ def map_page(request: Request, session_id: str):
 # Clean data
 from services.cleaner import clean_sales_data
 @app.post("/api/clean-data/{session_id}")
-def clean_data(request: Request, session_id: str):
+def clean_data(request: Request, session_id: str, background_tasks: BackgroundTasks):
     owner_id = current_user_id(request)
     df = get_session_mapped_df(session_id, owner_id)
 
@@ -211,6 +257,13 @@ def clean_data(request: Request, session_id: str):
 
     df_clean, report = clean_sales_data(df, SALES_SCHEMA)
     update_session_df(session_id, owner_id, df_clean)
+    set_session_clean_report(session_id, owner_id, report)
+
+    if claim_once(session_id, owner_id, "stats_recorded"):
+        background_tasks.add_task(
+            record_activity, request.state.access_token,
+            processed=report["rows_initial"], fixed=report["rows_fixed"], removed=report["rows_removed"]
+        )
 
     return {
         "status": "ok",
@@ -222,13 +275,23 @@ def clean_data(request: Request, session_id: str):
 # Analyze data
 from services.analyzer import analyze_sales_data
 @app.post("/api/analyze/{session_id}")
-def analyze_data(request: Request, session_id: str):
-    df = get_session_df(session_id, current_user_id(request))
+def analyze_data(request: Request, session_id: str, background_tasks: BackgroundTasks):
+    owner_id = current_user_id(request)
+    df = get_session_df(session_id, owner_id)
 
     if df is None:
         raise HTTPException(404, "Sesión inválida")
 
     result = analyze_sales_data(df)
+
+    # Primer análisis de este archivo: queda en el historial del panel con su PDF
+    clean_report = get_session_clean_report(session_id, owner_id)
+    if clean_report and claim_once(session_id, owner_id, "report_saved"):
+        background_tasks.add_task(
+            save_report, request.state.access_token, owner_id,
+            get_session_filename(session_id, owner_id), get_session_report_name(session_id, owner_id),
+            clean_report, result
+        )
 
     return {
         "status": "ok",

@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mi panel · Data Cleaner &amp; Sales Report</title>
+  <link rel="stylesheet" href="/static/css/styles.css">
+
+  <!-- Estilos solo de esta página: styles.css se comparte con el resto -->
+  <style>
+    /* El pie de página queda abajo aunque haya poco contenido */
+    body {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    .panel-page {
+      flex: 1;
+      width: 100%;
+      min-height: auto;
+      margin: 56px auto 0;
+    }
+
+    .panel-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+      width: 100%;
+      text-align: left;
+    }
+
+    .panel-card {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      padding: 22px;
+      border-radius: 12px;
+      background: #ffffff;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+    }
+
+    .panel-card-head {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.85rem;
+      color: #6b7280;
+    }
+
+    .panel-icon {
+      display: grid;
+      place-items: center;
+      flex: none;
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: #e7f0ff;
+      color: #0d6efd;
+    }
+
+    .panel-icon svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .panel-value {
+      margin-top: 6px;
+      font-size: 2rem;
+      font-weight: 700;
+      line-height: 1.15;
+      color: #111827;
+      overflow-wrap: anywhere;
+    }
+
+    .panel-value.small {
+      font-size: 1.15rem;
+      line-height: 1.4;
+    }
+
+    .panel-note {
+      font-size: 0.85rem;
+      color: #6b7280;
+    }
+
+    .plan-badge {
+      align-self: flex-start;
+      margin-top: 6px;
+      padding: 4px 12px;
+      border-radius: 999px;
+      background: #ecfdf5;
+      color: #065f46;
+      font-size: 0.95rem;
+      font-weight: 600;
+    }
+
+    .panel-notice {
+      width: 100%;
+      margin: 0 0 16px;
+      padding: 12px 16px;
+      border: 1px solid #fcd34d;
+      border-radius: 8px;
+      background: #fffbeb;
+      color: #92400e;
+      font-size: 0.9rem;
+      text-align: left;
+    }
+
+    .panel-impact {
+      width: 100%;
+      margin: 0 0 16px;
+      padding: 16px 20px;
+      border-radius: 12px;
+      background: #e7f0ff;
+      color: #0a3d8f;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      text-align: left;
+    }
+
+    .panel-impact strong {
+      color: #0d6efd;
+    }
+
+    .panel-actions {
+      margin-top: 28px;
+    }
+
+    .history {
+      width: 100%;
+      margin-top: 40px;
+      text-align: left;
+    }
+
+    .history-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .history-head h2 {
+      margin: 0;
+      font-size: 1.1rem;
+    }
+
+    .history-head span {
+      font-size: 0.85rem;
+      color: #6b7280;
+    }
+
+    .history-list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      border-radius: 12px;
+      background: #ffffff;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+    }
+
+    .history-item {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 12px 20px;
+      padding: 16px 20px;
+    }
+
+    .history-item + .history-item {
+      border-top: 1px solid #f3f4f6;
+    }
+
+    .history-main {
+      flex: 1 1 220px;
+      min-width: 0;
+    }
+
+    .history-name {
+      font-weight: 600;
+      overflow-wrap: anywhere;
+    }
+
+    .history-meta {
+      margin-top: 2px;
+      font-size: 0.82rem;
+      color: #6b7280;
+      overflow-wrap: anywhere;
+    }
+
+    .history-figures {
+      display: flex;
+      gap: 20px;
+      text-align: right;
+    }
+
+    .history-figure-label {
+      font-size: 0.75rem;
+      color: #6b7280;
+    }
+
+    .history-figure-value {
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .history-pdf {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      border-radius: 8px;
+      background: #dc3545;
+      color: #ffffff;
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: background 0.2s ease;
+    }
+
+    .history-pdf:hover {
+      background: #bb2d3b;
+    }
+
+    .history-pdf.disabled {
+      background: #e5e7eb;
+      color: #6b7280;
+      pointer-events: none;
+    }
+
+    .history-empty {
+      padding: 24px 20px;
+      font-size: 0.9rem;
+      color: #6b7280;
+      text-align: center;
+    }
+
+    .panel-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      border-radius: 999px;
+      background: #0d6efd;
+      color: #ffffff;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background 0.2s ease;
+    }
+
+    .panel-cta:hover {
+      background: #0b5ed7;
+    }
+
+    .page-footer {
+      margin-top: auto;
+      margin-bottom: 24px;
+      padding-top: 40px;
+      font-size: 0.8rem;
+    }
+
+    @media (max-width: 560px) {
+      .panel-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .history-figures {
+        flex: 1;
+        text-align: left;
+      }
+    }
+  </style>
+</head>
+<body>
+{% include "_user_bar.html" %}
+
+  <main class="container panel-page">
+    <h1>Mi panel</h1>
+    <p class="subtitle">Tu actividad en Data Cleaner &amp; Sales Report.</p>
+
+    {% if stats is none %}
+      <p class="panel-notice" role="status">
+        No pudimos leer tus estadísticas en este momento. Inténtalo de nuevo más tarde.
+      </p>
+    {% endif %}
+
+    {% if stats %}
+      <p class="panel-impact">
+        {% if stats.rows_processed %}
+          {% set with_errors = stats.rows_fixed + stats.rows_removed %}
+          La app revisó <strong>{{ "{:,}".format(stats.rows_processed) }} filas</strong> por ti y corrigió
+          <strong>{{ "{:,}".format(stats.rows_fixed) }}</strong> sin que tuvieras que tocarlas.
+          El <strong>{{ "{:.2f}".format(with_errors / stats.rows_processed * 100) }}%</strong> de tus datos tenía algún error.
+        {% else %}
+          Carga tu primer archivo y aquí verás cuánto trabajo te ahorra la limpieza automática.
+        {% endif %}
+      </p>
+    {% endif %}
+
+    <div class="panel-grid">
+      <section class="panel-card">
+        <div class="panel-card-head">
+          <span class="panel-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M12 18v-6M9 15l3-3 3 3"/>
+            </svg>
+          </span>
+          Archivos cargados
+        </div>
+        <div class="panel-value">{{ "{:,}".format(stats.files_uploaded) if stats else "—" }}</div>
+        <div class="panel-note">CSV y Excel subidos con tu cuenta</div>
+      </section>
+
+      <section class="panel-card">
+        <div class="panel-card-head">
+          <span class="panel-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M20 6 9 17l-5-5"/>
+            </svg>
+          </span>
+          Filas corregidas
+        </div>
+        <div class="panel-value">{{ "{:,}".format(stats.rows_fixed) if stats else "—" }}</div>
+        <div class="panel-note">
+          {% if stats %}
+            {{ "{:,}".format(stats.rows_removed) }} {{ "eliminada" if stats.rows_removed == 1 else "eliminadas" }} ·
+            {{ "{:,}".format(stats.rows_processed) }} {{ "procesada" if stats.rows_processed == 1 else "procesadas" }}
+          {% else %}
+            Filas que la limpieza arregló por ti
+          {% endif %}
+        </div>
+      </section>
+
+      <section class="panel-card">
+        <div class="panel-card-head">
+          <span class="panel-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>
+            </svg>
+          </span>
+          Último inicio de sesión
+        </div>
+        <div class="panel-value small">
+          {% if last_sign_in_at %}
+            <time datetime="{{ last_sign_in_at }}" data-format="datetime">{{ last_sign_in_at[:16] | replace("T", " ") }}</time>
+          {% else %}
+            —
+          {% endif %}
+        </div>
+        {% if member_since %}
+          <div class="panel-note">
+            Miembro desde <time datetime="{{ member_since }}" data-format="date">{{ member_since[:10] }}</time>
+          </div>
+        {% endif %}
+      </section>
+
+      <section class="panel-card">
+        <div class="panel-card-head">
+          <span class="panel-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="m12 3 2.6 5.6 6.1.7-4.5 4.2 1.2 6L12 16.6 6.6 19.5l1.2-6-4.5-4.2 6.1-.7z"/>
+            </svg>
+          </span>
+          Plan
+        </div>
+        <span class="plan-badge">{{ stats.plan_label if stats else "Gratuito" }}</span>
+        <div class="panel-note">Versión gratuita</div>
+      </section>
+    </div>
+
+    <section class="history">
+      <div class="history-head">
+        <h2>Historial de informes</h2>
+        <span>Últimos 10</span>
+      </div>
+
+      {% if reports is none %}
+        <p class="panel-notice" role="status">No pudimos leer tu historial en este momento. Inténtalo de nuevo más tarde.</p>
+      {% elif not reports %}
+        <div class="history-list">
+          <p class="history-empty">Aún no has procesado archivos. Tus informes aparecerán aquí.</p>
+        </div>
+      {% else %}
+        <ul class="history-list">
+          {% for report in reports %}
+            <li class="history-item">
+              <div class="history-main">
+                <div class="history-name">{{ report.report_name or report.file_name or "Informe sin nombre" }}</div>
+                <div class="history-meta">
+                  <time datetime="{{ report.created_at }}" data-format="datetime">{{ report.created_at[:16] | replace("T", " ") }}</time>
+                  {% if report.report_name and report.file_name %} · {{ report.file_name }}{% endif %}
+                  · {{ "{:,}".format(report.rows_final) }} {{ "fila" if report.rows_final == 1 else "filas" }}
+                  {% if report.rows_fixed %} · {{ "{:,}".format(report.rows_fixed) }} {{ "corregida" if report.rows_fixed == 1 else "corregidas" }}{% endif %}
+                </div>
+              </div>
+
+              <div class="history-figures">
+                <div>
+                  <div class="history-figure-label">Total vendido</div>
+                  <div class="history-figure-value">${{ "{:,.2f}".format(report.total_sold | float) }}</div>
+                </div>
+                {% if report.margin_pct is not none %}
+                  <div>
+                    <div class="history-figure-label">Margen</div>
+                    <div class="history-figure-value">{{ "{:.2f}".format(report.margin_pct | float) }}%</div>
+                  </div>
+                {% endif %}
+              </div>
+
+              {% if report.pdf_path %}
+                <a class="history-pdf" href="/panel/reports/{{ report.id }}/pdf">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M12 4v11M7.5 10.5 12 15l4.5-4.5M5 20h14"/>
+                  </svg>
+                  PDF
+                </a>
+              {% else %}
+                <span class="history-pdf disabled" title="El PDF de este informe no se pudo guardar">Sin PDF</span>
+              {% endif %}
+            </li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    </section>
+
+    <div class="panel-actions">
+      <a class="panel-cta" href="/">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 20V9M7.5 13.5 12 9l4.5 4.5M5 4h14"/>
+        </svg>
+        Cargar un archivo
+      </a>
+    </div>
+
+    <p class="subtitle page-footer">
+      © JAGM Data Cleaner &amp; Sales Report 2026. Todos los derechos reservados.
+    </p>
+  </main>
+
+  <script>
+    // Las fechas llegan en UTC: se muestran en la hora local de quien mira
+    const FORMATS = {
+      datetime: { dateStyle: "medium", timeStyle: "short" },
+      date: { dateStyle: "medium" },
+    };
+    document.querySelectorAll("time[data-format]").forEach(el => {
+      const date = new Date(el.getAttribute("datetime"));
+      if (!isNaN(date)) {
+        el.textContent = date.toLocaleString("es", FORMATS[el.dataset.format]);
+      }
+    });
+  </script>
+</body>
+</html>
