@@ -35,7 +35,7 @@ Construida con **FastAPI**, **pandas**, **Jinja2** y **reportlab**.
 - **Limpieza que corrige antes de eliminar**: deduce el valor correcto cuando los datos lo permiten y reporta cada cambio.
 - **Informe de ventas**: total vendido, utilidad, margen, rankings, ventas por categoría, tienda y ciudad, tendencia mensual e insights automáticos.
 - **Exportación** de los datos limpios a CSV y del informe a PDF, con el nombre de la empresa y la fecha.
-- **Mi panel**: cada usuario ve sus archivos cargados, filas corregidas, último inicio de sesión y plan, y un historial de sus últimos 10 informes con el PDF listo para volver a descargar.
+- **Mi panel**: cada usuario ve sus archivos cargados, filas corregidas, último inicio de sesión y plan, un historial de sus últimos 10 informes con el PDF listo para volver a descargar, y la sección *Cuenta*: método de acceso, cambio de contraseña y eliminación de la cuenta.
 
 ## Flujo de uso
 
@@ -110,14 +110,15 @@ En **Authentication → Sign In / Providers → Google**, activa el proveedor y 
 
 ### 4. Tablas y bucket del panel
 
-En **SQL Editor → New query**, ejecuta estos dos scripts. Cada uno se pega y se corre con **Run** una sola vez, y ambos se pueden volver a ejecutar sin problema.
+En **SQL Editor → New query**, ejecuta estos tres scripts en orden. Cada uno se pega y se corre con **Run** una sola vez, y todos se pueden volver a ejecutar sin problema.
 
 | Script | Qué crea |
 |---|---|
 | [`supabase/user_stats.sql`](supabase/user_stats.sql) | La tabla `user_stats`, con los contadores por usuario, y la función `record_activity`, que es la única forma de sumar a los contadores y no permite cambiar el plan |
 | [`supabase/reports.sql`](supabase/reports.sql) | La tabla `reports`, con el historial de informes, y el bucket privado `reports` de Storage, donde van los PDFs: una carpeta por usuario, solo PDFs y hasta 5 MB cada uno |
+| [`supabase/account.sql`](supabase/account.sql) | La función `delete_my_account`, que borra al usuario que la llama, y el permiso para que cada usuario borre sus propios PDFs |
 
-Ambos scripts activan reglas de seguridad (RLS) para que cada usuario solo vea sus propios datos y archivos.
+Los scripts activan reglas de seguridad (RLS) para que cada usuario solo vea sus propios datos y archivos.
 
 Si todavía no ejecutaste los scripts, la app funciona igual: el panel muestra un aviso, y la consola explica qué falta (`No se pudieron leer los stats del usuario`, `No se pudo guardar el PDF del informe`…).
 
@@ -263,6 +264,20 @@ Cómo funciona:
 
 Para cambiar el plan de un usuario en el futuro, edita la columna `plan` en **Table Editor → user_stats**. La etiqueta que se muestra se define en `PLANS`, en [`services/user_stats.py`](services/user_stats.py).
 
+### Cuenta
+
+Al final del panel, la sección **Cuenta** muestra:
+
+- **Correo y método de acceso:** *Correo y contraseña*, *Google* o ambos, según cómo se registró el usuario.
+- **Cambiar contraseña:** pide la contraseña actual, la nueva y su confirmación, con el “ojo” para verlas.
+  - La contraseña actual se verifica iniciando sesión con ella, así que alguien con la sesión abierta no puede cambiarla.
+  - La sesión actual sigue abierta después del cambio.
+  - Si el usuario entra solo con Google, en lugar del formulario aparece una nota: su cuenta no tiene contraseña propia.
+- **Eliminar cuenta:** un bloque desplegable que explica qué se borra y pide escribir el correo para confirmar.
+  - La app borra primero los PDFs del usuario en Storage y luego la cuenta con `delete_my_account`. Sus filas de `user_stats` y `reports` se borran solas, en cascada.
+  - Al terminar, cierra la sesión y muestra en el login “Tu cuenta y todos tus datos fueron eliminados.”
+  - Si no puede borrar los PDFs, se detiene sin borrar la cuenta, para no dejar archivos huérfanos.
+
 ## Estructura del proyecto
 
 ```
@@ -285,10 +300,12 @@ data-cleaner-app/
 │   ├── sessions.py          # Sesiones en memoria, una por archivo y por usuario
 │   ├── supabase_auth.py     # Cliente de Supabase: Auth, API de datos y Storage (solo librería estándar)
 │   ├── user_stats.py        # Stats del panel: guardar actividad y leerla
-│   └── report_history.py    # Historial de informes: guardar resumen y PDF, listar y descargar
+│   ├── report_history.py    # Historial de informes: guardar resumen y PDF, listar y descargar
+│   └── account.py           # Cuenta: método de acceso, cambio de contraseña y eliminación
 ├── supabase/
 │   ├── user_stats.sql       # Tabla, seguridad y función de los stats (se pega en el SQL Editor)
-│   └── reports.sql          # Tabla del historial y bucket de PDFs (se pega en el SQL Editor)
+│   ├── reports.sql          # Tabla del historial y bucket de PDFs (se pega en el SQL Editor)
+│   └── account.sql          # Función para eliminar la cuenta y permiso para borrar PDFs
 ├── templates/
 │   ├── _user_bar.html       # Barra con “Mi panel”, el correo del usuario y “Cerrar sesión”
 │   ├── auth.html            # Login, registro y contraseñas
@@ -299,7 +316,9 @@ data-cleaner-app/
 └── static/
     ├── css/styles.css       # Estilos compartidos
     ├── css/main.js
-    └── js/upload.js         # Carga de archivos
+    ├── js/upload.js         # Carga de archivos
+    ├── js/password_toggle.js # “Ojo” para mostrar u ocultar contraseñas (login, registro y panel)
+    └── ejemplo_ventas.csv   # Archivo de ejemplo que se descarga desde la guía de carga
 ```
 
 ## Rutas y API
@@ -315,6 +334,8 @@ Todas las rutas requieren sesión iniciada, excepto las marcadas como públicas.
 | GET | `/clean/{session_id}` | Procesamiento e informe |
 | GET | `/panel` | Mi panel |
 | GET | `/panel/reports/{id}/pdf` | Vuelve a descargar el PDF de un informe del historial |
+| POST | `/panel/password` | Cambia la contraseña (pide la actual) |
+| POST | `/panel/delete-account` | Elimina la cuenta y todos sus datos (pide escribir el correo) |
 | GET/POST | `/login` | Inicio de sesión (pública) |
 | GET/POST | `/signup` | Registro (pública) |
 | GET/POST | `/forgot-password` | Pedir enlace para cambiar la contraseña (pública) |

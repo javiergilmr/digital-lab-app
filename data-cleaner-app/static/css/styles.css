@@ -451,3 +451,72 @@ canvas {
   font-size: 0.85rem;
   text-decoration: underline;
 }
+
+/* =========================
+   CAMPOS DE CUENTA (login, registro y panel)
+   ========================= */
+.auth-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.9rem;
+}
+
+.auth-field input {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  background: #fff;
+  font-size: 0.95rem;
+  transition: border-color 0.2s ease;
+}
+
+.auth-field input:focus {
+  outline: none;
+  border-color: #111827;
+}
+
+/* Ojo para mostrar u ocultar la contraseña */
+.password-wrap {
+  position: relative;
+  display: flex;
+}
+
+.password-wrap input {
+  flex: 1;
+  width: 100%;
+  padding-right: 44px;
+}
+
+.password-toggle {
+  position: absolute;
+  top: 50%;
+  right: 6px;
+  display: flex;
+  padding: 6px;
+  border-radius: 6px;
+  background: none;
+  color: #6b7280;
+  transform: translateY(-50%);
+}
+
+.password-toggle:hover {
+  background: #f3f4f6;
+  color: #111827;
+}
+
+.password-toggle:focus-visible {
+  outline: 2px solid #111827;
+  outline-offset: 1px;
+}
+
+.password-toggle svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* Edge agrega su propio ojo: se oculta para no tener dos */
+input::-ms-reveal,
+input::-ms-clear {
+  display: none;
+}

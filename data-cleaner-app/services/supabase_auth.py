@@ -107,6 +107,15 @@ def storage_download(bucket, path, token) -> bytes:
     return _call("GET", f"/object/authenticated/{bucket}/{path}", token=token, api="storage", binary=True)
 
 
+def storage_list(bucket, prefix, token):
+    """Archivos dentro de una carpeta del bucket (solo los que las políticas dejan ver)."""
+    return _call("POST", f"/object/list/{bucket}", {"prefix": prefix, "limit": 1000, "offset": 0}, token, api="storage")
+
+
+def storage_remove(bucket, paths, token):
+    _call("DELETE", f"/object/{bucket}", {"prefixes": paths}, token, api="storage")
+
+
 # =========================
 # PKCE: Google y los enlaces por correo vuelven con ?code=, que se canjea con este verificador
 # =========================

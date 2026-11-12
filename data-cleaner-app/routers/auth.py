@@ -99,10 +99,11 @@ def _logged_in_redirect(session, next_path, secure):
 # =========================
 
 @router.get("/login")
-def login_page(request: Request, next: str = "/"):
+def login_page(request: Request, next: str = "/", deleted: bool = False):
     if request.state.user:
         return RedirectResponse(safe_next(next), status_code=303)
-    return _render(request, "login", next=safe_next(next))
+    notice = "Tu cuenta y todos tus datos fueron eliminados." if deleted else None
+    return _render(request, "login", next=safe_next(next), notice=notice)
 
 
 @router.post("/login")

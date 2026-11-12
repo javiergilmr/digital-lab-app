@@ -1,4 +1,4 @@
-from fastapi import FastAPI, UploadFile, File, HTTPException, BackgroundTasks
+from fastapi import FastAPI, UploadFile, File, Form, HTTPException, BackgroundTasks
 import pandas as pd
 from services.column_validator import detect_sales_columns, validate_sales_file, validate_column_types
 from services.schema import SALES_SCHEMA
@@ -85,6 +85,7 @@ from services.sessions import (
 )
 from services.user_stats import record_activity, get_stats, StatsUnavailable
 from services.report_history import save_report, list_reports, get_report_pdf, HistoryUnavailable
+from services.account import AccountError, access_methods, has_password, change_password, delete_account
 
 @app.get("/api/health")
 def health():
@@ -146,7 +147,11 @@ def upload_page(request: Request):
 
 # PANEL DEL USUARIO
 @app.get("/panel")
-def panel_page(request: Request):
+def panel_page(request: Request, ok: str = ""):
+    notice = "Tu contraseña se cambió correctamente." if ok == "password" else None
+    return render_panel(request, password_notice=notice)
+
+def render_panel(request: Request, status_code=200, **messages):
     user = request.state.user
     token = request.state.access_token
     try:
@@ -166,8 +171,35 @@ def panel_page(request: Request):
             "reports": reports,
             "last_sign_in_at": user.get("last_sign_in_at"),
             "member_since": user.get("created_at"),
-        }
+            "access_methods": access_methods(user),
+            "has_password": has_password(user),
+            **messages,
+        },
+        status_code=status_code
     )
+
+@app.post("/panel/password")
+def panel_change_password(
+    request: Request, current: str = Form(...), password: str = Form(...), confirm: str = Form(...)
+):
+    if not has_password(request.state.user):
+        raise HTTPException(400, "Tu cuenta entra con Google y no tiene contraseña.")
+    try:
+        change_password(request.state.user, current, password, confirm)
+    except AccountError as e:
+        return render_panel(request, status_code=400, password_error=e.message)
+    return RedirectResponse("/panel?ok=password#cuenta", status_code=303)
+
+@app.post("/panel/delete-account")
+def panel_delete_account(request: Request, confirm_email: str = Form(...)):
+    try:
+        delete_account(request.state.user, request.state.access_token, confirm_email)
+    except AccountError as e:
+        return render_panel(request, status_code=400, delete_error=e.message)
+
+    response = RedirectResponse("/login?deleted=1", status_code=303)
+    clear_session_cookies(response)
+    return response
 
 @app.get("/panel/reports/{report_id}/pdf")
 def panel_report_pdf(request: Request, report_id: str):

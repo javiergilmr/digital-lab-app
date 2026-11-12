@@ -260,6 +260,118 @@
       font-size: 0.8rem;
     }
 
+    /* ================= CUENTA ================= */
+
+    .account {
+      width: 100%;
+      margin-top: 48px;
+      text-align: left;
+    }
+
+    .account h2 {
+      margin: 0 0 12px;
+      font-size: 1.1rem;
+    }
+
+    .account-card {
+      margin-bottom: 16px;
+      padding: 20px;
+      border-radius: 12px;
+      background: #ffffff;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+    }
+
+    .account-hint {
+      margin: 0 0 14px;
+      font-size: 0.85rem;
+      line-height: 1.5;
+      color: #6b7280;
+    }
+
+    .account-rows {
+      display: grid;
+      grid-template-columns: max-content minmax(0, 1fr);
+      gap: 10px 20px;
+      margin: 0;
+      font-size: 0.9rem;
+    }
+
+    .account-rows dt {
+      color: #6b7280;
+    }
+
+    .account-rows dd {
+      margin: 0;
+      overflow-wrap: anywhere;
+    }
+
+    .method-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin: 0 6px 6px 0;
+      padding: 3px 10px;
+      border-radius: 999px;
+      background: #f3f4f6;
+      font-size: 0.82rem;
+      font-weight: 600;
+    }
+
+    .account-form {
+      display: grid;
+      gap: 12px;
+      max-width: 360px;
+    }
+
+    .account-form button {
+      justify-self: start;
+      padding: 10px 18px;
+      font-weight: 600;
+    }
+
+    .account-message {
+      margin: 0 0 14px;
+      font-size: 0.88rem;
+    }
+
+    .danger-zone {
+      border: 1px solid #fecaca;
+    }
+
+    /* Bloques desplegables de la cuenta (contraseña y eliminar) */
+    .account-toggle summary {
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .account-toggle[open] summary {
+      margin-bottom: 12px;
+    }
+
+    .account-toggle .account-hint:last-child {
+      margin-bottom: 0;
+    }
+
+    .danger-zone summary {
+      color: #b91c1c;
+    }
+
+    .danger-zone ul {
+      margin: 0 0 14px;
+      padding-left: 18px;
+      font-size: 0.85rem;
+      line-height: 1.6;
+      color: #4b5563;
+    }
+
+    .account-form .danger-btn {
+      background: #dc3545;
+    }
+
+    .account-form .danger-btn:hover {
+      background: #bb2d3b;
+    }
+
     @media (max-width: 560px) {
       .panel-grid {
         grid-template-columns: minmax(0, 1fr);
@@ -433,11 +545,100 @@
       </a>
     </div>
 
+    <section class="account" id="cuenta" aria-labelledby="account-title">
+      <h2 id="account-title">Cuenta</h2>
+
+      <div class="account-card">
+        <dl class="account-rows">
+          <dt>Correo</dt>
+          <dd>{{ request.state.user.email }}</dd>
+          <dt>Acceso</dt>
+          <dd>
+            {% for method in access_methods %}
+              <span class="method-chip">
+                {% if method.id == "google" %}
+                  <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true">
+                    <path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.4h6.5a5.6 5.6 0 0 1-2.4 3.6v3h3.9c2.2-2.1 3.5-5.1 3.5-8.7z"/>
+                    <path fill="#34A853" d="M12 24c3.2 0 6-1.1 8-2.9l-3.9-3c-1.1.7-2.5 1.2-4.1 1.2-3.1 0-5.8-2.1-6.7-5H1.3v3.1A12 12 0 0 0 12 24z"/>
+                    <path fill="#FBBC05" d="M5.3 14.3a7.2 7.2 0 0 1 0-4.6V6.6h-4a12 12 0 0 0 0 10.8z"/>
+                    <path fill="#EA4335" d="M12 4.8c1.7 0 3.3.6 4.5 1.8l3.4-3.4A12 12 0 0 0 1.3 6.6l4 3.1c.9-2.8 3.6-4.9 6.7-4.9z"/>
+                  </svg>
+                {% else %}
+                  <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/>
+                  </svg>
+                {% endif %}
+                {{ method.label }}
+              </span>
+            {% else %}
+              —
+            {% endfor %}
+          </dd>
+        </dl>
+      </div>
+
+      <details class="account-card account-toggle"{% if password_error or password_notice %} open{% endif %}>
+        <summary>Cambiar contraseña</summary>
+        {% if has_password %}
+          <p class="account-hint">Por seguridad, primero confirma tu contraseña actual.</p>
+
+          {% if password_notice %}
+            <p class="ready-message account-message" role="status">{{ password_notice }}</p>
+          {% endif %}
+          {% if password_error %}
+            <p class="upload-error account-message" role="alert">{{ password_error }}</p>
+          {% endif %}
+
+          <form class="account-form" method="post" action="/panel/password">
+            <input type="email" name="username" value="{{ request.state.user.email }}" autocomplete="username" hidden>
+            <label class="auth-field">
+              Contraseña actual
+              <input type="password" name="current" required autocomplete="current-password">
+            </label>
+            <label class="auth-field">
+              Nueva contraseña
+              <input type="password" name="password" required minlength="6" autocomplete="new-password">
+            </label>
+            <label class="auth-field">
+              Repite la nueva contraseña
+              <input type="password" name="confirm" required minlength="6" autocomplete="new-password">
+            </label>
+            <button type="submit">Cambiar contraseña</button>
+          </form>
+        {% else %}
+          <p class="account-hint">
+            Entras con Google, así que tu cuenta no tiene contraseña propia: la seguridad la maneja tu cuenta de Google.
+          </p>
+        {% endif %}
+      </details>
+
+      <details class="account-card account-toggle danger-zone"{% if delete_error %} open{% endif %}>
+        <summary>Eliminar cuenta</summary>
+        <ul>
+          <li>Se borran tu cuenta, tus estadísticas y tu historial de informes, con todos sus PDFs.</li>
+          <li>No se puede deshacer. Podrás volver a registrarte con el mismo correo, pero empezarás desde cero.</li>
+        </ul>
+
+        {% if delete_error %}
+          <p class="upload-error account-message" role="alert">{{ delete_error }}</p>
+        {% endif %}
+
+        <form class="account-form" method="post" action="/panel/delete-account">
+          <label class="auth-field">
+            Para confirmar, escribe tu correo: {{ request.state.user.email }}
+            <input type="email" name="confirm_email" required autocomplete="off" spellcheck="false">
+          </label>
+          <button type="submit" class="danger-btn">Eliminar mi cuenta para siempre</button>
+        </form>
+      </details>
+    </section>
+
     <p class="subtitle page-footer">
       © JAGM Data Cleaner &amp; Sales Report 2026. Todos los derechos reservados.
     </p>
   </main>
 
+  <script src="/static/js/password_toggle.js"></script>
   <script>
     // Las fechas llegan en UTC: se muestran en la hora local de quien mira
     const FORMATS = {
