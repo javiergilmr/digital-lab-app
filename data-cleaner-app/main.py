@@ -1,7 +1,7 @@
 from fastapi import FastAPI, UploadFile, File, Form, HTTPException, BackgroundTasks
 import pandas as pd
 from services.column_validator import detect_sales_columns, validate_sales_file, validate_column_types
-from services.schema import SALES_SCHEMA
+from services.schema import SALES_SCHEMA, ALL_FIELDS
 from routers.api import router as api_router
 
 from fastapi import FastAPI, Request
@@ -75,10 +75,13 @@ from services.sessions import (
     update_session_df,
     get_session_original_df,
     set_session_mapped_df,
+    set_session_mapping,
+    get_session_mapping,
     get_session_mapped_df,
     set_session_report_name,
     get_session_report_name,
     claim_once,
+    was_claimed,
     set_session_clean_report,
     get_session_clean_report,
     get_session_filename
@@ -86,6 +89,21 @@ from services.sessions import (
 from services.user_stats import record_activity, get_stats, StatsUnavailable
 from services.report_history import save_report, list_reports, get_report_pdf, HistoryUnavailable
 from services.account import AccountError, access_methods, has_password, change_password, delete_account
+from services.plans import (
+    PlanLimitError, get_plan, get_monthly_usage, record_processed_file, check_rows, check_monthly_quota, usage_summary
+)
+
+def enforce_plan(request: Request, rows=None):
+    """Valida filas y cupo mensual del plan; devuelve el plan para reutilizarlo."""
+    token, user_id = request.state.access_token, current_user_id(request)
+    plan = get_plan(token, user_id)
+    try:
+        if rows is not None:
+            check_rows(plan, rows)
+        check_monthly_quota(plan, get_monthly_usage(token, user_id))
+    except PlanLimitError as e:
+        raise HTTPException(403, e.message) from None
+    return plan
 
 @app.get("/api/health")
 def health():
@@ -108,6 +126,9 @@ async def upload_file(request: Request, background_tasks: BackgroundTasks, file:
 
     if df.empty:
         raise HTTPException(400, "Archivo vacío")
+
+    # Antes de mapear: si el archivo no cabe en el plan, se avisa de una vez
+    enforce_plan(request, rows=len(df))
 
     detected_columns = detect_sales_columns(df)
     missing_fields = validate_sales_file(df)
@@ -158,8 +179,9 @@ def render_panel(request: Request, status_code=200, **messages):
         stats = get_stats(token, user["id"])
     except StatsUnavailable:
         stats = None
+    plan = get_plan(token, user["id"])
     try:
-        reports = list_reports(token)
+        reports = list_reports(token, limit=plan["history"])
     except HistoryUnavailable:
         reports = None
 
@@ -169,6 +191,8 @@ def render_panel(request: Request, status_code=200, **messages):
             "request": request,
             "stats": stats,
             "reports": reports,
+            "plan": plan,
+            "usage": usage_summary(plan, get_monthly_usage(token, user["id"])),
             "last_sign_in_at": user.get("last_sign_in_at"),
             "member_since": user.get("created_at"),
             "access_methods": access_methods(user),
@@ -234,8 +258,11 @@ def map_columns(request: Request, session_id: str, payload: ColumnMappingPayload
     if df is None:
         raise HTTPException(404, "Sesión no encontrada")
 
-    df = apply_column_mapping(df, payload.mapping)
-    set_session_mapped_df(session_id, owner_id, df)
+    mapped = apply_column_mapping(df, payload.mapping)
+    set_session_mapped_df(session_id, owner_id, mapped)
+    set_session_mapping(session_id, owner_id, {
+        field: col for col, field in payload.mapping.items() if col in df.columns and field in ALL_FIELDS
+    })
     set_session_report_name(session_id, owner_id, payload.report_name.strip())
 
     return {"status": "ok"}
@@ -251,7 +278,8 @@ from services.auto_mapping import auto_map_columns
 
 @app.get("/map/{session_id}")
 def map_page(request: Request, session_id: str):
-    df = get_session_original_df(session_id, current_user_id(request))
+    owner_id = current_user_id(request)
+    df = get_session_original_df(session_id, owner_id)
 
     if df is None:
         raise HTTPException(status_code=404, detail="Sesión no encontrada")
@@ -260,6 +288,8 @@ def map_page(request: Request, session_id: str):
     print(df.head(3))
 
     auto_mapping = auto_map_columns(list(df.columns))
+    # Si ya se mapeó (ej. al volver desde Procesar), se muestra lo elegido y no lo automático
+    saved_mapping = get_session_mapping(session_id, owner_id)
 
     return templates.TemplateResponse(
         request, "map.html",
@@ -270,7 +300,9 @@ def map_page(request: Request, session_id: str):
             "optional": SALES_SCHEMA["optional"],
             "labels": SALES_SCHEMA["labels"],
             "columns": list(df.columns),
-            "auto_mapping": auto_mapping
+            "auto_mapping": auto_mapping,
+            "selected": saved_mapping if saved_mapping is not None else auto_mapping,
+            "report_name": get_session_report_name(session_id, owner_id)
         }
     )
 
@@ -286,6 +318,12 @@ def clean_data(request: Request, session_id: str, background_tasks: BackgroundTa
 
     print("Columnas: ")
     print(df.columns)
+
+    # El cupo se gasta la primera vez que se procesa el archivo; reprocesar o remapear no lo vuelve a gastar
+    if not was_claimed(session_id, owner_id, "quota_counted"):
+        enforce_plan(request)
+        if claim_once(session_id, owner_id, "quota_counted"):
+            record_processed_file(request.state.access_token)
 
     df_clean, report = clean_sales_data(df, SALES_SCHEMA)
     update_session_df(session_id, owner_id, df_clean)
@@ -322,7 +360,7 @@ def analyze_data(request: Request, session_id: str, background_tasks: Background
         background_tasks.add_task(
             save_report, request.state.access_token, owner_id,
             get_session_filename(session_id, owner_id), get_session_report_name(session_id, owner_id),
-            clean_report, result
+            clean_report, result, get_plan(request.state.access_token, owner_id)
         )
 
     return {
@@ -374,7 +412,8 @@ def export_pdf(request: Request, session_id: str):
         raise HTTPException(409, "Primero procesa el archivo para generar el PDF.")
 
     report_name = get_session_report_name(session_id, owner_id)
-    pdf = build_sales_report_pdf(analyze_sales_data(df), report_name)
+    plan = get_plan(request.state.access_token, owner_id)
+    pdf = build_sales_report_pdf(analyze_sales_data(df), report_name, watermark=plan["watermark"])
 
     slug = report_slug(report_name)
     filename = f"{slug}_report_{date.today()}.pdf" if slug else f"reporte_ventas_{date.today()}.pdf"

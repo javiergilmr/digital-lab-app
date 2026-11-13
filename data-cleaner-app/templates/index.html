@@ -292,6 +292,8 @@
 {% include "_user_bar.html" %}
 
   <main class="container upload-page">
+    {% with step = 1 %}{% include "_stepper.html" %}{% endwith %}
+
     <h1>Data Cleaner &amp; Sales Report</h1>
     <p class="subtitle">
       Sube tu archivo de ventas y descubre qué productos realmente te generan dinero. En minutos y sin análisis complicado.

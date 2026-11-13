@@ -78,6 +78,46 @@
       line-height: 1.4;
     }
 
+    .plan-badge.pro {
+      background: #ede9fe;
+      color: #5b21b6;
+    }
+
+    .plan-usage {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-top: 8px;
+      font-size: 0.9rem;
+      color: #374151;
+    }
+
+    .plan-bar {
+      height: 6px;
+      border-radius: 999px;
+      background: #e5e7eb;
+      overflow: hidden;
+    }
+
+    .plan-bar span {
+      display: block;
+      height: 100%;
+      border-radius: inherit;
+      background: #6d28d9;
+    }
+
+    .plan-bar.full span {
+      background: #dc3545;
+    }
+
+    .plan-limits {
+      margin: 10px 0 0;
+      padding-left: 18px;
+      font-size: 0.85rem;
+      line-height: 1.6;
+      color: #6b7280;
+    }
+
     .panel-note {
       font-size: 0.85rem;
       color: #6b7280;
@@ -476,15 +516,41 @@
           </span>
           Plan
         </div>
-        <span class="plan-badge">{{ stats.plan_label if stats else "Gratuito" }}</span>
-        <div class="panel-note">Versión gratuita</div>
+        <span class="plan-badge{% if plan.id == 'pro' %} pro{% endif %}">{{ plan.label }}</span>
+
+        {% if usage.limit %}
+          <div class="plan-usage">
+            <div class="plan-usage-text">
+              {% if usage.used is none %}
+                Cupo del mes: {{ usage.limit }} archivos
+              {% else %}
+                <strong>{{ usage.used }} de {{ usage.limit }}</strong> archivos este mes
+              {% endif %}
+            </div>
+            {% if usage.used is not none %}
+              <div class="plan-bar{% if usage.used >= usage.limit %} full{% endif %}"
+                   role="progressbar" aria-valuemin="0" aria-valuemax="{{ usage.limit }}" aria-valuenow="{{ usage.used }}">
+                <span style="width: {{ usage.pct }}%"></span>
+              </div>
+            {% endif %}
+            <div class="panel-note">Se reinicia el {{ usage.reset }}</div>
+          </div>
+        {% else %}
+          <div class="panel-note">Archivos ilimitados cada mes</div>
+        {% endif %}
+
+        <ul class="plan-limits">
+          <li>Hasta {{ "{:,}".format(plan.max_rows) }} filas por archivo</li>
+          <li>Historial de tus últimos {{ plan.history }} informes</li>
+          <li>{{ "PDF con marca de agua" if plan.watermark else "PDF sin marca de agua" }}</li>
+        </ul>
       </section>
     </div>
 
     <section class="history">
       <div class="history-head">
         <h2>Historial de informes</h2>
-        <span>Últimos 10</span>
+        <span>Últimos {{ plan.history }}</span>
       </div>
 
       {% if reports is none %}

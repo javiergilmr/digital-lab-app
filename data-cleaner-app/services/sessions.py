@@ -43,6 +43,16 @@ def set_session_mapped_df(session_id, owner_id, df):
         session["df_mapped"] = df
         session["df"] = df
 
+def set_session_mapping(session_id, owner_id, mapping):
+    # {campo: columna} elegido en /map: al volver a mapear se muestra lo mismo que se dejó
+    session = _get_session(session_id, owner_id)
+    if session:
+        session["mapping"] = mapping
+
+def get_session_mapping(session_id: str, owner_id: str):
+    session = _get_session(session_id, owner_id)
+    return session.get("mapping") if session else None
+
 def get_session_mapped_df(session_id: str, owner_id: str):
     session = _get_session(session_id, owner_id)
     if not session:
@@ -57,6 +67,10 @@ def claim_once(session_id, owner_id, key) -> bool:
         return False
     session[key] = True
     return True
+
+def was_claimed(session_id, owner_id, key) -> bool:
+    session = _get_session(session_id, owner_id)
+    return bool(session and session.get(key))
 
 def set_session_clean_report(session_id, owner_id, report):
     session = _get_session(session_id, owner_id)

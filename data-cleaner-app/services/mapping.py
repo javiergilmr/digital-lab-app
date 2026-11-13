@@ -12,14 +12,13 @@ def apply_column_mapping(df, mapping):
     if missing:
         raise HTTPException(400, f"Faltan columnas obligatorias: {', '.join(missing)}.")
 
-    # Una columna no asignada que ya se llame como un campo (ej. "price") se renombra
-    # para no quedar duplicada con la que sí se eligió
-    targets = set(mapping.values())
+    # Una columna no asignada que ya se llame como un campo (ej. "price" o "profit") se renombra:
+    # así no se duplica con la elegida y "No usar" se respeta aunque el nombre coincida
     renames = {}
     for col in df.columns:
         if col in mapping:
             renames[col] = mapping[col]
-        elif col in targets:
+        elif col in ALL_FIELDS:
             renames[col] = f"{col}_original"
 
     return df.rename(columns=renames)

@@ -453,6 +453,117 @@ canvas {
 }
 
 /* =========================
+   PASOS DEL FLUJO (subir, mapear, procesar, informe)
+   ========================= */
+.stepper-wrap {
+  --step-accent: #6d28d9;
+  --step-line: #e5e7eb;
+  width: 100%;
+  max-width: 560px;
+  margin: 0 auto 36px;
+}
+
+.stepper {
+  display: flex;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.step {
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Línea hacia el siguiente paso: va del borde de un círculo al del siguiente */
+.step:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  top: 15px;
+  left: calc(50% + 20px);
+  right: calc(-50% + 20px);
+  height: 2px;
+  border-radius: 2px;
+  background: var(--step-line);
+  transition: background 0.4s ease;
+}
+
+.step.done:not(:last-child)::after {
+  background: var(--step-accent);
+}
+
+/* Desde el paso actual, la línea va a medio camino */
+.step.current:not(:last-child)::after {
+  background: linear-gradient(to right, var(--step-accent) 50%, var(--step-line) 50%);
+}
+
+.step-dot {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border: 1.5px solid var(--step-line);
+  border-radius: 50%;
+  background: #ffffff;
+  color: #6b7280;
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+  transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.step-check {
+  display: none;
+}
+
+.step.done .step-dot {
+  border-color: var(--step-accent);
+  background: var(--step-accent);
+  color: #ffffff;
+}
+
+.step.done .step-number {
+  display: none;
+}
+
+.step.done .step-check {
+  display: block;
+}
+
+.step.current .step-dot {
+  border-color: var(--step-accent);
+  color: var(--step-accent);
+  font-weight: 600;
+  box-shadow: 0 0 0 4px rgba(109, 40, 217, 0.12);
+}
+
+.step-label {
+  font-size: 0.75rem;
+  line-height: 1.3;
+  color: #9ca3af;
+  text-align: center;
+}
+
+.step.done .step-label {
+  color: #6b7280;
+}
+
+.step.current .step-label {
+  color: #111827;
+  font-weight: 600;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .step:not(:last-child)::after,
+  .step-dot {
+    transition: none;
+  }
+}
+
+/* =========================
    CAMPOS DE CUENTA (login, registro y panel)
    ========================= */
 .auth-field {

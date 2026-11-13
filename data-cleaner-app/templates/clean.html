@@ -356,6 +356,27 @@
       transform: scale(0.97);
     }
 
+    .back-to-map {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin: -8px 0 24px;
+      padding: 8px 16px;
+      border: 1px solid #e5e7eb;
+      border-radius: 999px;
+      background: #ffffff;
+      color: #374151;
+      font-size: 0.9rem;
+      text-decoration: none;
+      transition: border-color 0.2s ease, color 0.2s ease;
+    }
+
+    .back-to-map:hover,
+    .back-to-map:focus-visible {
+      border-color: #6d28d9;
+      color: #6d28d9;
+    }
+
     .process-arrow {
       animation: process-nudge 1.2s ease-in-out infinite;
     }
@@ -388,6 +409,8 @@
 {% include "_user_bar.html" %}
 
 <main class="container">
+  {% with step = 3 %}{% include "_stepper.html" %}{% endwith %}
+
   <h1>Data Cleaner &amp; Sales Report</h1>
   <p class="subtitle" id="intro">
     Haz clic en el botón para procesar el archivo y generar la descarga final.
@@ -399,6 +422,13 @@
       <path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
     </svg>
   </button>
+
+  <a href="/map/{{ session_id }}" class="back-to-map" id="back-to-map">
+    <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+      <path d="M19 12H5M11 6l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    Volver a mapear columnas
+  </a>
 
   <div id="loading" class="loading hidden" role="status">
     <div class="loading-label">Cargando...</div>
@@ -506,6 +536,7 @@
 <script>
 document.addEventListener("DOMContentLoaded", () => {
   const button = document.getElementById("clean-btn");
+  const backToMap = document.getElementById("back-to-map");
   const downloadActions = document.getElementById("download-actions");
   const errorText = document.getElementById("error-message");
   const readyText = document.getElementById("ready-message-text");
@@ -735,6 +766,15 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  // Al terminar de procesar: "Procesar" queda completado y "Informe" pasa a ser el actual
+  function advanceStepper() {
+    const steps = document.querySelectorAll("#stepper .step");
+    steps.forEach(step => step.removeAttribute("aria-current"));
+    steps[2].classList.replace("current", "done");
+    steps[3].classList.replace("todo", "current");
+    steps[3].setAttribute("aria-current", "step");
+  }
+
   function wait(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
@@ -778,6 +818,7 @@ document.addEventListener("DOMContentLoaded", () => {
     errorBox.classList.add("hidden");
     intro.classList.add("hidden");
     button.classList.add("hidden");
+    backToMap.classList.add("hidden");
     startLoading();
 
     try {
@@ -788,12 +829,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
       showStatus("✅ Análisis generado correctamente.");
       downloadActions.classList.remove("hidden");
+      advanceStepper();
 
     } catch (error) {
       // Si falla, el botón vuelve para poder intentarlo de nuevo
       loading.classList.add("hidden");
       intro.classList.remove("hidden");
       button.classList.remove("hidden");
+      backToMap.classList.remove("hidden");
       showAlert(`❌ ${error.message}`);
       console.error(error);
     }

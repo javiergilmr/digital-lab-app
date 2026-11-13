@@ -55,6 +55,8 @@
 {% include "_user_bar.html" %}
 
 <main class="container">
+  {% with step = 2 %}{% include "_stepper.html" %}{% endwith %}
+
   <h1>Selección de columnas</h1>
   <p class="subtitle">
     Asigna las columnas de tu archivo a los campos requeridos.
@@ -82,15 +84,16 @@
         <label class="field-label">
           <span>{{ labels[field] }}</span>
 
-          {% if auto_mapping.get(field) %}
+          {% set is_auto = auto_mapping.get(field) and auto_mapping.get(field) == selected.get(field) %}
+          {% if is_auto %}
             <span class="badge-auto">AUTO</span>
           {% endif %}
         </label>
 
         <select
           name="{{ field }}"
-          class="{% if auto_mapping.get(field) %}auto-selected{% endif %}"
-          data-auto="{% if auto_mapping.get(field) %}true{% else %}false{% endif %}"
+          class="{% if is_auto %}auto-selected{% endif %}"
+          data-auto="{% if is_auto %}true{% else %}false{% endif %}"
           {% if is_required %}required{% endif %}
         >
 
@@ -98,7 +101,7 @@
 
           {% for col in columns %}
             <option value="{{ col }}"
-              {% if auto_mapping.get(field) == col %}selected{% endif %}
+              {% if selected.get(field) == col %}selected{% endif %}
             >
               {{ col }}
             </option>
@@ -164,7 +167,7 @@ function updateReportNameHint() {
 }
 
 // maxlength no aplica a valores puestos por código: se recorta lo guardado antes de esta regla
-reportNameInput.value = (localStorage.getItem(REPORT_NAME_KEY) || "").slice(0, reportNameInput.maxLength);
+reportNameInput.value = (localStorage.getItem(REPORT_NAME_KEY) ?? {{ report_name | tojson }}).slice(0, reportNameInput.maxLength);
 updateReportNameHint();
 
 reportNameInput.addEventListener("input", () => {

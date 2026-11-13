@@ -1,0 +1,19 @@
+{# Pasos del flujo. Uso: {% with step = 2 %}{% include "_stepper.html" %}{% endwith %} #}
+{% set steps = ["Subir archivo", "Mapear columnas", "Procesar", "Informe"] %}
+<nav class="stepper-wrap" aria-label="Progreso">
+  <ol class="stepper" id="stepper">
+    {% for label in steps %}
+      {% set number = loop.index %}
+      {% set state = "done" if number < step else ("current" if number == step else "todo") %}
+      <li class="step {{ state }}"{% if state == "current" %} aria-current="step"{% endif %}>
+        <span class="step-dot">
+          <span class="step-number">{{ "%02d" | format(number) }}</span>
+          <svg class="step-check" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+            <path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+        <span class="step-label">{{ label }}</span>
+      </li>
+    {% endfor %}
+  </ol>
+</nav>

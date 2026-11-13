@@ -1,8 +1,7 @@
 # Stats del panel de usuario: se guardan en la tabla user_stats de Supabase (ver supabase/user_stats.sql)
 
+from services.plans import plan_info
 from services.supabase_auth import AuthError, rest_call
-
-PLANS = {"free": "Gratuito"}
 
 EMPTY_STATS = {
     "files_uploaded": 0,
@@ -42,5 +41,5 @@ def get_stats(access_token, user_id):
         raise StatsUnavailable() from None
 
     stats = {**EMPTY_STATS, **(rows[0] if rows else {})}
-    stats["plan_label"] = PLANS.get(stats["plan"], stats["plan"].capitalize())
+    stats["plan_label"] = plan_info(stats["plan"])["label"]
     return stats
