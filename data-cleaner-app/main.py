@@ -243,7 +243,11 @@ def panel_report_pdf(request: Request, report_id: str):
 def clean_page(request: Request, session_id: str):
     return templates.TemplateResponse(
         request, "clean.html",
-        {"request": request, "session_id": session_id}
+        {
+            "request": request,
+            "session_id": session_id,
+            "report_name": get_session_report_name(session_id, current_user_id(request))
+        }
     )
 
 from models.payloads import ColumnMappingPayload

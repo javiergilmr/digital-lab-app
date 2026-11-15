@@ -429,27 +429,67 @@ canvas {
   margin: 0;
 }
 
-.user-bar a {
-  color: #0d6efd;
+.user-email {
+  max-width: 220px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Botones "Mi panel" y "Cerrar sesión": píldoras con ícono.
+   Los selectores con button[type="submit"] le ganan a los estilos globales de botón */
+.user-bar .user-btn,
+.user-bar button[type="submit"].user-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  font-size: 0.85rem;
   font-weight: 600;
+  line-height: 1.2;
   text-decoration: none;
-}
-
-.user-bar a:hover,
-.user-bar a[aria-current="page"] {
-  text-decoration: underline;
-}
-
-/* Gana a los estilos globales de button[type="submit"] */
-.user-bar button[type="submit"],
-.user-bar button[type="submit"]:not(:disabled):hover {
-  padding: 0;
-  background: none;
   box-shadow: none;
   transform: none;
-  color: #111827;
-  font-size: 0.85rem;
-  text-decoration: underline;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.user-bar .user-btn svg {
+  flex-shrink: 0;
+}
+
+.user-bar .panel-btn {
+  background: #eff6ff;
+  color: #0d6efd;
+}
+
+.user-bar .panel-btn:hover {
+  background: #dbeafe;
+}
+
+.user-bar .panel-btn[aria-current="page"] {
+  background: #0d6efd;
+  color: #ffffff;
+}
+
+.user-bar button[type="submit"].logout-btn {
+  border-color: #e5e7eb;
+  background: #ffffff;
+  color: #374151;
+}
+
+.user-bar button[type="submit"].logout-btn:not(:disabled):hover {
+  border-color: #fecaca;
+  background: #fef2f2;
+  color: #dc3545;
+  box-shadow: none;
+  transform: none;
+}
+
+.user-bar .user-btn:focus-visible {
+  outline: 2px solid #0d6efd;
+  outline-offset: 2px;
 }
 
 /* =========================
@@ -630,4 +670,43 @@ canvas {
 input::-ms-reveal,
 input::-ms-clear {
   display: none;
+}
+
+/* =========================
+   CELULAR (600 px o menos)
+   ========================= */
+@media (max-width: 600px) {
+  .container {
+    margin: 16px auto 32px;
+    padding: 0 16px;
+  }
+
+  h1 {
+    font-size: 1.75rem;
+    line-height: 1.2;
+  }
+
+  .subtitle {
+    margin-bottom: 24px;
+  }
+
+  .user-bar {
+    gap: 8px;
+    padding: 12px 16px;
+  }
+
+  /* En el celular no caben los tres: el correo se ve en Mi panel → Cuenta */
+  .user-email {
+    display: none;
+  }
+
+  .stepper-wrap {
+    margin-bottom: 20px;
+  }
+
+  /* Con letra menor a 16 px, el iPhone hace zoom al tocar el campo.
+     "body .container" le gana a reglas como .auth-field input o .report-name input */
+  body .container :is(input, select, textarea) {
+    font-size: 16px;
+  }
 }
