@@ -328,6 +328,64 @@
       }
     }
 
+    /* Celular: cada fila de las tablas por categoría, tienda y ciudad pasa a ser un bloque.
+       Arriba nombre y ventas; abajo % del total, utilidad y margen con su etiqueta */
+    @media (max-width: 560px) {
+      .data-table thead {
+        display: none;
+      }
+
+      .data-table tr {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 6px 12px;
+        padding: 12px 0;
+      }
+
+      .data-table tbody tr + tr {
+        border-top: 1px solid #f3f4f6;
+      }
+
+      .data-table tbody tr + tr td {
+        border-top: 0;
+      }
+
+      .data-table td,
+      .data-table td + td {
+        padding: 0;
+      }
+
+      .data-table td:first-child {
+        grid-column: 1 / 3;
+        font-weight: 600;
+      }
+
+      .data-table td:nth-child(2) {
+        font-weight: 600;
+      }
+
+      .data-table td:nth-child(n + 3) {
+        font-size: 0.85rem;
+        text-align: left;
+      }
+
+      .data-table td:nth-child(4) {
+        text-align: center;
+      }
+
+      .data-table td:nth-child(5) {
+        text-align: right;
+      }
+
+      .data-table td[data-label]::before {
+        content: attr(data-label);
+        display: block;
+        margin-bottom: 2px;
+        font-size: 0.72rem;
+        color: #9ca3af;
+      }
+    }
+
     /* Botón principal: degradado que se mueve, halo que late y flecha que invita a presionar */
     .process-btn {
       display: inline-flex;
@@ -411,7 +469,7 @@
 <main class="container">
   {% with step = 3 %}{% include "_stepper.html" %}{% endwith %}
 
-  <h1>Data Cleaner &amp; Sales Report</h1>
+  <h1>{% if report_name %}Informe de {{ report_name }}{% else %}Data Cleaner &amp; Sales Report{% endif %}</h1>
   <p class="subtitle" id="intro">
     Haz clic en el botón para procesar el archivo y generar la descarga final.
   </p>
@@ -657,8 +715,8 @@ document.addEventListener("DOMContentLoaded", () => {
       <tr>
         <td>${escapeHtml(row.name)}</td>
         <td>${formatMoney(row.revenue)}</td>
-        <td class="muted">${formatPct(row.share_pct)}</td>
-        ${hasProfit ? `<td>${formatMoney(row.profit)}</td><td class="muted">${formatPct(row.margin_pct)}</td>` : ""}
+        <td class="muted" data-label="% del total">${formatPct(row.share_pct)}</td>
+        ${hasProfit ? `<td data-label="Utilidad">${formatMoney(row.profit)}</td><td class="muted" data-label="Margen">${formatPct(row.margin_pct)}</td>` : ""}
       </tr>`).join("");
 
     document.getElementById(containerId).innerHTML =
