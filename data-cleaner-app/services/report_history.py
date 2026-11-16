@@ -5,7 +5,7 @@ import uuid
 from datetime import datetime
 
 from services.pdf_report import build_sales_report_pdf, report_slug
-from services.supabase_auth import AuthError, rest_call, storage_download, storage_remove, storage_upload
+from services.supabase_auth import AuthError, rest_call, storage_download, storage_upload
 
 BUCKET = "reports"
 HISTORY_LIMIT = 10
@@ -15,14 +15,13 @@ class HistoryUnavailable(Exception):
     pass
 
 
-def save_report(access_token, user_id, file_name, report_name, clean_report, analysis, plan):
-    """Genera el PDF, lo sube, registra el informe y recorta el historial al límite del plan.
-    Si algo falla, solo se avisa en consola."""
+def save_report(access_token, user_id, file_name, report_name, clean_report, analysis):
+    """Genera el PDF, lo sube y registra el informe. Si algo falla, solo se avisa en consola."""
     report_id = str(uuid.uuid4())
     pdf_path = f"{user_id}/{report_id}.pdf"
 
     try:
-        pdf = build_sales_report_pdf(analysis, report_name, watermark=plan["watermark"])
+        pdf = build_sales_report_pdf(analysis, report_name)
         storage_upload(BUCKET, pdf_path, pdf, "application/pdf", access_token)
     except AuthError as e:
         # Sin PDF el informe igual aparece en el historial, solo que sin botón de descarga
@@ -47,29 +46,6 @@ def save_report(access_token, user_id, file_name, report_name, clean_report, ana
         }, token=access_token)
     except AuthError as e:
         print(f"⚠️ No se pudo guardar el informe en el historial: {e}")
-        return
-
-    trim_history(access_token, plan["history"])
-
-
-def trim_history(access_token, keep):
-    """Borra los informes (y sus PDFs) más antiguos que pasan del límite del plan."""
-    try:
-        old = rest_call("GET", "/reports", token=access_token, query={
-            "select": "id,pdf_path",
-            "order": "created_at.desc",
-            "offset": keep,
-        })
-        if not old:
-            return
-        pdfs = [row["pdf_path"] for row in old if row["pdf_path"]]
-        if pdfs:
-            storage_remove(BUCKET, pdfs, access_token)
-        ids = ",".join(row["id"] for row in old)
-        rest_call("DELETE", "/reports", token=access_token, query={"id": f"in.({ids})"})
-    except AuthError as e:
-        # Sin plans.sql no hay permiso para borrar: el historial solo queda más largo
-        print(f"⚠️ No se pudo recortar el historial: {e}")
 
 
 def list_reports(access_token, limit=HISTORY_LIMIT):
