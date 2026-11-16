@@ -207,34 +207,6 @@ def draw_footer(canvas, doc):
     canvas.restoreState()
 
 
-WATERMARK_TEXT = "VERSIÓN GRATUITA"
-WATERMARK_NOTE = f"Generado con la versión gratuita de {APP_NAME} · Con el plan Pro este informe sale sin marca de agua."
-
-
-def draw_watermark(canvas, doc):
-    """Plan Gratuito: texto diagonal tenue en el centro y aviso sobre el pie de página."""
-    canvas.saveState()
-    width, height = doc.pagesize
-    canvas.translate(width / 2, height / 2)
-    canvas.rotate(35)
-    canvas.setFont("Helvetica-Bold", 64)
-    canvas.setFillColor(ACCENT)
-    canvas.setFillAlpha(0.07)
-    canvas.drawCentredString(0, -22, WATERMARK_TEXT)
-    canvas.restoreState()
-
-    canvas.saveState()
-    canvas.setFont("Helvetica-Oblique", 7.5)
-    canvas.setFillColor(ACCENT)
-    canvas.drawCentredString(width / 2, 0.5 * inch + 12, WATERMARK_NOTE)
-    canvas.restoreState()
-
-
-def draw_free_page(canvas, doc):
-    draw_watermark(canvas, doc)
-    draw_footer(canvas, doc)
-
-
 def report_slug(report_name) -> str:
     # "Fridays Company" -> "fridays_company", para usarlo en los nombres de archivo
     name = re.sub(r"\.(pdf|csv)\s*$", "", report_name, flags=re.IGNORECASE)
@@ -250,7 +222,7 @@ def report_title(report_name) -> str:
     return f"{name} {TITLE_SUFFIX}"
 
 
-def build_sales_report_pdf(analysis, report_name="", watermark=False) -> bytes:
+def build_sales_report_pdf(analysis, report_name="") -> bytes:
     summary = analysis["executive_summary"]
     insights = analysis["insights"]
     has_sales = any(item["total"] > 0 for item in analysis["trend"])
@@ -309,6 +281,5 @@ def build_sales_report_pdf(analysis, report_name="", watermark=False) -> bytes:
         title=title,
         author="JAGM Data Cleaner",
     )
-    on_page = draw_free_page if watermark else draw_footer
-    doc.build(story, onFirstPage=on_page, onLaterPages=on_page)
+    doc.build(story, onFirstPage=draw_footer, onLaterPages=draw_footer)
     return buffer.getvalue()

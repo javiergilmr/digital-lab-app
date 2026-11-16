@@ -17,12 +17,11 @@ Construida con **FastAPI**, **pandas**, **Jinja2** y **reportlab**.
 7. [Limpieza de datos](#limpieza-de-datos)
 8. [Análisis e informe](#análisis-e-informe)
 9. [Descargas](#descargas)
-10. [Planes](#planes)
-11. [Mi panel](#mi-panel)
-12. [Estructura del proyecto](#estructura-del-proyecto)
-13. [Rutas y API](#rutas-y-api)
-14. [Seguridad](#seguridad)
-15. [Limitaciones conocidas](#limitaciones-conocidas)
+10. [Mi panel](#mi-panel)
+11. [Estructura del proyecto](#estructura-del-proyecto)
+12. [Rutas y API](#rutas-y-api)
+13. [Seguridad](#seguridad)
+14. [Limitaciones conocidas](#limitaciones-conocidas)
 
 ---
 
@@ -36,8 +35,7 @@ Construida con **FastAPI**, **pandas**, **Jinja2** y **reportlab**.
 - **Limpieza que corrige antes de eliminar**: deduce el valor correcto cuando los datos lo permiten y reporta cada cambio.
 - **Informe de ventas**: total vendido, utilidad, margen, rankings, ventas por categoría, tienda y ciudad, tendencia mensual e insights automáticos.
 - **Exportación** de los datos limpios a CSV y del informe a PDF, con el nombre de la empresa y la fecha.
-- **Planes Gratuito y Pro**: el Gratuito tiene límites de archivos por mes, filas por archivo e historial, y su PDF lleva marca de agua.
-- **Mi panel**: cada usuario ve sus archivos cargados, filas corregidas, último inicio de sesión, su plan con el uso del mes, un historial de sus informes con el PDF listo para volver a descargar, y la sección *Cuenta*: método de acceso, cambio de contraseña y eliminación de la cuenta.
+- **Mi panel**: cada usuario ve sus archivos cargados, filas corregidas, último inicio de sesión, un historial de sus informes con el PDF listo para volver a descargar, y la sección *Cuenta*: método de acceso, cambio de contraseña y eliminación de la cuenta.
 
 ## Flujo de uso
 
@@ -47,7 +45,7 @@ Login  →  Subir archivo  →  Mapear columnas  →  Procesar  →  Informe + d
 ```
 
 1. **Iniciar sesión** (o crear cuenta).
-2. **Subir el archivo**. La app valida que parezca un archivo de ventas: si no encuentra fecha, producto, cantidad y precio, explica qué falta. También revisa que el archivo quepa en tu [plan](#planes).
+2. **Subir el archivo**. La app valida que parezca un archivo de ventas: si no encuentra fecha, producto, cantidad y precio, explica qué falta.
 3. **Mapear columnas**. Cada campo viene preseleccionado; puedes cambiarlo o marcar las opcionales como *No usar*. Aquí también se escribe el **nombre del informe** (opcional, máximo 18 caracteres), por ejemplo `Fridays Company`.
 4. **Procesar archivo**. Una barra de carga (mínimo 5 segundos) acompaña la limpieza y el análisis. Al terminar, el botón desaparece y un aviso flotante confirma el resultado.
    - Antes de procesar, el botón **Volver a mapear columnas** regresa al paso 3 con tu mapeo y el nombre del informe tal como los dejaste, sin volver a subir el archivo.
@@ -115,18 +113,17 @@ En **Authentication → Sign In / Providers → Google**, activa el proveedor y 
 
 ### 4. Tablas y bucket del panel
 
-En **SQL Editor → New query**, ejecuta estos cuatro scripts en orden. Cada uno se pega y se corre con **Run** una sola vez, y todos se pueden volver a ejecutar sin problema.
+En **SQL Editor → New query**, ejecuta estos tres scripts en orden. Cada uno se pega y se corre con **Run** una sola vez, y todos se pueden volver a ejecutar sin problema.
 
 | Script | Qué crea |
 |---|---|
-| [`supabase/user_stats.sql`](supabase/user_stats.sql) | La tabla `user_stats`, con los contadores por usuario, y la función `record_activity`, que es la única forma de sumar a los contadores y no permite cambiar el plan |
+| [`supabase/user_stats.sql`](supabase/user_stats.sql) | La tabla `user_stats`, con los contadores por usuario, y la función `record_activity`, que es la única forma de sumar a los contadores |
 | [`supabase/reports.sql`](supabase/reports.sql) | La tabla `reports`, con el historial de informes, y el bucket privado `reports` de Storage, donde van los PDFs: una carpeta por usuario, solo PDFs y hasta 5 MB cada uno |
 | [`supabase/account.sql`](supabase/account.sql) | La función `delete_my_account`, que borra al usuario que la llama, y el permiso para que cada usuario borre sus propios PDFs |
-| [`supabase/plans.sql`](supabase/plans.sql) | La tabla `monthly_usage`, con los archivos procesados por mes; la función `record_processed_file`, que es la única forma de sumar al cupo; el permiso para recortar el historial, y la regla que solo acepta los planes `free` y `pro` |
 
 Los scripts activan reglas de seguridad (RLS) para que cada usuario solo vea sus propios datos y archivos.
 
-Si todavía no ejecutaste los scripts, la app funciona igual: el panel muestra un aviso, y la consola explica qué falta (`No se pudieron leer los stats del usuario`, `No se pudo guardar el PDF del informe`…). Sin `plans.sql`, el cupo mensual no se cuenta y el historial no se recorta.
+Si todavía no ejecutaste los scripts, la app funciona igual: el panel muestra un aviso, y la consola explica qué falta (`No se pudieron leer los stats del usuario`, `No se pudo guardar el PDF del informe`…).
 
 ### 5. Ver los usuarios registrados
 
@@ -236,47 +233,6 @@ La página del informe (`/clean/{id}`) muestra, en este orden:
 - El nombre del archivo se forma con el nombre del informe en minúsculas, sin tildes y con `_` en lugar de espacios.
 - En el PDF, el título es el nombre en mayúsculas seguido de *Sales Report* (`FRIDAYS COMPANY Sales Report`).
 - El PDF incluye el resumen, los rankings, los desgloses, el gráfico mensual y los insights.
-- En el plan Gratuito, el PDF lleva marca de agua (ver [Planes](#planes)). En Pro sale limpio.
-
-## Planes
-
-| | Gratuito | Pro |
-|---|---|---|
-| Archivos procesados por mes | 5 | Ilimitados |
-| Filas por archivo | 5,000 | 200,000 |
-| Historial en *Mi panel* | Últimos 5 informes | Últimos 100 informes |
-| Limpieza, análisis, CSV y PDF | Completos | Completos |
-| Marca de agua en el PDF | Sí | No |
-
-Los dos planes tienen la misma limpieza y el mismo informe; solo cambian el volumen y la marca de agua.
-
-### Cómo se aplican los límites
-
-- **Filas por archivo:** se revisan al subir. Si el archivo es más grande, la app lo rechaza con un mensaje que dice cuántas filas tiene y cuántas permite el plan.
-- **Archivos por mes:**
-  - Se revisan al subir y otra vez al procesar, así que un archivo subido antes de agotar el cupo tampoco se puede procesar después.
-  - El cupo se gasta la **primera vez** que se procesa un archivo. Reprocesarlo, recargar el informe o volver a mapearlo no gasta otro.
-  - El cupo se reinicia el **día 1 de cada mes**, según la fecha del servidor.
-  - Al agotarlo, el mensaje dice cuándo se reinicia: *“Ya usaste los 5 archivos de este mes del plan Gratuito. Tu cupo se reinicia el 1 de diciembre. Con Pro procesas archivos ilimitados.”*
-- **Historial:** al guardar un informe nuevo, la app borra los que pasan del límite del plan, con sus PDFs, empezando por los más antiguos.
-- **Marca de agua:** en el plan Gratuito, cada página del PDF lleva “VERSIÓN GRATUITA” en diagonal, muy tenue y sin tapar los datos. Al pie dice *“Generado con la versión gratuita de Data Cleaner & Sales Report · Con el plan Pro este informe sale sin marca de agua.”* Aplica al PDF descargado y al guardado en el historial.
-- **Si Supabase falla** al leer el uso del mes, la app deja procesar en vez de bloquear, y avisa en la consola.
-
-### Cambiar el plan de un usuario
-
-El usuario no puede cambiar su propio plan. Lo asignas tú en **SQL Editor**, con el correo del usuario:
-
-```sql
-insert into public.user_stats (user_id, plan)
-select id, 'pro' from auth.users where email = 'cliente@correo.com'
-on conflict (user_id) do update set plan = excluded.plan, updated_at = now();
-```
-
-Usa `'free'` para regresarlo al plan Gratuito. Los usuarios sin fila en `user_stats` son Gratuito.
-
-### Cambiar los límites
-
-Los números de cada plan están en `PLANS`, en [`services/plans.py`](services/plans.py): archivos por mes (`None` es ilimitado), filas por archivo, tamaño del historial y marca de agua. Basta con editar ese archivo y reiniciar la app.
 
 ## Mi panel
 
@@ -287,13 +243,12 @@ La página **`/panel`** se abre desde el enlace *Mi panel* de la barra superior 
 | Archivos cargados | Archivos aceptados al subirlos | Suma 1 en cada carga exitosa |
 | Filas corregidas | Filas que la limpieza arregló, más las eliminadas y las procesadas | Suma una vez por archivo procesado |
 | Último inicio de sesión | Fecha y hora en la zona horaria de quien mira, más “Miembro desde” | Supabase Auth, que lo actualiza en cada inicio de sesión |
-| Plan | *Gratuito* o *Pro*, el uso del mes con una barra (“3 de 5 archivos este mes”, en rojo al llenarse), la fecha de reinicio y los límites del plan | Columna `plan` de `user_stats` y tabla `monthly_usage` |
 
 Arriba de las tarjetas, una frase resume el valor de la limpieza, por ejemplo: *“La app revisó 3,000 filas por ti y corrigió 18 sin que tuvieras que tocarlas. El 0.70 % de tus datos tenía algún error.”* El porcentaje cuenta las filas corregidas más las eliminadas, sobre el total procesado.
 
 ### Historial de informes
 
-Debajo de las tarjetas aparecen los informes procesados: los **últimos 5** en el plan Gratuito y los **últimos 100** en Pro. Cada uno muestra:
+Debajo de las tarjetas aparecen los informes procesados: los **últimos 10**. Cada uno muestra:
 
 - El nombre del informe (o el del archivo, si no tiene nombre).
 - La fecha y hora, el archivo original, las filas analizadas y las corregidas.
@@ -311,8 +266,6 @@ Cómo funciona:
 - **Sin esperas:** los contadores se guardan en Supabase después de responder, así que no hacen esperar al usuario.
 - **Sin bloqueos:** si Supabase falla, la carga y la limpieza siguen funcionando.
 
-Para cambiar el plan de un usuario, ver [Cambiar el plan de un usuario](#cambiar-el-plan-de-un-usuario).
-
 ### Cuenta
 
 Al final del panel, la sección **Cuenta** muestra:
@@ -323,7 +276,7 @@ Al final del panel, la sección **Cuenta** muestra:
   - La sesión actual sigue abierta después del cambio.
   - Si el usuario entra solo con Google, en lugar del formulario aparece una nota: su cuenta no tiene contraseña propia.
 - **Eliminar cuenta:** un bloque desplegable que explica qué se borra y pide escribir el correo para confirmar.
-  - La app borra primero los PDFs del usuario en Storage y luego la cuenta con `delete_my_account`. Sus filas de `user_stats`, `reports` y `monthly_usage` se borran solas, en cascada.
+  - La app borra primero los PDFs del usuario en Storage y luego la cuenta con `delete_my_account`. Sus filas de `user_stats` y `reports` se borran solas, en cascada.
   - Al terminar, cierra la sesión y muestra en el login “Tu cuenta y todos tus datos fueron eliminados.”
   - Si no puede borrar los PDFs, se detiene sin borrar la cuenta, para no dejar archivos huérfanos.
 
@@ -349,21 +302,19 @@ data-cleaner-app/
 │   ├── sessions.py          # Sesiones en memoria, una por archivo y por usuario
 │   ├── supabase_auth.py     # Cliente de Supabase: Auth, API de datos y Storage (solo librería estándar)
 │   ├── user_stats.py        # Stats del panel: guardar actividad y leerla
-│   ├── report_history.py    # Historial de informes: guardar resumen y PDF, listar, descargar y recortar
-│   ├── plans.py             # Planes Gratuito y Pro: límites, plan del usuario y cupo mensual
+│   ├── report_history.py    # Historial de informes: guardar resumen y PDF, listar y descargar
 │   └── account.py           # Cuenta: método de acceso, cambio de contraseña y eliminación
 ├── supabase/
 │   ├── user_stats.sql       # Tabla, seguridad y función de los stats (se pega en el SQL Editor)
 │   ├── reports.sql          # Tabla del historial y bucket de PDFs (se pega en el SQL Editor)
-│   ├── account.sql          # Función para eliminar la cuenta y permiso para borrar PDFs
-│   └── plans.sql            # Cupo mensual, recorte del historial y planes permitidos
+│   └── account.sql          # Función para eliminar la cuenta y permiso para borrar PDFs
 ├── templates/
 │   ├── _user_bar.html       # Barra con “Mi panel”, el correo del usuario y “Cerrar sesión”
 │   ├── _stepper.html        # Indicador de pasos: subir, mapear, procesar e informe
 │   ├── auth.html            # Login, registro y contraseñas
 │   ├── index.html           # Carga de archivos (arrastrar y soltar)
 │   ├── map.html             # Mapeo de columnas y nombre del informe
-│   ├── panel.html           # Mi panel: stats, plan, historial y cuenta
+│   ├── panel.html           # Mi panel: stats, historial y cuenta
 │   └── clean.html           # Procesamiento, informe y descargas
 └── static/
     ├── css/styles.css       # Estilos compartidos
@@ -401,9 +352,9 @@ Todas las rutas requieren sesión iniciada, excepto las marcadas como públicas.
 | Método | Ruta | Descripción |
 |---|---|---|
 | GET | `/api/health` | Estado del servidor (pública) |
-| POST | `/api/upload` | Sube el archivo y crea la sesión. Responde `403` si el archivo excede las filas del plan o no queda cupo en el mes |
+| POST | `/api/upload` | Sube el archivo y crea la sesión |
 | POST | `/api/map-columns/{session_id}` | Guarda el mapeo y el nombre del informe |
-| POST | `/api/clean-data/{session_id}` | Limpia los datos y devuelve el reporte. La primera vez gasta un archivo del cupo; responde `403` si ya no queda |
+| POST | `/api/clean-data/{session_id}` | Limpia los datos y devuelve el reporte |
 | POST | `/api/analyze/{session_id}` | Devuelve el análisis completo |
 | GET | `/export/{session_id}` | Descarga el CSV limpio |
 | GET | `/export-pdf/{session_id}` | Descarga el PDF (requiere haber procesado) |
@@ -413,7 +364,6 @@ Todas las rutas requieren sesión iniciada, excepto las marcadas como públicas.
 - **Login con PKCE** para Google, confirmación de correo y recuperación de contraseña.
 - **Cookies `httponly`** (`sb_access`, `sb_refresh`), con `samesite=lax` y `secure` cuando la app corre en HTTPS. El token de acceso se renueva solo con el de refresco cuando vence.
 - **Stats protegidos con RLS**: la app lee y escribe los stats con el token del propio usuario, nunca con una clave de administrador.
-- **Plan y cupo a prueba de cambios**: el usuario puede leer su plan y su uso del mes, pero no modificarlos. El uso solo sube con `record_processed_file`, y el plan solo lo cambias tú desde el SQL Editor.
 - **Sesiones por usuario**: cada archivo subido pertenece a quien lo subió. Otro usuario no puede verlo aunque conozca el id.
 - **Redirecciones seguras**: el parámetro `?next=` solo acepta rutas internas.
 - **Sin claves secretas**: la app solo usa la clave publishable de Supabase, y el `.env` está fuera de git.
@@ -421,8 +371,7 @@ Todas las rutas requieren sesión iniciada, excepto las marcadas como públicas.
 ## Limitaciones conocidas
 
 - **Sesiones en memoria**: los archivos subidos se pierden al reiniciar el servidor, y la app está pensada para un solo proceso. Los informes ya procesados sí quedan guardados en el historial del panel, con su PDF.
-- **Espacio en Storage**: cada PDF pesa alrededor de 10 KB. El plan gratuito de Supabase incluye 1 GB, y el historial de cada usuario está acotado por su plan (5 o 100 informes).
-- **Sin cobro integrado**: el plan Pro se asigna a mano desde Supabase. No hay pasarela de pago.
+- **Espacio en Storage**: cada PDF pesa alrededor de 10 KB. El nivel gratuito de Supabase incluye 1 GB. Los informes se guardan todos; el panel muestra los 10 más recientes.
 - **Precio deducido aproximado**: un precio corregido toma la mediana del producto, que puede no ser el valor real. Si existe la venta neta, los totales no se ven afectados porque el ingreso sale de ella.
 - **Sinónimos no se unifican**: solo se unifican variantes de escritura. Por ejemplo, `Online` y `E-commerce` quedan como valores distintos.
 - **El PDF no incluye** la sección *Acerca de este informe* ni el reporte de limpieza: se muestran solo en la página.

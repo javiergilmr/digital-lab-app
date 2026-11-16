@@ -81,7 +81,6 @@ from services.sessions import (
     set_session_report_name,
     get_session_report_name,
     claim_once,
-    was_claimed,
     set_session_clean_report,
     get_session_clean_report,
     get_session_filename
@@ -89,21 +88,6 @@ from services.sessions import (
 from services.user_stats import record_activity, get_stats, StatsUnavailable
 from services.report_history import save_report, list_reports, get_report_pdf, HistoryUnavailable
 from services.account import AccountError, access_methods, has_password, change_password, delete_account
-from services.plans import (
-    PlanLimitError, get_plan, get_monthly_usage, record_processed_file, check_rows, check_monthly_quota, usage_summary
-)
-
-def enforce_plan(request: Request, rows=None):
-    """Valida filas y cupo mensual del plan; devuelve el plan para reutilizarlo."""
-    token, user_id = request.state.access_token, current_user_id(request)
-    plan = get_plan(token, user_id)
-    try:
-        if rows is not None:
-            check_rows(plan, rows)
-        check_monthly_quota(plan, get_monthly_usage(token, user_id))
-    except PlanLimitError as e:
-        raise HTTPException(403, e.message) from None
-    return plan
 
 @app.get("/api/health")
 def health():
@@ -126,9 +110,6 @@ async def upload_file(request: Request, background_tasks: BackgroundTasks, file:
 
     if df.empty:
         raise HTTPException(400, "Archivo vacío")
-
-    # Antes de mapear: si el archivo no cabe en el plan, se avisa de una vez
-    enforce_plan(request, rows=len(df))
 
     detected_columns = detect_sales_columns(df)
     missing_fields = validate_sales_file(df)
@@ -179,9 +160,8 @@ def render_panel(request: Request, status_code=200, **messages):
         stats = get_stats(token, user["id"])
     except StatsUnavailable:
         stats = None
-    plan = get_plan(token, user["id"])
     try:
-        reports = list_reports(token, limit=plan["history"])
+        reports = list_reports(token)
     except HistoryUnavailable:
         reports = None
 
@@ -191,8 +171,6 @@ def render_panel(request: Request, status_code=200, **messages):
             "request": request,
             "stats": stats,
             "reports": reports,
-            "plan": plan,
-            "usage": usage_summary(plan, get_monthly_usage(token, user["id"])),
             "last_sign_in_at": user.get("last_sign_in_at"),
             "member_since": user.get("created_at"),
             "access_methods": access_methods(user),
@@ -323,12 +301,6 @@ def clean_data(request: Request, session_id: str, background_tasks: BackgroundTa
     print("Columnas: ")
     print(df.columns)
 
-    # El cupo se gasta la primera vez que se procesa el archivo; reprocesar o remapear no lo vuelve a gastar
-    if not was_claimed(session_id, owner_id, "quota_counted"):
-        enforce_plan(request)
-        if claim_once(session_id, owner_id, "quota_counted"):
-            record_processed_file(request.state.access_token)
-
     df_clean, report = clean_sales_data(df, SALES_SCHEMA)
     update_session_df(session_id, owner_id, df_clean)
     set_session_clean_report(session_id, owner_id, report)
@@ -364,7 +336,7 @@ def analyze_data(request: Request, session_id: str, background_tasks: Background
         background_tasks.add_task(
             save_report, request.state.access_token, owner_id,
             get_session_filename(session_id, owner_id), get_session_report_name(session_id, owner_id),
-            clean_report, result, get_plan(request.state.access_token, owner_id)
+            clean_report, result
         )
 
     return {
@@ -416,8 +388,7 @@ def export_pdf(request: Request, session_id: str):
         raise HTTPException(409, "Primero procesa el archivo para generar el PDF.")
 
     report_name = get_session_report_name(session_id, owner_id)
-    plan = get_plan(request.state.access_token, owner_id)
-    pdf = build_sales_report_pdf(analyze_sales_data(df), report_name, watermark=plan["watermark"])
+    pdf = build_sales_report_pdf(analyze_sales_data(df), report_name)
 
     slug = report_slug(report_name)
     filename = f"{slug}_report_{date.today()}.pdf" if slug else f"reporte_ventas_{date.today()}.pdf"

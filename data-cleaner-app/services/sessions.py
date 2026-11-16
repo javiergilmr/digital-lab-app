@@ -68,10 +68,6 @@ def claim_once(session_id, owner_id, key) -> bool:
     session[key] = True
     return True
 
-def was_claimed(session_id, owner_id, key) -> bool:
-    session = _get_session(session_id, owner_id)
-    return bool(session and session.get(key))
-
 def set_session_clean_report(session_id, owner_id, report):
     session = _get_session(session_id, owner_id)
     if session:

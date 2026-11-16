@@ -8,7 +8,6 @@ create table if not exists public.user_stats (
   rows_processed bigint  not null default 0,
   rows_fixed     bigint  not null default 0,
   rows_removed   bigint  not null default 0,
-  plan           text    not null default 'free',
   created_at     timestamptz not null default now(),
   updated_at     timestamptz not null default now()
 );
@@ -23,7 +22,7 @@ create policy "Cada usuario ve sus stats"
   using ((select auth.uid()) = user_id);
 
 -- No hay políticas de insert/update: los contadores solo cambian con esta función,
--- que suma a la fila del usuario que llama y nunca toca el plan
+-- que suma a la fila del usuario que llama
 create or replace function public.record_activity(
   files     integer default 0,
   processed integer default 0,
