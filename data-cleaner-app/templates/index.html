@@ -218,6 +218,17 @@
       font-weight: 600;
     }
 
+    .dz-quota {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 0.82rem;
+    }
+
+    .dz-quota.is-full {
+      color: var(--danger);
+      font-weight: 600;
+    }
+
     .dz-hint {
       margin: 4px 0 0;
       font-size: 0.85rem;
@@ -349,6 +360,15 @@
         </svg>
         <p class="dz-title" id="dz-title">Arrastra tu archivo aquí</p>
         <p class="dz-hint">CSV o Excel (.xlsx), hasta 10 MB</p>
+        {% if usage.remaining is not none %}
+          <p class="dz-quota{% if usage.remaining == 0 %} is-full{% endif %}">
+            {% if usage.remaining == 0 %}
+              Usaste los {{ usage.limit }} archivos de este mes · se reinicia el {{ usage.reset }}
+            {% else %}
+              Te {{ "queda" if usage.remaining == 1 else "quedan" }} {{ usage.remaining }} de {{ usage.limit }} archivos este mes
+            {% endif %}
+          </p>
+        {% endif %}
 
         <div class="dz-divider">o</div>
 
@@ -469,6 +489,7 @@
 
     <p class="subtitle page-footer">
       © JAGM Data Cleaner &amp; Sales Report 2026. Todos los derechos reservados.
+      <br><a class="footer-link" href="/sobre-nosotros">Sobre nosotros</a>
     </p>
   </main>
 

@@ -114,7 +114,49 @@
     }
 
     .panel-actions {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
       margin: -8px 0 28px;
+    }
+
+    /* Uso del mes: barra fina bajo "Cargar un archivo" */
+    .quota {
+      width: min(100%, 400px);
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+
+    .quota-text {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 2px 12px;
+      white-space: nowrap;
+      margin-bottom: 6px;
+    }
+
+    .quota-text strong {
+      color: var(--text);
+    }
+
+    .quota-bar {
+      height: 6px;
+      border-radius: 999px;
+      background: var(--border);
+      overflow: hidden;
+    }
+
+    .quota-bar span {
+      display: block;
+      height: 100%;
+      border-radius: inherit;
+      background: #0d6efd;
+    }
+
+    .quota-bar.is-full span {
+      background: #dc3545;
     }
 
     .history {
@@ -384,9 +426,11 @@
   </style>
 </head>
 <body>
+{% set back_url = "/" %}
 {% include "_user_bar.html" %}
 
   <main class="container panel-page">
+
     <h1>Mi panel</h1>
     <p class="subtitle">Tu actividad en Data Cleaner &amp; Sales Report.</p>
 
@@ -398,6 +442,18 @@
         </svg>
         Cargar un archivo
       </a>
+      {% if usage.used is not none %}
+        <div class="quota">
+          <div class="quota-text">
+            <span><strong>{{ usage.used }} de {{ usage.limit }}</strong> archivos este mes</span>
+            <span>Se reinicia el {{ usage.reset }}</span>
+          </div>
+          <div class="quota-bar{% if usage.remaining == 0 %} is-full{% endif %}" role="progressbar"
+               aria-label="Archivos usados este mes" aria-valuemin="0" aria-valuemax="{{ usage.limit }}" aria-valuenow="{{ usage.used }}">
+            <span style="width: {{ usage.pct }}%"></span>
+          </div>
+        </div>
+      {% endif %}
     </div>
 
     {% if stats is none %}
@@ -622,6 +678,7 @@
 
     <p class="subtitle page-footer">
       © JAGM Data Cleaner &amp; Sales Report 2026. Todos los derechos reservados.
+      <br><a class="footer-link" href="/sobre-nosotros">Sobre nosotros</a>
     </p>
   </main>
 

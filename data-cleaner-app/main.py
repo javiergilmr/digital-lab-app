@@ -40,7 +40,7 @@ from routers.auth import ACCESS_COOKIE, REFRESH_COOKIE, clear_session_cookies, s
 from services.supabase_auth import AuthError, get_user, refresh_session
 from services.sessions import adopt_sessions, SESSION_TTL
 
-PUBLIC_PATHS = ("/login", "/signup", "/forgot-password", "/api/health")
+PUBLIC_PATHS = ("/login", "/signup", "/forgot-password", "/sobre-nosotros", "/api/health")
 PUBLIC_PREFIXES = ("/static/", "/auth/")
 # Lo que un invitado puede usar; el panel y la cuenta piden iniciar sesión
 GUEST_PATHS = ("/", "/api/upload", "/api/demo")
@@ -145,6 +145,10 @@ from services.sessions import (
 from services.user_stats import record_activity, get_stats, StatsUnavailable
 from services.report_history import save_report, list_reports, get_report_pdf, HistoryUnavailable
 from services.account import AccountError, access_methods, has_password, change_password, delete_account
+from services.monthly_quota import QuotaExceeded, claim_file, get_usage
+
+def monthly_usage(request: Request):
+    return get_usage(request.state.user, request.state.access_token, request.state.guest_id)
 
 @app.get("/api/health")
 def health():
@@ -171,9 +175,10 @@ async def upload_file(request: Request, background_tasks: BackgroundTasks, file:
     except Exception as e:
         raise HTTPException(400, f"Error leyendo archivo: {e}")
 
-    return start_session(request, background_tasks, df, file.filename)
+    return start_session(request, background_tasks, df, file.filename, count_quota=True)
 
-# Datos de ejemplo: un año de ventas de 4 tiendas con errores típicos para que la limpieza tenga qué mostrar
+# Datos de ejemplo: un año de ventas de 4 tiendas con errores típicos para que la limpieza tenga qué mostrar.
+# No cuentan para el límite mensual: son para conocer la app
 DEMO_FILE = Path(__file__).resolve().parent / "static" / "demo_ventas.csv"
 DEMO_REPORT_NAME = "Tiendas Demo"
 
@@ -184,8 +189,8 @@ def demo_file(request: Request, background_tasks: BackgroundTasks):
     set_session_report_name(result["session_id"], current_user_id(request), DEMO_REPORT_NAME)
     return result
 
-def start_session(request: Request, background_tasks: BackgroundTasks, df, filename):
-    """Valida que parezca un archivo de ventas y crea la sesión del archivo."""
+def start_session(request: Request, background_tasks: BackgroundTasks, df, filename, count_quota=False):
+    """Valida que parezca un archivo de ventas, lo cuenta en el límite del mes y crea la sesión del archivo."""
     if df.empty:
         raise HTTPException(400, "Archivo vacío")
 
@@ -207,6 +212,13 @@ def start_session(request: Request, background_tasks: BackgroundTasks, df, filen
     #         detail="Asegúrate de subir un archivo con fechas, productos, cantidades y precios."
     #     )
 
+    # Se cuenta después de validar: un archivo rechazado no gasta cupo
+    if count_quota:
+        try:
+            claim_file(request.state.user, request.state.access_token, request.state.guest_id)
+        except QuotaExceeded as e:
+            raise HTTPException(429, e.message)
+
     session_id = create_session(df, SALES_SCHEMA, current_user_id(request), filename)
     # Solo con cuenta hay stats; se guardan después de responder para no hacer esperar al usuario
     if is_logged_in(request):
@@ -224,7 +236,7 @@ def start_session(request: Request, background_tasks: BackgroundTasks, df, filen
 
 @app.get("/")
 def upload_page(request: Request):
-    return templates.TemplateResponse(request, "index.html", {"request": request})
+    return templates.TemplateResponse(request, "index.html", {"request": request, "usage": monthly_usage(request)})
 
 # PANEL DEL USUARIO
 @app.get("/panel")
@@ -250,6 +262,7 @@ def render_panel(request: Request, status_code=200, **messages):
             "request": request,
             "stats": stats,
             "reports": reports,
+            "usage": monthly_usage(request),
             "last_sign_in_at": user.get("last_sign_in_at"),
             "member_since": user.get("created_at"),
             "access_methods": access_methods(user),

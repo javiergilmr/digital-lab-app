@@ -30,12 +30,14 @@ Construida con **FastAPI**, **pandas**, **Jinja2** y **reportlab**.
 - **Login opcional**: sin cuenta se usa todo el flujo, desde subir el archivo hasta descargar el informe. Con cuenta (Supabase: correo y contraseña, o Google) además se guardan los stats y el historial. Registro abierto, recuperación de contraseña y botón de “ojo” para ver la contraseña.
 - **Datos de ejemplo**: el botón *Probar con datos de ejemplo* carga un año de ventas de 4 tiendas con errores a propósito, para ver la app completa sin tener un archivo a mano.
 - **Carga de archivos** `.csv` o `.xlsx` de hasta 10 MB, arrastrándolos a la página o con el botón *Cargar archivo*.
+- **Límite de uso**: hasta **10 archivos por mes**, que se reinicia el día 1 (ver [Límite mensual](#límite-mensual)).
 - **Guía del archivo** en la página de carga: una mini hoja de ejemplo con las columnas obligatorias y opcionales, y un [CSV de ejemplo](static/ejemplo_ventas.csv) para descargar y probar.
 - **Detección automática de columnas**: reconoce nombres en español e inglés (`fecha`, `transaction_date`, `precio`, `unit_price`…) y propone el mapeo.
 - **Mapeo editable**: 4 columnas obligatorias y 7 opcionales que enriquecen el análisis.
 - **Limpieza que corrige antes de eliminar**: deduce el valor correcto cuando los datos lo permiten y reporta cada cambio.
 - **Informe de ventas**: total vendido, utilidad, margen, rankings, ventas por categoría, tienda y ciudad, tendencia mensual e insights automáticos.
 - **Exportación** de los datos limpios a CSV y del informe a PDF, con el nombre de la empresa y la fecha.
+- **Sobre nosotros** (`/sobre-nosotros`, enlazada desde el pie de cada página): quién desarrolló el proyecto, por qué existe, qué se construyó, su propósito de demostración no comercial y el correo de contacto.
 - **Modo día / noche**: botón con luna o sol en la barra superior. Sin elección guardada, sigue el tema del sistema; la elección se guarda en el navegador.
 - **Mi panel**: cada usuario ve sus archivos cargados, filas corregidas, último inicio de sesión, un historial de sus informes con el PDF listo para volver a descargar, y la sección *Cuenta*: método de acceso, cambio de contraseña y eliminación de la cuenta.
 
@@ -61,6 +63,7 @@ En la parte superior de cada página, un indicador de pasos (**Subir archivo →
 |---|---|---|
 | Subir, mapear, limpiar y ver el informe | Sí | Sí |
 | Descargar CSV y PDF | Sí | Sí |
+| Límite de 10 archivos por mes | Sí, contado por la cookie del invitado | Sí, guardado en Supabase |
 | Stats e historial en *Mi panel* | No | Sí |
 
 - **Invitado**: una cookie `guest_id` con un id al azar identifica sus archivos mientras están en memoria (2 horas sin uso). La barra superior muestra *Iniciar sesión* y *Crear cuenta*, y bajo el informe un aviso explica que no se guarda.
@@ -72,6 +75,16 @@ En la parte superior de cada página, un indicador de pasos (**Subir archivo →
 [`static/demo_ventas.csv`](static/demo_ventas.csv) tiene 1,193 filas: un año de ventas de un minisúper con 4 tiendas en Panamá, 22 productos y un pico en diciembre. Trae errores a propósito para que la limpieza tenga qué mostrar: espacios de sobra, mayúsculas y tildes inconsistentes, categorías y ciudades equivocadas, precios negativos o vacíos, precios con coma decimal o símbolo `$`, cantidades en 0, costos totales que no cuadran, fechas con mes 13, filas vacías y duplicadas. La app corrige 98 filas y elimina 24.
 
 El informe de ejemplo se llama *Tiendas Demo*; se puede cambiar en el mapeo.
+
+### Límite mensual
+
+Cada usuario puede subir **10 archivos por mes**. El contador vuelve a 0 el **día 1 de cada mes** (fecha UTC). El límite está en `MONTHLY_FILES` de [`services/monthly_quota.py`](services/monthly_quota.py).
+
+- **Qué cuenta**: cada archivo aceptado al subirlo. Un archivo rechazado (por ejemplo, sin columnas de ventas) no cuenta, y los **datos de ejemplo tampoco**.
+- **Dónde se ve**: en la carga (*Te quedan 7 de 10 archivos este mes*) y en *Mi panel*, con una barra bajo *Cargar un archivo* y la fecha del reinicio.
+- **Al llegar al límite**: la subida responde 429 con el mensaje *Llegaste al límite de 10 archivos de este mes. Se reinicia el 1 de …*.
+- **Con cuenta**: el uso se guarda en la tabla `monthly_usage` de Supabase. La función `claim_monthly_file` suma el archivo solo si queda cupo, en una sola operación. Si Supabase no responde o falta el script, la subida se permite: un fallo nuestro nunca frena al usuario.
+- **Sin cuenta**: el uso se cuenta en memoria por la cookie `guest_id`. Es un freno razonable para una demo, no una barrera: se pierde al reiniciar el servidor o al borrar las cookies.
 
 ## Instalación
 
@@ -133,13 +146,14 @@ En **Authentication → Sign In / Providers → Google**, activa el proveedor y 
 
 ### 4. Tablas y bucket del panel
 
-En **SQL Editor → New query**, ejecuta estos tres scripts en orden. Cada uno se pega y se corre con **Run** una sola vez, y todos se pueden volver a ejecutar sin problema.
+En **SQL Editor → New query**, ejecuta estos cuatro scripts en orden. Cada uno se pega y se corre con **Run** una sola vez, y todos se pueden volver a ejecutar sin problema.
 
 | Script | Qué crea |
 |---|---|
 | [`supabase/user_stats.sql`](supabase/user_stats.sql) | La tabla `user_stats`, con los contadores por usuario, y la función `record_activity`, que es la única forma de sumar a los contadores |
 | [`supabase/reports.sql`](supabase/reports.sql) | La tabla `reports`, con el historial de informes, y el bucket privado `reports` de Storage, donde van los PDFs: una carpeta por usuario, solo PDFs y hasta 5 MB cada uno |
 | [`supabase/account.sql`](supabase/account.sql) | La función `delete_my_account`, que borra al usuario que la llama, y el permiso para que cada usuario borre sus propios PDFs |
+| [`supabase/monthly_usage.sql`](supabase/monthly_usage.sql) | La tabla `monthly_usage`, con los archivos de cada usuario por mes, y la función `claim_monthly_file`, que es la única forma de sumar uno |
 
 Los scripts activan reglas de seguridad (RLS) para que cada usuario solo vea sus propios datos y archivos.
 
@@ -269,7 +283,7 @@ La página del informe (`/clean/{id}`) muestra, en este orden:
 
 ## Mi panel
 
-La página **`/panel`** requiere iniciar sesión. Se abre desde el enlace *Mi panel* de la barra superior y muestra:
+La página **`/panel`** requiere iniciar sesión. Se abre desde el enlace *Mi panel* de la barra superior. La barra superior tiene un botón **Volver**, junto al de día / noche, y arriba del contenido está **Cargar un archivo**; los dos llevan a la carga. Debajo de este botón, una barra muestra los archivos usados en el mes (por ejemplo, *3 de 10*) y cuándo se reinicia. Muestra:
 
 | Tarjeta | Qué muestra | De dónde sale |
 |---|---|---|
@@ -337,12 +351,14 @@ data-cleaner-app/
 │   ├── templating.py        # Plantillas compartidas; asset() versiona CSS y JS (?v=) para que el navegador no use una copia vieja
 │   ├── supabase_auth.py     # Cliente de Supabase: Auth, API de datos y Storage (solo librería estándar)
 │   ├── user_stats.py        # Stats del panel: guardar actividad y leerla
+│   ├── monthly_quota.py     # Límite de 10 archivos por mes (Supabase con cuenta, memoria sin cuenta)
 │   ├── report_history.py    # Historial de informes: guardar resumen y PDF, listar y descargar
 │   └── account.py           # Cuenta: método de acceso, cambio de contraseña y eliminación
 ├── supabase/
 │   ├── user_stats.sql       # Tabla, seguridad y función de los stats (se pega en el SQL Editor)
 │   ├── reports.sql          # Tabla del historial y bucket de PDFs (se pega en el SQL Editor)
-│   └── account.sql          # Función para eliminar la cuenta y permiso para borrar PDFs
+│   ├── account.sql          # Función para eliminar la cuenta y permiso para borrar PDFs
+│   └── monthly_usage.sql    # Tabla y función del límite mensual (se pega en el SQL Editor)
 ├── templates/
 │   ├── _user_bar.html       # Barra con “Mi panel”, el correo del usuario y “Cerrar sesión”
 │   ├── _theme_toggle.html   # Botón día / noche (luna de día, sol de noche)
@@ -351,6 +367,7 @@ data-cleaner-app/
 │   ├── index.html           # Carga de archivos (arrastrar y soltar)
 │   ├── map.html             # Mapeo de columnas y nombre del informe
 │   ├── panel.html           # Mi panel: stats, historial y cuenta
+│   ├── about.html           # Sobre nosotros: autor, motivos, propósito de demostración y contacto
 │   └── clean.html           # Procesamiento, informe y descargas
 └── static/
     ├── css/styles.css       # Estilos compartidos y las dos paletas del tema (variables --text, --surface, --accent…)
@@ -374,6 +391,7 @@ Las rutas del flujo (carga, mapeo, informe, descargas y su API) funcionan con o 
 | GET | `/map/{session_id}` | Mapeo de columnas |
 | GET | `/clean/{session_id}` | Procesamiento e informe |
 | GET | `/panel` | Mi panel (requiere sesión) |
+| GET | `/sobre-nosotros` | Sobre nosotros (pública) |
 | GET | `/panel/reports/{id}/pdf` | Vuelve a descargar el PDF de un informe del historial |
 | POST | `/panel/password` | Cambia la contraseña (pide la actual) |
 | POST | `/panel/delete-account` | Elimina la cuenta y todos sus datos (pide escribir el correo) |
@@ -390,8 +408,8 @@ Las rutas del flujo (carga, mapeo, informe, descargas y su API) funcionan con o 
 | Método | Ruta | Descripción |
 |---|---|---|
 | GET | `/api/health` | Estado del servidor (pública) |
-| POST | `/api/upload` | Sube el archivo y crea la sesión |
-| POST | `/api/demo` | Crea la sesión con los datos de ejemplo |
+| POST | `/api/upload` | Sube el archivo y crea la sesión; responde 429 si ya se usó el límite del mes |
+| POST | `/api/demo` | Crea la sesión con los datos de ejemplo (no cuenta para el límite) |
 | POST | `/api/map-columns/{session_id}` | Guarda el mapeo y el nombre del informe |
 | POST | `/api/clean-data/{session_id}` | Limpia los datos y devuelve el reporte |
 | POST | `/api/analyze/{session_id}` | Devuelve el análisis completo |
