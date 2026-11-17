@@ -259,6 +259,45 @@
       outline-offset: 2px;
     }
 
+    .demo-cta {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 8px 12px;
+      margin-top: 16px;
+      color: #6b7280;
+      font-size: 0.9rem;
+    }
+
+    .demo-cta .demo-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 18px;
+      border: 1px solid #ddd6fe;
+      border-radius: 999px;
+      background: #f5f3ff;
+      color: #6d28d9;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .demo-cta .demo-btn:not(:disabled):hover {
+      border-color: #c4b5fd;
+      background: #ede9fe;
+    }
+
+    .demo-cta .demo-btn:focus-visible {
+      outline: 2px solid #6d28d9;
+      outline-offset: 2px;
+    }
+
+    .demo-cta .demo-btn svg {
+      width: 16px;
+      height: 16px;
+    }
+
     .dz-file {
       margin: 0;
       font-weight: 600;
@@ -327,6 +366,26 @@
         </div>
         <p class="dz-status" id="status" aria-live="polite"></p>
       </div>
+    </div>
+
+    {% if request.query_params.get("expired") %}
+      <div class="upload-error" role="alert">
+        <div class="upload-error-title">Ese archivo ya no está disponible</div>
+        <div class="upload-error-message">
+          Los archivos se guardan por 2 horas sin uso. Súbelo de nuevo o prueba con los datos de ejemplo.
+        </div>
+      </div>
+    {% endif %}
+
+    <div class="demo-cta">
+      <span>¿No tienes un archivo a mano?</span>
+      <button type="button" id="demo-btn" class="demo-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M9 3h6M10 3v6L4.5 18.5A1.7 1.7 0 0 0 6 21h12a1.7 1.7 0 0 0 1.5-2.5L14 9V3"/>
+          <path d="M7 15h10"/>
+        </svg>
+        Probar con datos de ejemplo
+      </button>
     </div>
 
     <div id="upload-error" class="upload-error hidden" role="alert">

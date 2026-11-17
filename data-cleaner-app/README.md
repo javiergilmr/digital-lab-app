@@ -27,7 +27,8 @@ Construida con **FastAPI**, **pandas**, **Jinja2** y **reportlab**.
 
 ## Qué hace
 
-- **Login obligatorio** con Supabase: correo y contraseña, o Google. Registro abierto, recuperación de contraseña y botón de “ojo” para ver la contraseña.
+- **Login opcional**: sin cuenta se usa todo el flujo, desde subir el archivo hasta descargar el informe. Con cuenta (Supabase: correo y contraseña, o Google) además se guardan los stats y el historial. Registro abierto, recuperación de contraseña y botón de “ojo” para ver la contraseña.
+- **Datos de ejemplo**: el botón *Probar con datos de ejemplo* carga un año de ventas de 4 tiendas con errores a propósito, para ver la app completa sin tener un archivo a mano.
 - **Carga de archivos** `.csv` o `.xlsx` de hasta 10 MB, arrastrándolos a la página o con el botón *Cargar archivo*.
 - **Guía del archivo** en la página de carga: una mini hoja de ejemplo con las columnas obligatorias y opcionales, y un [CSV de ejemplo](static/ejemplo_ventas.csv) para descargar y probar.
 - **Detección automática de columnas**: reconoce nombres en español e inglés (`fecha`, `transaction_date`, `precio`, `unit_price`…) y propone el mapeo.
@@ -40,18 +41,36 @@ Construida con **FastAPI**, **pandas**, **Jinja2** y **reportlab**.
 ## Flujo de uso
 
 ```
-Login  →  Subir archivo  →  Mapear columnas  →  Procesar  →  Informe + descargas
- /login        /             /map/{id}         /clean/{id}
+Subir archivo  →  Mapear columnas  →  Procesar  →  Informe + descargas
+      /             /map/{id}         /clean/{id}
 ```
 
-1. **Iniciar sesión** (o crear cuenta).
-2. **Subir el archivo**. La app valida que parezca un archivo de ventas: si no encuentra fecha, producto, cantidad y precio, explica qué falta.
+1. **Iniciar sesión es opcional** (ver [Con cuenta o sin cuenta](#con-cuenta-o-sin-cuenta)).
+2. **Subir el archivo**, o usar **Probar con datos de ejemplo**. La app valida que parezca un archivo de ventas: si no encuentra fecha, producto, cantidad y precio, explica qué falta.
 3. **Mapear columnas**. Cada campo viene preseleccionado; puedes cambiarlo o marcar las opcionales como *No usar*. Aquí también se escribe el **nombre del informe** (opcional, máximo 18 caracteres), por ejemplo `Fridays Company`.
 4. **Procesar archivo**. Una barra de carga (mínimo 5 segundos) acompaña la limpieza y el análisis. Al terminar, el botón desaparece y un aviso flotante confirma el resultado.
    - Antes de procesar, el botón **Volver a mapear columnas** regresa al paso 3 con tu mapeo y el nombre del informe tal como los dejaste, sin volver a subir el archivo.
 5. **Revisar el informe** y descargar el CSV o el PDF.
 
 En la parte superior de cada página, un indicador de pasos (**Subir archivo → Mapear columnas → Procesar → Informe**) marca con ✓ los pasos completados y resalta el actual.
+
+### Con cuenta o sin cuenta
+
+| | Sin cuenta (invitado) | Con cuenta |
+|---|---|---|
+| Subir, mapear, limpiar y ver el informe | Sí | Sí |
+| Descargar CSV y PDF | Sí | Sí |
+| Stats e historial en *Mi panel* | No | Sí |
+
+- **Invitado**: una cookie `guest_id` con un id al azar identifica sus archivos mientras están en memoria (2 horas sin uso). La barra superior muestra *Iniciar sesión* y *Crear cuenta*, y bajo el informe un aviso explica que no se guarda.
+- **Pasar a tener cuenta**: si el invitado inicia sesión, sus archivos pasan a su cuenta. Al procesar de nuevo el informe, se guarda en el historial con su PDF.
+- **Login**: el enlace *Usar la app sin cuenta* lleva directo a la carga.
+
+### Datos de ejemplo
+
+[`static/demo_ventas.csv`](static/demo_ventas.csv) tiene 1,193 filas: un año de ventas de un minisúper con 4 tiendas en Panamá, 22 productos y un pico en diciembre. Trae errores a propósito para que la limpieza tenga qué mostrar: espacios de sobra, mayúsculas y tildes inconsistentes, categorías y ciudades equivocadas, precios negativos o vacíos, precios con coma decimal o símbolo `$`, cantidades en 0, costos totales que no cuadran, fechas con mes 13, filas vacías y duplicadas. La app corrige 98 filas y elimina 24.
+
+El informe de ejemplo se llama *Tiendas Demo*; se puede cambiar en el mapeo.
 
 ## Instalación
 
@@ -249,7 +268,7 @@ La página del informe (`/clean/{id}`) muestra, en este orden:
 
 ## Mi panel
 
-La página **`/panel`** se abre desde el enlace *Mi panel* de la barra superior y muestra:
+La página **`/panel`** requiere iniciar sesión. Se abre desde el enlace *Mi panel* de la barra superior y muestra:
 
 | Tarjeta | Qué muestra | De dónde sale |
 |---|---|---|
@@ -297,7 +316,7 @@ Al final del panel, la sección **Cuenta** muestra:
 
 ```
 data-cleaner-app/
-├── main.py                  # App FastAPI: middleware de login, carga, mapeo, limpieza, análisis y exportaciones
+├── main.py                  # App FastAPI: login opcional (invitados), carga, demo, mapeo, limpieza, análisis y exportaciones
 ├── requirements.txt         # Dependencias con versiones fijas
 ├── models/
 │   └── payloads.py          # Datos del mapeo que envía el navegador (incluye el nombre del informe)
@@ -335,21 +354,22 @@ data-cleaner-app/
     ├── css/main.js
     ├── js/upload.js         # Carga de archivos
     ├── js/password_toggle.js # “Ojo” para mostrar u ocultar contraseñas (login, registro y panel)
-    └── ejemplo_ventas.csv   # Archivo de ejemplo que se descarga desde la guía de carga
+    ├── ejemplo_ventas.csv   # Archivo de ejemplo que se descarga desde la guía de carga
+    └── demo_ventas.csv      # Datos del botón «Probar con datos de ejemplo» (1,193 filas con errores)
 ```
 
 ## Rutas y API
 
-Todas las rutas requieren sesión iniciada, excepto las marcadas como públicas.
+Las rutas del flujo (carga, mapeo, informe, descargas y su API) funcionan con o sin cuenta. Las del panel y la cuenta requieren sesión iniciada. Las de login son públicas.
 
 ### Páginas
 
 | Método | Ruta | Descripción |
 |---|---|---|
-| GET | `/` | Carga de archivos |
+| GET | `/` | Carga de archivos (con o sin cuenta) |
 | GET | `/map/{session_id}` | Mapeo de columnas |
 | GET | `/clean/{session_id}` | Procesamiento e informe |
-| GET | `/panel` | Mi panel |
+| GET | `/panel` | Mi panel (requiere sesión) |
 | GET | `/panel/reports/{id}/pdf` | Vuelve a descargar el PDF de un informe del historial |
 | POST | `/panel/password` | Cambia la contraseña (pide la actual) |
 | POST | `/panel/delete-account` | Elimina la cuenta y todos sus datos (pide escribir el correo) |
@@ -367,6 +387,7 @@ Todas las rutas requieren sesión iniciada, excepto las marcadas como públicas.
 |---|---|---|
 | GET | `/api/health` | Estado del servidor (pública) |
 | POST | `/api/upload` | Sube el archivo y crea la sesión |
+| POST | `/api/demo` | Crea la sesión con los datos de ejemplo |
 | POST | `/api/map-columns/{session_id}` | Guarda el mapeo y el nombre del informe |
 | POST | `/api/clean-data/{session_id}` | Limpia los datos y devuelve el reporte |
 | POST | `/api/analyze/{session_id}` | Devuelve el análisis completo |
@@ -378,13 +399,14 @@ Todas las rutas requieren sesión iniciada, excepto las marcadas como públicas.
 - **Login con PKCE** para Google, confirmación de correo y recuperación de contraseña.
 - **Cookies `httponly`** (`sb_access`, `sb_refresh`), con `samesite=lax` y `secure` cuando la app corre en HTTPS. El token de acceso se renueva solo con el de refresco cuando vence.
 - **Stats protegidos con RLS**: la app lee y escribe los stats con el token del propio usuario, nunca con una clave de administrador.
-- **Sesiones por usuario**: cada archivo subido pertenece a quien lo subió. Otro usuario no puede verlo aunque conozca el id.
+- **Sesiones por usuario**: cada archivo subido pertenece a quien lo subió, sea un usuario con cuenta o un invitado (cookie `guest_id` `httponly`, con un id al azar). Nadie más puede verlo aunque conozca el id.
+- **Invitados sin acceso a Supabase**: sin cuenta, la app no lee ni escribe nada en la base de datos; los stats y el historial solo se guardan con el token del propio usuario.
 - **Redirecciones seguras**: el parámetro `?next=` solo acepta rutas internas.
 - **Sin claves secretas**: la app solo usa la clave publishable de Supabase, y el `.env` está fuera de git.
 
 ## Limitaciones conocidas
 
-- **Sesiones en memoria**: los archivos subidos se pierden al reiniciar el servidor, y la app está pensada para un solo proceso. Además, cada sesión expira tras **2 horas sin uso** para que la memoria no crezca sin límite; al abrir una sesión vencida aparece *Sesión no encontrada* y hay que subir el archivo de nuevo. Los informes ya procesados sí quedan guardados en el historial del panel, con su PDF.
+- **Sesiones en memoria**: los archivos subidos se pierden al reiniciar el servidor, y la app está pensada para un solo proceso. Además, cada sesión expira tras **2 horas sin uso** para que la memoria no crezca sin límite; al abrir una sesión vencida, la app vuelve a la carga con el aviso *Ese archivo ya no está disponible*. Los informes ya procesados sí quedan guardados en el historial del panel, con su PDF.
 - **Archivos de hasta 10 MB**: protege la memoria del servidor. Se revisa en el navegador antes de subir y otra vez en el servidor (`MAX_UPLOAD_MB` en `main.py`).
 - **Espacio en Storage**: cada PDF pesa alrededor de 10 KB. El nivel gratuito de Supabase incluye 1 GB. Los informes se guardan todos; el panel muestra los 10 más recientes.
 - **Precio deducido aproximado**: un precio corregido toma la mediana del producto, que puede no ser el valor real. Si existe la venta neta, los totales no se ven afectados porque el ingreso sale de ella.

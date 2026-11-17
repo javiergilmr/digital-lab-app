@@ -279,6 +279,22 @@
       width: 100%;
     }
 
+    .guest-note {
+      margin: 16px 0 0;
+      padding: 12px 16px;
+      border-radius: 10px;
+      background: #eff6ff;
+      color: #1e3a8a;
+      font-size: 0.9rem;
+      line-height: 1.5;
+      text-align: center;
+    }
+
+    .guest-note a {
+      color: #0d6efd;
+      font-weight: 600;
+    }
+
     .download-actions {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -578,6 +594,14 @@
         PDF
       </a>
     </div>
+
+    {% if not request.state.user %}
+      <p id="guest-note" class="guest-note hidden">
+        Usas la app sin cuenta, así que este informe no se guarda.
+        <a href="/login?next=/clean/{{ session_id }}">Inicia sesión o crea tu cuenta</a>
+        y procésalo de nuevo para tenerlo en tu panel con su PDF.
+      </p>
+    {% endif %}
 
     <a href="/" class="secondary-btn">
       ← Volver al inicio
@@ -887,6 +911,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       showStatus("✅ Análisis generado correctamente.");
       downloadActions.classList.remove("hidden");
+      document.getElementById("guest-note")?.classList.remove("hidden");
       advanceStepper();
 
     } catch (error) {

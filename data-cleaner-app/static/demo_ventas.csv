@@ -1,0 +1,1194 @@
+﻿fecha,producto,categoria,cantidad,precio_unitario,costo_unitario,costo_total,tienda,ciudad
+2025-01-01,Queso blanco 500 g,Lácteos,1,4.60,3.10,3.10,S004,Colón
+2025-01-01,Pasta spaghetti 500 g,Abarrotes,3,1.45,0.85,2.55,S002,San Miguelito
+2025-01-01,Cerveza six pack,Bebidas,4,7.80,5.40,21.60,S002,San Miguelito
+2025-01-02,Cerveza six pack,Bebidas,3,7.80,5.40,16.20,S003,David
+2025-01-02,Pasta spaghetti 500 g,Abarrotes,1,1.45,0.85,0.85,S003,David
+2025-01-02,Shampoo 400 ml,Cuidado personal,4,4.25,2.60,10.40,S002,San Miguelito
+2025-01-03,Azúcar 2 kg,Abarrotes,6,2.85,1.95,11.70,S001,Panamá
+2025-01-03,Papel higiénico 12 rollos,Limpieza,6,6.75,4.40,26.40,S003,David
+2025-01-04,Queso blanco 500 g,Lácteos,2,4.60,3.10,6.20,S001,Panamá
+2025-01-04,Mantequilla 250 g,Lácteos,2,3.30,2.20,4.40,S001,Panamá
+2025-01-05,Mantequilla 250 g,Lácteos,3,3.30,2.20,6.60,S001,Panamá
+2025-01-05,Carne molida kg,Carnes,2,7.40,5.30,10.60,S002,San Miguelito
+2025-01-05,Agua 1.5 L,Bebidas,1,0.95,0.45,0.45,S002,San Miguelito
+2025-01-06,Queso blanco 500 g,Lácteos,3,4.60,3.10,9.30,S003,David
+2025-01-06,Queso blanco 500 g,Lácteos,1,4.60,3.10,3.10,S004,Colón
+2025-01-07,Leche entera 1 L,Lácteos,1,1.75,1.15,1.15,S002,San Miguelito
+2025-01-08,Pasta spaghetti 500 g,Abarrotes,1,1.45,0.85,0.85,S001,Panamá
+2025-01-08,Gaseosa 2 L,Bebidas,1,2.25,1.30,1.30,S004,Colón
+2025-01-08,Agua 1.5 L,Bebidas,2,0.95,0.45,0.90,S002,San Miguelito
+2025-01-09,Agua 1.5 L,Bebidas,2,0.95,0.45,0.90,S002,San Miguelito
+2025-01-09,Papel higiénico 12 rollos,Limpieza,2,6.75,4.40,8.80,S004,Colón
+2025-01-09,Mantequilla 250 g,Lácteos,2,3.30,2.20,4.40,S003,David
+2025-01-10,Shampoo 400 ml,Cuidado personal,2,4.25,2.60,5.20,S002,San Miguelito
+2025-01-10,Detergente 2 kg,Limpieza,1,7.30,4.90,4.90,S002,San Miguelito
+2025-01-10,Pasta spaghetti 500 g,Abarrotes,3,1.45,0.85,2.55,S001,Panamá
+2025-01-10,Agua 1.5 L,Bebidas,2,0.95,0.45,1.35,S002,San Miguelito
+2025-01-11,Pasta spaghetti 500 g,Abarrotes,2,1.45,0.85,1.70,S002,San Miguelito
+2025-01-12,Pasta dental 100 ml,Cuidado personal,3,2.40,1.35,4.05,S003,David
+2025-01-12,Detergente 2 kg,Limpieza,2,7.30,4.90,9.80,S004,Colón
+2025-01-13,Gaseosa 2 L,Bebidas,2,2.25,1.30,2.60,S003,David
+2025-01-13,Leche entera 1 L,Lácteos,6,1.75,1.15,6.90,S004,Colón
+2025-01-13,Pasta dental 100 ml,Cuidado personal,1,2.40,1.35,1.35,S002,San Miguelito
+2025-01-14,Pasta spaghetti 500 g,Abarrotes,1,$1.45,0.85,0.85,S002,San Miguelito
+2025-01-14,Gaseosa 2 L,Bebidas,2,2.25,1.30,2.60,S002,San Miguelito
+2025-01-15,Agua 1.5 L,Bebidas,1,0.95,0.45,0.45,S004,Colón
+2025-01-15,Shampoo 400 ml,Cuidado personal,3,4.25,2.60,7.80,S001,Panamá
+2025-01-16,Cerveza six pack,Bebidas,3,7.80,5.40,16.20,S004,Colón
+2025-01-16,Agua 1.5 L,Bebidas,2,0.95,0.45,0.90,S001,Panamá
+2025-01-17,Papel higiénico 12 rollos,Limpieza,3,6.75,4.40,19.80,S002,San Miguelito
+2025-01-17,Arroz 5 lb,Abarrotes,3,3.95,2.70,8.10,S001,Panamá
+2025-01-18,Papel higiénico 12 rollos,Limpieza,2,6.75,4.40,8.80,S004,Colón
+2025-01-18,Arroz 5 lb,Abarrotes,5,3.95,2.70,13.50,S003,David
+2025-01-19,Pechuga de pollo kg,Carnes,4,6.20,4.35,17.40,S002,San Miguelito
+2025-01-19,Yogur griego 1 kg,Lácteos,1,5.20,3.40,3.40,S001,Panamá
+2025-01-19,Arroz 5 lb,Abarrotes,1,3.95,2.70,2.70,S004,Colón
+2025-01-20,carne molida kg,Carnes,4,7.40,5.30,21.20,S002,San Miguelito
+2025-01-21,Pechuga de pollo kg,Carnes,2,6.20,4.35,8.70,S001,Panamá
+2025-01-21,Arroz 5 lb,Abarrotes,3,3.95,2.70,8.10,S004,Colón
+2025-01-21,Shampoo 400 ml,Cuidado personal,2,4.25,2.60,5.20,S001,Panamá
+2025-01-22,Leche entera 1 L,Lácteos,3,1.75,1.15,3.45,S001,Panamá
+2025-01-22,Jugo de naranja 1 L,Bebidas,2,2.90,1.80,3.60,S001,Panamá
+2025-01-22,Azúcar 2 kg,Abarrotes,1,2.85,1.95,1.95,S004,Colón
+2025-01-23,Leche entera 1 L,Lácteos,1,1.75,1.15,1.15,S003,David
+2025-01-24,Gaseosa 2 L,Bebidas,1,2.25,1.30,1.30,S004,COLÓN
+2025-01-24,Yogur griego 1 kg,Lácteos,2,"5,20",3.40,6.80,S003,David
+2025-01-25,Pasta dental 100 ml,Cuidado personal,2,2.40,1.35,2.70,S002,San Miguelito
+2025-01-25,Leche entera 1 L,Lácteos,2,1.75,1.15,2.30,S001,Panamá
+2025-01-25,Carne molida kg,Carnes,2,7.40,5.30,10.60,S001,Panamá
+2025-01-26,Cerveza six pack,Bebidas,2,7.80,5.40,10.80,S002,San Miguelito
+2025-01-26,Pechuga de pollo kg,Carnes,1,6.20,4.35,4.35,S002,San Miguelito
+2025-01-27,Shampoo 400 ml,Cuidado personal,1,4.25,2.60,2.60,S004,Colón
+2025-01-27,Papel higiénico 12 rollos,Limpieza,3,6.75,4.40,13.20,S004,Colón
+2025-01-27,Leche entera 1 L,Lácteos,4,1.75,1.15,4.60,S003,David
+2025-01-28,Jugo de naranja 1 L,Bebidas,2,2.90,1.80,3.60,S004,Colón
+2025-01-29,Mantequilla 250 g,Lácteos,1,3.30,2.20,2.20,S002,San Miguelito
+2025-01-29,Gaseosa 2 L,Bebidas,3,2.25,1.30,3.90,S002,San Miguelito
+2025-01-29,Azúcar 2 kg,Abarrotes,1,2.85,1.95,1.95,S001,Panamá
+2025-01-30,Mantequilla 250 g,Lácteos,1,3.30,2.20,2.20,S001,Panamá
+2025-01-30,Papel higiénico 12 rollos,Limpieza,3,6.75,4.40,13.20,S001,Panamá
+2025-01-30,Cerveza six pack,Bebidas,1,7.80,5.40,5.40,S003,David
+2025-01-31,Pasta spaghetti 500 g,Abarrotes,1,1.45,0.85,0.85,S004,Colón
+2025-01-31,Pechuga de pollo kg,Carnes,1,6.20,4.35,4.35,S001,Panamá
+2025-02-01,Leche entera 1 L,Lácteos,4,1.75,1.15,4.60,S004,Colón
+2025-02-01,Leche entera 1 L,Lácteos,1,1.75,1.15,1.15,S001,Panamá
+2025-02-02,Jugo de naranja 1 L,Bebidas,5,2.90,1.80,9.00,S002,San Miguelito
+2025-02-02,Carne molida kg,Carnes,3,7.40,5.30,15.90,S003,David
+2025-02-02,Jugo de naranja 1 L,Bebidas,5,2.90,1.80,9.00,S003,David
+2025-02-03,Pechuga de pollo kg,Carnes,2,6.20,4.35,8.70,S001,Panamá
+2025-02-03,Cloro 1 gal,Limpieza,3,3.20,1.90,5.70,S004,Colón
+2025-02-03,Desodorante 150 ml,Cuidado personal,5,3.95,2.30,11.50,S003,David
+2025-02-04,Carne molida kg,Carnes,2,7.40,5.30,10.60,S003,David
+2025-02-05,Café molido 400 g,Abarrotes,1,6.50,4.10,4.10,S003,David
+2025-02-05,Papel higiénico 12 rollos,Limpieza,1,6.75,4.40,4.40,S003,San Miguelito
+2025-02-05,Cerveza six pack,Bebidas,5,7.80,5.40,27.00,S001,Panamá
+2025-02-05,Yogur griego 1 kg,Lácteos,3,5.20,3.40,10.20,S002,San Miguelito
+2025-02-06,Agua 1.5 L,Bebidas,1,0.95,0.45,0.45,S001,Panamá
+2025-02-06,Carne molida kg,Carnes,3,7.40,5.30,15.90,S003,David
+2025-02-06,Café molido 400 g,Abarrotes,2,6.50,4.10,8.20,S002,San Miguelito
+2025-02-07,Carne molida kg,Carnes,2,7.40,5.30,10.60,S001,Panamá
+2025-02-07,Azúcar 2 kg,Abarrotes,2,2.85,1.95,3.90,S001,Panamá
+2025-02-08,Jugo de naranja 1 L,Bebidas,1,2.90,1.80,1.80,S002,San Miguelito
+2025-02-08,Aceite de oliva 500 ml,Abarrotes,1,8.90,6.20,6.20,S001,Panamá
+2025-02-09,Leche entera 1 L,Lácteos,2,1.75,1.15,2.30,S001,Panamá
+2025-02-10,Pasta dental 100 ml,Cuidado personal,3,"2,40",1.35,4.05,S002,San Miguelito
+2025-02-10,  Papel higiénico 12 rollos ,Limpieza,1,6.75,4.40,4.40,S002,San Miguelito
+2025-02-10,Agua 1.5 L,Bebidas,2,0.95,0.45,0.90,S003,David
+2025-02-11,Jugo de naranja 1 L,Bebidas,6,2.90,1.80,10.80,S001,Panamá
+2025-02-11,Leche entera 1 L,Lácteos,3,"-1,75",1.15,3.45,S004,Colón
+2025-02-12,Detergente 2 kg,Limpieza,6,7.30,4.90,29.40,S002,San Miguelito
+2025-02-12,Papel higiénico 12 rollos,Limpieza,4,6.75,4.40,17.60,S001,Panamá
+2025-02-12,Carne molida kg,Carnes,2,7.40,5.30,10.60,S001,Panamá
+2025-02-12,Agua 1.5 L,Bebidas,2,0.95,0.45,0.90,S002,San Miguelito
+2025-02-13,Cerveza six pack,Bebidas,1,7.80,5.40,5.40,S002,San Miguelito
+2025-02-14,Detergente 2 kg,Limpieza,4,7.30,4.90,19.60,S004,COLÓN
+2025-02-14,Pasta dental 100 ml,Cuidado personal,4,2.40,1.35,5.40,S003,David
+2025-02-15,Agua 1.5 L,Bebidas,2,0.95,0.45,0.90,S001,Panamá
+2025-02-15,Gaseosa 2 L,Bebidas,4,-2.25,1.30,5.20,S001,Panamá
+2025-02-16,Azúcar 2 kg,Abarrotes,3,2.85,1.95,5.85,S004,Colón
+2025-02-16,Mantequilla 250 g,Lácteos,2,3.30,2.20,4.40,S004,Colón
+2025-02-16,Papel higiénico 12 rollos,Limpieza,3,6.75,4.40,13.20,S002,San Miguelito
+2025-02-17,Aceite de oliva 500 ml,Abarrotes,1,8.90,6.20,6.20,S002,San Miguelito
+2025-02-17,Gaseosa 2 L,Bebidas,1,2.25,1.30,1.30,S001,Panamá
+2025-02-17,Café molido 400 g,Abarrotes,4,6.50,4.10,16.40,S002,San Miguelito
+2025-02-18,Yogur griego 1 kg,Lácteos,6,5.20,3.40,20.40,S002,San Miguelito
+2025-02-18,Azúcar 2 kg,Abarrotes,1,2.85,1.95,1.95,S003,David
+2025-02-18,Agua 1.5 L,Bebidas,2,0.95,0.45,0.90,S002,San Miguelito
+2025-02-19,Shampoo 400 ml,Cuidado personal,6,4.25,2.60,15.60,S004,Colón
+2025-02-19,Cloro 1 gal,Limpieza,2,3.20,1.90,3.80,S001,Panamá
+2025-02-19,Azúcar 2 kg,Abarrotes,1,2.85,1.95,1.95,S002,San Miguelito
+2025-02-20,Detergente 2 kg,Limpieza,1,7.30,4.90,4.90,S003,David
+2025-02-20,Carne molida kg,Carnes,1,7.40,5.30,5.30,S002,San Miguelito
+2025-02-20,aceite de oliva 500 ml,Abarrotes,1,8.90,6.20,6.20,S003,David
+2025-02-21,Cloro 1 gal,Limpieza,5,3.20,1.90,9.50,S002,San Miguelito
+2025-02-21,Gaseosa 2 L,Bebidas,3,2.25,1.30,3.90,S002,San Miguelito
+2025-02-22,Detergente 2 kg,Limpieza,2,7.30,4.90,9.80,S001,Panamá
+2025-02-22,Pasta dental 100 ml,Cuidado personal,2,2.40,1.35,2.70,S003,David
+2025-02-23,Agua 1.5 L,Bebidas,4,0.95,0.45,1.80,S001,Panamá
+2025-02-23,Arroz 5 lb,Abarrotes,2,3.95,2.70,5.40,S002,San Miguelito
+2025-02-24,Pechuga de pollo kg,Carnes,2,6.20,4.35,8.70,S002,San Miguelito
+2025-02-24,Detergente 2 kg,Limpieza,5,7.30,4.90,24.50,S003,David
+2025-02-24,Filete de res kg,Abarrotes,4,12.90,9.10,36.40,S001,Panamá
+2025-02-25,Azúcar 2 kg,Abarrotes,2,2.85,1.95,3.90,S003,David
+2025-02-25,Cerveza six pack,Bebidas,4,7.80,5.40,21.60,S002,San Miguelito
+2025-02-26,Gaseosa 2 L,Bebidas,1,2.25,1.30,1.30,S003,David
+2025-02-26,Pasta spaghetti 500 g,Abarrotes,2,1.45,0.85,1.70,S004,Colón
+2025-02-27,Pasta dental 100 ml,Cuidado personal,1,2.40,1.35,1.35,S002,San Miguelito
+2025-02-27,Agua 1.5 L,Bebidas,6,0.95,0.45,2.70,S001,Panamá
+2025-02-27,mantequilla 250 g,Lácteos,1,3.30,2.20,2.20,S001,Panamá
+2025-02-28,Café molido 400 g,Abarrotes,3,6.50,4.10,12.30,S003,David
+2025-02-28,Pechuga de pollo kg,Carnes,5,6.20,4.35,21.75,S003,David
+2025-03-01,Detergente 2 kg,Limpieza,6,7.30,4.90,29.40,S004,Colón
+2025-03-01,Jugo de naranja 1 L,Bebidas,1,2.90,1.80,1.80,S002,San Miguelito
+2025-03-01,Carne molida kg,Carnes,5,7.40,5.30,26.50,S001,Panamá
+2025-03-02,Mantequilla 250 g,Lácteos,2,3.30,2.20,4.40,S001,Panamá
+2025-03-02,Agua 1.5 L,Bebidas,4,0.95,0.45,1.80,S002,San Miguelito
+2025-03-02,Leche entera 1 L,Lácteos,2,1.75,1.15,2.30,S004,Colón
+2025-03-03,Café molido 400 g,Abarrotes,1,6.50,4.10,6.15,S001,Panamá
+2025-03-03,Pasta dental 100 ml,Cuidado personal,1,2.40,1.35,1.35,S001,Panamá
+2025-03-03,Azúcar 2 kg,Abarrotes,1,2.85,1.95,1.95,S002,San Miguelito
+2025-03-04,Gaseosa 2 L,Bebidas,1,2.25,1.30,1.30,S002,San Miguelito
+2025-03-04,Arroz 5 lb,Abarrotes,1,3.95,2.70,2.70,S001,Panamá
+2025-03-04,Leche entera 1 L,Lácteos,1,1.75,1.15,1.15,S003,David
+2025-03-05,Pechuga de pollo kg,Carnes,3,6.20,4.35,13.05,S002,San Miguelito
+2025-03-05,Jugo de naranja 1 L,Bebidas,1,2.90,1.80,1.80,S002,San Miguelito
+2025-03-05,Pasta spaghetti 500 g,Abarrotes,1,1.45,0.85,0.85,S002,San Miguelito
+2025-03-06,Cloro 1 gal,Limpieza,3,3.20,1.90,5.70,S004,Colón
+2025-03-06,Carne molida kg,Carnes,3,7.40,5.30,23.85,S002,San Miguelito
+2025-03-06,Pasta spaghetti 500 g,Abarrotes,4,1.45,0.85,3.40,S004,Colón
+2025-03-07,Café molido 400 g,Abarrotes,1,6.50,4.10,4.10,S002,San Miguelito
+2025-03-08,Cerveza six pack,Bebidas,1,7.80,5.40,5.40,S001,Panamá
+2025-03-08,Pasta dental 100 ml,Cuidado personal,1,2.40,1.35,1.35,S002,San Miguelito
+2025-03-08,Café molido 400 g,Abarrotes,1,,4.10,4.10,S002,San Miguelito
+2025-03-09,Gaseosa 2 L,Bebidas,3,2.25,1.30,3.90,S003,David
+2025-03-09,Cerveza six pack,Bebidas,2,7.80,5.40,10.80,S001,Panamá
+2025-03-10,Yogur griego 1 kg,Lácteos,2,5.20,3.40,6.80,S001,Panamá
+2025-03-10,Pechuga de pollo kg,Carnes,6,6.20,4.35,26.10,S001,Panamá
+2025-03-10,Desodorante 150 ml,Cuidado personal,1,3.95,2.30,2.30,S001,Panamá
+2025-03-10,Papel higiénico 12 rollos,Limpieza,2,6.75,4.40,8.80,S004,Colón
+2025-03-11,Carne molida kg,Carnes,3,7.40,5.30,15.90,S001,Panamá
+2025-03-11,Azúcar 2 kg,Abarrotes,1,2.85,1.95,2.92,S002,San Miguelito
+2025-03-11,Queso blanco 500 g,Lácteos,2,4.60,3.10,6.20,S002,SAN MIGUELITO
+2025-03-12,Desodorante 150 ml,Cuidado personal,3,3.95,2.30,6.90,S002,San Miguelito
+2025-03-12,Pasta dental 100 ml,Carnes,6,2.40,1.35,8.10,S001,Panamá
+2025-03-12,Filete de res kg,Carnes,2,12.90,9.10,18.20,S003,David
+2025-03-13,  Aceite de oliva 500 ml ,Abarrotes,6,8.90,6.20,37.20,S002,San Miguelito
+2025-03-13,Gaseosa 2 L,Bebidas,4,2.25,1.30,5.20,S001,Panamá
+2025-03-14,Jugo de naranja 1 L,Bebidas,4,2.90,1.80,7.20,S001,Panamá
+2025-03-14,Papel higiénico 12 rollos,Limpieza,1,6.75,4.40,4.40,S001,Panamá
+2025-03-14,Yogur griego 1 kg,Lácteos,2,5.20,3.40,6.80,S002,San Miguelito
+2025-03-15,Azúcar 2 kg,Abarrotes,1,2.85,1.95,1.95,S001,Panamá
+2025-03-15,Aceite de oliva 500 ml,Abarrotes,2,8.90,6.20,12.40,S003,David
+2025-03-15,Yogur griego 1 kg,Lácteos,1,5.20,3.40,3.40,S001,Panamá
+2025-03-16,Leche entera 1 L,Carnes,1,1.75,1.15,1.15,S003,David
+2025-03-16,Pechuga de pollo kg,Carnes,1,6.20,4.35,4.35,S003,David
+2025-03-17,Café molido 400 g,Abarrotes,3,6.50,4.10,12.30,S001,Panamá
+2025-03-17,Gaseosa 2 L,Bebidas,1,2.25,1.30,1.30,S003,David
+2025-03-17,Cerveza six pack,Bebidas,1,7.80,5.40,5.40,S001,Panamá
+2025-03-17,Shampoo 400 ml,Cuidado personal,2,4.25,2.60,5.20,S002,San Miguelito
+2025-03-18,Pasta spaghetti 500 g,Abarrotes,1,1.45,0.85,0.85,S004,Colón
+2025-03-18,Aceite de oliva 500 ml,Abarrotes,2,8.90,6.20,12.40,S004,Colón
+2025-03-18,Leche entera 1 L,Lácteos,3,1.75,1.15,3.45,S004,Colón
+2025-03-19,Papel higiénico 12 rollos,Limpieza,2,6.75,4.40,8.80,S003,David
+2025-03-19,Papel higiénico 12 rollos,Limpieza,1,6.75,4.40,4.40,S003,David
+2025-03-20,Arroz 5 lb,Abarrotes,3,3.95,2.70,8.10,S001,Panamá
+2025-03-20,Agua 1.5 L,Bebidas,1,0.95,0.45,0.45,S001,Panamá
+2025-03-20,Agua 1.5 L,Bebidas,6,0.95,0.45,2.70,S001,Panamá
+2025-03-20,Cloro 1 gal,Limpieza,6,3.20,1.90,11.40,S001,Panamá
+2025-03-21,Jugo de naranja 1 L,Bebidas,4,2.90,1.80,7.20,S004,Colón
+2025-03-21,Pechuga de pollo kg,Carnes,1,6.20,4.35,4.35,S002,San Miguelito
+2025-03-22,Pasta dental 100 ml,Cuidado personal,1,2.40,1.35,1.35,S002,San Miguelito
+2025-03-23,Shampoo 400 ml,Cuidado personal,6,4.25,2.60,15.60,S002,San Miguelito
+2025-03-23,Leche entera 1 L,Lácteos,3,1.75,1.15,3.45,S003,David
+2025-03-23,Papel higiénico 12 rollos,Limpieza,2,6.75,4.40,8.80,S003,David
+2025-03-24,Leche entera 1 L,Lácteos,4,1.75,1.15,4.60,S002,San Miguelito
+2025-03-24,Yogur griego 1 kg,Lácteos,1,5.20,3.40,3.40,S002,San Miguelito
+2025-03-24,Pasta spaghetti 500 g,Abarrotes,3,1.45,0.85,2.55,S001,Panamá
+2025-03-25,Arroz 5 lb,Abarrotes,3,3.95,2.70,8.10,S004,Colón
+2025-03-25,Filete de res kg,Carnes,3,12.90,9.10,27.30,S003,David
+2025-03-25,Leche entera 1 L,Lácteos,1,1.75,1.15,1.15,S002,San Miguelito
+2025-03-25,Detergente 2 kg,Limpieza,1,7.30,4.90,4.90,S001,Panamá
+2025-03-26,Pasta spaghetti 500 g,Abarrotes,4,1.45,0.85,3.40,S004,Colón
+2025-03-26,Arroz 5 lb,Abarrotes,1,3.95,2.70,2.70,S002,San Miguelito
+2025-03-26,Papel higiénico 12 rollos,Limpieza,3,6.75,4.40,13.20,S004,Colón
+2025-03-26,Pechuga de pollo kg,Carnes,2,6.20,4.35,8.70,S002,San Miguelito
+2025-03-27,detergente 2 kg,Limpieza,2,7.30,4.90,9.80,S003,David
+2025-03-27,Queso blanco 500 g,Lácteos,2,4.60,3.10,6.20,S004,Colón
+2025-03-27,Queso blanco 500 g,Lácteos,2,4.60,3.10,6.20,S002,San Miguelito
+2025-03-28,Agua 1.5 L,Bebidas,1,0.95,0.45,0.45,S002,San Miguelito
+2025-03-28,Papel higiénico 12 rollos,Limpieza,1,6.75,4.40,4.40,S002,San Miguelito
+2025-03-28,Leche entera 1 L,Lácteos,1,1.75,1.15,1.15,S001,Panamá
+2025-03-29,Yogur griego 1 kg,Lácteos,2,5.20,3.40,6.80,S001,Panamá
+2025-03-29,Gaseosa 2 L,Bebidas,3,2.25,1.30,3.90,S001,Panamá
+2025-03-30,Arroz 5 lb,Abarrotes,1,3.95,2.70,2.70,S002,San Miguelito
+2025-03-31,Arroz 5 lb,Abarrotes,2,3.95,2.70,5.40,S001,Colón
+2025-03-31,Arroz 5 lb,Abarrotes,6,3.95,2.70,16.20,S001,Panamá
+2025-03-31,Filete de res kg,Carnes,1,12.90,9.10,9.10,S001,Panamá
+2025-04-01,Yogur griego 1 kg,Lácteos,1,5.20,3.40,3.40,S004,Colón
+2025-04-01,Aceite de oliva 500 ml,Abarrotes,1,8.90,6.20,6.20,S004,Colón
+,,,,,,,,
+2025-04-01,Pasta dental 100 ml,Cuidado personal,3,2.40,1.35,4.05,S003,David
+2025-04-02,Detergente 2 kg,Limpieza,1,7.30,4.90,4.90,S002,San Miguelito
+2025-04-02,Papel higiénico 12 rollos,Limpieza,3,6.75,4.40,13.20,S004,Colón
+2025-04-02,Pasta dental 100 ml,Abarrotes,5,2.40,1.35,6.75,S002,San Miguelito
+2025-04-02,Papel higiénico 12 rollos,Limpieza,6,6.75,4.40,26.40,S004,Colón
+2025-04-03,Café molido 400 g,Abarrotes,3,6.50,4.10,12.30,S001,Panamá
+2025-04-03,Pasta spaghetti 500 g,Abarrotes,3,1.45,0.85,2.55,S001,Panamá
+2025-04-04,Café molido 400 g,Abarrotes,1,-6.50,4.10,4.10,S004,Colón
+2025-04-05,Yogur griego 1 kg,Lácteos,2,5.20,3.40,6.80,S002,San Miguelito
+2025-04-05,Queso blanco 500 g,Lácteos,2,4.60,3.10,6.20,S001,Panamá
+2025-04-05,Yogur griego 1 kg,Lácteos,1,5.20,3.40,3.40,S002,San Miguelito
+2025-04-06,Café molido 400 g,Abarrotes,1,6.50,4.10,4.10,S002,San Miguelito
+2025-04-06,Jugo de naranja 1 L,Bebidas,1,2.90,1.80,1.80,S001,Panamá
+2025-04-07,Pechuga de pollo kg,Carnes,3,6.20,4.35,13.05,S001,Panamá
+2025-04-07,Aceite de oliva 500 ml,Abarrotes,2,8.90,6.20,12.40,S001,Panamá
+2025-04-08,Gaseosa 2 L,Bebidas,6,2.25,1.30,7.80,S001,Panamá
+2025-04-08,Desodorante 150 ml,Cuidado personal,4,3.95,2.30,9.20,S003,David
+2025-04-08,Leche entera 1 L,Lácteos,3,1.75,1.15,3.45,S003,David
+2025-04-09,Arroz 5 lb,Abarrotes,2,3.95,2.70,5.40,S001,Panamá
+2025-04-09,Papel higiénico 12 rollos,Limpieza,2,6.75,4.40,8.80,S002,San Miguelito
+2025-04-09,Mantequilla 250 g,Lácteos,2,3.30,2.20,4.40,S002,San Miguelito
+2025-04-10,Gaseosa 2 L,Bebidas,3,2.25,1.30,3.90,S002,San Miguelito
+2025-04-10,Pasta spaghetti 500 g,Abarrotes,1,1.45,0.85,0.85,S002,San Miguelito
+2025-04-10,Pechuga de pollo kg,Carnes,3,6.20,4.35,13.05,S003,David
+2025-04-10,Mantequilla 250 g,Lácteos,2,3.30,2.20,4.40,S001,Panamá
+2025-04-11,Gaseosa 2 L,Bebidas,3,2.25,1.30,3.90,S003,David
+2025-04-11,Pasta spaghetti 500 g,Abarrotes,6,1.45,0.85,5.10,S002,San Miguelito
+2025-04-11,Agua 1.5 L,Bebidas,3,0.95,0.45,1.35,S002,San Miguelito
+2025-04-11,Arroz 5 lb,Abarrotes,3,3.95,2.70,8.10,S001,Panamá
+2025-04-12,Pechuga de pollo kg,Carnes,1,6.20,4.35,4.35,S002,San Miguelito
+2025-04-12,Leche entera 1 L,Lácteos,1,1.75,1.15,1.15,S001,Panamá
+2025-04-12,Agua 1.5 L,Bebidas,0,0.95,0.45,1.35,S001,Panamá
+2025-04-13,Leche entera 1 L,Lácteos,2,1.75,1.15,2.30,S001,Panamá
+2025-04-13,Pasta spaghetti 500 g,Abarrotes,3,1.45,0.85,2.55,S003,David
+2025-04-13,Pasta dental 100 ml,Cuidado personal,4,2.40,1.35,5.40,S001,Panamá
+2025-04-13,Leche entera 1 L,Lácteos,2,1.75,1.15,2.30,S001,Panamá
+2025-04-14,  aceite de oliva 500 ml ,Abarrotes,1,8.90,6.20,6.20,S003,David
+2025-04-14,Azúcar 2 kg,Abarrotes,3,2.85,1.95,5.85,S003,David
+2025-04-14,Cerveza six pack,Bebidas,5,7.80,5.40,27.00,S002,San Miguelito
+2025-04-14,Jugo de naranja 1 L,Bebidas,1,2.90,1.80,1.80,S001,Panamá
+2025-04-15,  Jugo de naranja 1 L ,Bebidas,3,2.90,1.80,5.40,S002,San Miguelito
+2025-04-15,Pechuga de pollo kg,Carnes,6,"6,20",4.35,26.10,S002,San Miguelito
+2025-04-16,Gaseosa 2 L,Bebidas,5,2.25,1.30,6.50,S002,San Miguelito
+2025-04-16,Pasta spaghetti 500 g,Abarrotes,1,1.45,0.85,0.85,S002,San Miguelito
+2025-04-16,Agua 1.5 L,Bebidas,1,0.95,0.45,0.45,S001,Panamá
+2025-04-16,  Leche entera 1 L ,Lácteos,2,1.75,1.15,2.30,S002,San Miguelito
+2025-04-17,Café molido 400 g,Abarrotes,1,6.50,4.10,4.10,S001,Panamá
+2025-04-17,Agua 1.5 L,Bebidas,1,0.95,0.45,0.45,S001,Panamá
+2025-04-18,Leche entera 1 L,Lácteos,3,1.75,1.15,3.45,S004,Colón
+2025-04-18,Yogur griego 1 kg,Lácteos,6,5.20,3.40,20.40,S004,Colón
+2025-04-18,Pechuga de pollo kg,Carnes,6,6.20,4.35,26.10,S003,David
+2025-04-19,Carne molida kg,Carnes,1,"7,40",5.30,5.30,S002,San Miguelito
+2025-04-19,Leche entera 1 L,Lácteos,3,1.75,1.15,3.45,S002,San Miguelito
+2025-04-20,Detergente 2 kg,Limpieza,4,7.30,4.90,19.60,S004,Colón
+2025-04-20,Mantequilla 250 g,Lácteos,5,3.30,2.20,11.00,S002,San Miguelito
+2025-04-20,Desodorante 150 ml,Cuidado personal,1,3.95,2.30,2.30,S001,Panamá
+2025-04-21,Leche entera 1 L,Lácteos,2,1.75,1.15,2.30,S003,David
+2025-04-21,Azúcar 2 kg,Abarrotes,1,2.85,1.95,1.95,S001,Panamá
+2025-04-21,Arroz 5 lb,Abarrotes,1,3.95,2.70,2.70,S001,Panamá
+2025-04-22,Agua 1.5 L,Bebidas,6,0.95,0.45,2.70,S003,David
+2025-04-22,Agua 1.5 L,Bebidas,2,0.95,0.45,0.90,S002,San Miguelito
+2025-04-22,Detergente 2 kg,Limpieza,1,7.30,4.90,4.90,S001,Panamá
+2025-04-22,Carne molida kg,Carnes,3,7.40,5.30,15.90,S001,Panamá
+2025-04-23,Shampoo 400 ml,Cuidado personal,3,4.25,2.60,7.80,S004,Colón
+2025-04-23,Queso blanco 500 g,Lácteos,0,4.60,3.10,3.10,S002,San Miguelito
+2025-04-23,Carne molida kg,Carnes,2,7.40,5.30,10.60,S001,Panamá
+2025-04-24,Pasta dental 100 ml,Cuidado personal,6,2.40,1.35,8.10,S001,Panamá
+2025-04-24,Shampoo 400 ml,Cuidado personal,6,4.25,2.60,15.60,S002,San Miguelito
+2025-04-24,Arroz 5 lb,Abarrotes,2,3.95,2.70,5.40,S003,David
+2025-04-25,Café molido 400 g,Abarrotes,4,6.50,4.10,16.40,S002,San Miguelito
+2025-04-25,Cloro 1 gal,Limpieza,2,3.20,1.90,3.80,S002,San Miguelito
+2025-04-25,Arroz 5 lb,Abarrotes,2,3.95,2.70,5.40,S003,David
+2025-04-25,Leche entera 1 L,Lácteos,1,1.75,1.15,1.15,S002,San Miguelito
+2025-04-26,Pasta dental 100 ml,Cuidado personal,4,2.40,1.35,5.40,S002,San Miguelito
+2025-04-26,Pasta spaghetti 500 g,Abarrotes,4,1.45,0.85,3.40,S003,David
+2025-04-26,Gaseosa 2 L,Bebidas,4,2.25,1.30,5.20,S002,San Miguelito
+2025-04-27,Agua 1.5 L,Bebidas,2,0.95,0.45,0.90,S003,David
+2025-04-27,Pasta dental 100 ml,Cuidado personal,2,2.40,1.35,4.05,S004,Colón
+2025-04-28,Gaseosa 2 L,Bebidas,1,2.25,1.30,1.30,S002,San Miguelito
+2025-04-28,Leche entera 1 L,Lácteos,3,1.75,1.15,3.45,S001,Panamá
+2025-04-28,Yogur griego 1 kg,Lácteos,4,5.20,3.40,13.60,S001,Panamá
+2025-04-29,Papel higiénico 12 rollos,Limpieza,2,6.75,4.40,8.80,S003,David
+2025-04-29,Carne molida kg,Carnes,6,7.40,5.30,31.80,S002,San Miguelito
+2025-04-29,Pechuga de pollo kg,Carnes,1,6.20,4.35,4.35,S004,Colón
+2025-04-30,Detergente 2 kg,Limpieza,2,7.30,4.90,9.80,S002,San Miguelito
+2025-04-30,Pechuga de pollo kg,Carnes,3,6.20,4.35,13.05,S004,Colón
+2025-04-30,Jugo de naranja 1 L,Bebidas,2,2.90,1.80,3.60,S002,San Miguelito
+2025-05-01,Arroz 5 lb,Abarrotes,4,3.95,2.70,10.80,S002,San Miguelito
+2025-05-01,leche entera 1 l,Lácteos,3,1.75,1.15,3.45,S003,David
+2025-05-02,Mantequilla 250 g,Lácteos,4,3.30,2.20,8.80,S002,San Miguelito
+2025-05-02,Filete de res kg,Carnes,1,12.90,9.10,9.10,S002,San Miguelito
+2025-05-02,Leche entera 1 L,Lácteos,2,1.75,1.15,2.30,S002,San Miguelito
+2025-05-03,Pechuga de pollo kg,Carnes,4,6.20,4.35,17.40,S004,Colón
+2025-05-03,Arroz 5 lb,Abarrotes,1,3.95,2.70,2.70,S001,Panamá
+2025-05-04,Pechuga de pollo kg,Carnes,3,"6,20",4.35,13.05,S004,Colón
+2025-05-04,Café molido 400 g,Abarrotes,1,6.50,4.10,4.10,S001,Panamá
+2025-05-05,Papel higiénico 12 rollos,Limpieza,2,6.75,4.40,8.80,S004,Colón
+2025-05-05,Arroz 5 lb,Abarrotes,2,3.95,2.70,5.40,S003,David
+2025-05-05,Agua 1.5 L,Bebidas,1,0.95,0.45,0.45,S001,Panamá
+2025-05-05,Leche entera 1 L,Lácteos,6,1.75,1.15,6.90,S001,Panamá
+2025-05-06,Detergente 2 kg,Limpieza,1,7.30,4.90,4.90,S003,David
+2025-05-06,Agua 1.5 L,Bebidas,2,0.95,0.45,0.90,S003,David
+2025-05-06,Arroz 5 lb,Abarrotes,3,3.95,2.70,8.10,S004,Colón
+2025-05-06,Café molido 400 g,Abarrotes,1,6.50,4.10,4.10,S003,David
+2025-05-07,Pasta dental 100 ml,Cuidado personal,5,2.40,1.35,6.75,S002,San Miguelito
+2025-05-07,  Leche entera 1 L ,Lácteos,3,1.75,1.15,3.45,S001,Panamá
+2025-05-07,Cloro 1 gal,Limpieza,2,3.20,1.90,3.80,S001,Panamá
+2025-05-07,Café molido 400 g,Abarrotes,3,6.50,4.10,12.30,S002,San Miguelito
+2025-05-08,Shampoo 400 ml,Cuidado personal,3,4.25,2.60,7.80,S002,San Miguelito
+2025-05-08,Cerveza six pack,Bebidas,4,7.80,5.40,21.60,S001,Panamá
+2025-05-08,Shampoo 400 ml,Cuidado personal,1,4.25,2.60,2.60,S002,San Miguelito
+2025-05-09,Aceite de oliva 500 ml,Abarrotes,4,8.90,6.20,24.80,S001,Panamá
+2025-05-09,Gaseosa 2 L,Bebidas,1,2.25,1.30,1.30,S001,Panamá
+2025-05-09,Leche entera 1 L,Lácteos,2,1.75,1.15,2.30,S001,Panamá
+2025-05-10,Arroz 5 lb,Abarrotes,2,3.95,2.70,5.40,S004,Colón
+2025-05-10,Jugo de naranja 1 L,Bebidas,1,2.90,1.80,1.80,S001,Panamá
+2025-05-11,Yogur griego 1 kg,Lácteos,2,5.20,3.40,6.80,S001,Panamá
+2025-05-11,Gaseosa 2 L,Bebidas,2,2.25,1.30,2.60,S002,San Miguelito
+2025-05-11,Cerveza six pack,Bebidas,1,7.80,5.40,5.40,S001,Panamá
+2025-05-12,Mantequilla 250 g,Lácteos,2,3.30,2.20,4.40,S003,David
+2025-05-12,Agua 1.5 L,Bebidas,1,0.95,0.45,0.45,S002,San Miguelito
+2025-05-12,Cerveza six pack,Bebidas,2,7.80,5.40,10.80,S004,Colón
+2025-05-13,Agua 1.5 L,Bebidas,6,0.95,0.45,2.70,S001,Panamá
+2025-05-13,  Yogur griego 1 kg ,Lácteos,2,5.20,3.40,6.80,S004,Colón
+2025-05-13,Papel higiénico 12 rollos,Limpieza,2,6.75,4.40,8.80,S003,David
+2025-05-13,Papel higiénico 12 rollos,Limpieza,1,6.75,4.40,4.40,S004,Colón
+2025-05-14,Leche entera 1 L,Lácteos,6,1.75,1.15,6.90,S004,Colón
+2025-05-14,Gaseosa 2 L,Bebidas,1,2.25,1.30,1.30,S001,Panamá
+2025-05-14,Papel higiénico 12 rollos,Limpieza,1,6.75,4.40,4.40,S004,Colón
+2025-05-15,Cloro 1 gal,Limpieza,4,3.20,1.90,7.60,S003,David
+2025-05-15,Papel higiénico 12 rollos,Limpieza,2,6.75,4.40,8.80,S001,Panamá
+2025-05-15,Desodorante 150 ml,Cuidado personal,5,3.95,2.30,11.50,S003,David
+2025-05-16,Café molido 400 g,Abarrotes,1,6.50,4.10,4.10,S004,Colón
+2025-05-16,  Agua 1.5 L ,Bebidas,1,0.95,0.45,0.45,S001,Panamá
+2025-05-16,Cloro 1 gal,Limpieza,3,3.20,1.90,5.70,S004,Colón
+2025-05-16,Yogur griego 1 kg,Lácteos,1,5.20,3.40,3.40,S003,David
+2025-05-17,Queso blanco 500 g,Lácteos,3,4.60,3.10,9.30,S003,David
+2025-05-17,Café molido 400 g,Abarrotes,5,6.50,4.10,20.50,S003,David
+2025-05-17,Azúcar 2 kg,Abarrotes,3,2.85,1.95,5.85,S004,Colón
+2025-05-17,Yogur griego 1 kg,Abarrotes,2,5.20,3.40,6.80,S003,David
+2025-05-18,Cerveza six pack,Bebidas,5,7.80,5.40,27.00,S003,David
+2025-05-18,Cerveza six pack,Bebidas,5,7.80,5.40,27.00,S002,San Miguelito
+2025-05-19,Leche entera 1 L,Lácteos,2,$1.75,1.15,2.30,S004,Colón
+2025-05-19,Arroz 5 lb,Abarrotes,5,3.95,2.70,13.50,S004,Colón
+2025-05-19,Papel higiénico 12 rollos,Limpieza,1,6.75,4.40,4.40,S001,Panamá
+2025-05-19,Pasta spaghetti 500 g,Abarrotes,6,1.45,0.85,5.10,S001,Panamá
+2025-05-20,Leche entera 1 L,Lácteos,1,1.75,1.15,1.15,S003,David
+2025-05-20,Gaseosa 2 L,Bebidas,2,2.25,1.30,2.60,S002,San Miguelito
+2025-05-20,Filete de res kg,Carnes,3,12.90,9.10,27.30,S003,David
+2025-05-20,Shampoo 400 ml,Cuidado personal,2,4.25,2.60,5.20,S003,David
+2025-05-21,Leche entera 1 L,Lácteos,2,-1.75,1.15,2.30,S002,San Miguelito
+2025-05-21,Arroz 5 lb,Abarrotes,2,3.95,2.70,5.40,S002,San Miguelito
+2025-05-21,Azúcar 2 kg,Abarrotes,3,2.85,1.95,5.85,S002,San Miguelito
+2025-05-22,Cerveza six pack,Bebidas,1,,5.40,5.40,S004,Colón
+2025-05-22,Pechuga de pollo kg,Carnes,4,6.20,4.35,17.40,S003,David
+2025-05-22,Shampoo 400 ml,Cuidado personal,2,4.25,2.60,5.20,S004,Colón
+2025-05-22,Arroz 5 lb,Abarrotes,1,3.95,2.70,2.70,S001,Panamá
+2025-05-23,Gaseosa 2 L,Bebidas,2,2.25,1.30,2.60,S001,Panamá
+2025-05-23,Filete de res kg,Carnes,1,12.90,9.10,9.10,S004,Colón
+2025-05-23,Pasta spaghetti 500 g,Abarrotes,5,1.45,0.85,4.25,S004,Colón
+2025-05-23,Pechuga de pollo kg,Carnes,1,6.20,4.35,4.35,S001,Panamá
+2025-05-24,Pasta dental 100 ml,Cuidado personal,2,2.40,1.35,2.70,S003,David
+2025-05-24,Shampoo 400 ml,Cuidado personal,5,4.25,2.60,13.00,S003,David
+2025-05-24,Queso blanco 500 g,Lácteos,2,4.60,3.10,6.20,S003,David
+2025-05-25,arroz 5 lb,Abarrotes,5,3.95,2.70,13.50,S001,Panamá
+2025-05-25,Pasta spaghetti 500 g,Abarrotes,3,"1,45",0.85,2.55,S001,Panamá
+2025-05-25,Pechuga de pollo kg,Carnes,3,6.20,4.35,13.05,S001,Panamá
+2025-05-25,Pasta spaghetti 500 g,Abarrotes,5,1.45,0.85,4.25,S003,David
+2025-05-26,Mantequilla 250 g,Lácteos,2,3.30,2.20,4.40,S001,Panamá
+2025-05-26,Leche entera 1 L,Lácteos,3,1.75,1.15,5.18,S002,SAN MIGUELITO
+2025-05-26,Gaseosa 2 L,Bebidas,1,2.25,1.30,1.30,S003,David
+2025-05-26,Shampoo 400 ml,Cuidado personal,1,4.25,2.60,2.60,S002,San Miguelito
+2025-05-27,Filete de res kg,Carnes,1,12.90,9.10,9.10,S002,San Miguelito
+2025-05-27,Mantequilla 250 g,Lácteos,5,3.30,2.20,11.00,S001,Panamá
+2025-05-27,Cloro 1 gal,Limpieza,2,3.20,1.90,3.80,S001,Panamá
+2025-05-27,Arroz 5 lb,Abarrotes,1,3.95,2.70,2.70,S001,Panamá
+2025-05-28,Café molido 400 g,Abarrotes,2,6.50,4.10,8.20,S004,Colón
+2025-05-28,Café molido 400 g,Abarrotes,3,6.50,4.10,12.30,S003,David
+2025-05-28,Queso blanco 500 g,Lácteos,1,4.60,3.10,3.10,S004,Colón
+2025-05-29,pechuga de pollo kg,Carnes,2,-6.20,4.35,8.70,S004,Colón
+2025-05-29,Gaseosa 2 L,Bebidas,1,2.25,1.30,1.30,S003,David
+2025-05-29,Leche entera 1 L,Lácteos,5,1.75,1.15,5.75,S003,David
+2025-05-30,Detergente 2 kg,Limpieza,1,7.30,4.90,4.90,S001,Panamá
+2025-05-30,Arroz 5 lb,Abarrotes,1,3.95,2.70,2.70,S001,Panamá
+2025-05-30,Queso blanco 500 g,Lácteos,1,4.60,3.10,3.10,S004,Colón
+2025-05-31,Café molido 400 g,Abarrotes,1,6.50,4.10,4.10,S001,Panamá
+2025-05-31,Azúcar 2 kg,Abarrotes,1,2.85,1.95,1.95,S002,San Miguelito
+2025-05-31,Leche entera 1 L,Lácteos,5,1.75,1.15,5.75,S001,Panamá
+2025-06-01,Azúcar 2 kg,Abarrotes,5,2.85,1.95,9.75,S002,San Miguelito
+2025-06-01,Arroz 5 lb,Abarrotes,2,3.95,2.70,5.40,S004,Colón
+2025-06-01,Café molido 400 g,Abarrotes,4,6.50,4.10,16.40,S003,David
+2025-06-01,Cerveza six pack,Bebidas,2,7.80,5.40,10.80,S004,Colón
+2025-06-02,Queso blanco 500 g,Lácteos,0,4.60,3.10,9.30,S003,David
+2025-06-02,Agua 1.5 L,Bebidas,4,0.95,0.45,1.80,S001,Panamá
+2025-06-02,Arroz 5 lb,Abarrotes,1,3.95,2.70,2.70,S004,Colón
+2025-06-02,Queso blanco 500 g,Lácteos,6,4.60,3.10,18.60,S004,Colón
+2025-06-03,Jugo de naranja 1 L,Bebidas,2,2.90,1.80,3.60,S001,Panamá
+2025-06-03,Carne molida kg,Carnes,1,7.40,5.30,5.30,S004,Colón
+2025-06-03,Agua 1.5 L,Bebidas,3,0.95,0.45,1.35,S004,Colón
+2025-06-04,Papel higiénico 12 rollos,Limpieza,2,6.75,4.40,8.80,S003,David
+2025-06-04,Carne molida kg,Carnes,0,7.40,5.30,26.50,S001,Panamá
+2025-06-04,Café molido 400 g,Abarrotes,6,6.50,4.10,24.60,S002,San Miguelito
+2025-06-04,Shampoo 400 ml,Cuidado personal,2,4.25,2.60,5.20,S001,Panamá
+2025-06-04,Cerveza six pack,Bebidas,6,7.80,5.40,32.40,S002,San Miguelito
+2025-06-05,Shampoo 400 ml,Cuidado personal,1,4.25,2.60,2.60,S002,San Miguelito
+2025-06-05,Mantequilla 250 g,Lácteos,1,3.30,2.20,2.20,S001,Panamá
+2025-06-06,Jugo de naranja 1 L,Bebidas,1,2.90,1.80,1.80,S003,David
+2025-06-07,Pasta spaghetti 500 g,Abarrotes,4,1.45,0.85,3.40,S003,David
+2025-06-07,Filete de res kg,Carnes,2,12.90,9.10,18.20,S003,David
+2025-06-07,Aceite de oliva 500 ml,Abarrotes,3,8.90,6.20,18.60,S001,Panamá
+2025-06-07,Agua 1.5 L,Bebidas,1,0.95,0.45,0.45,S004,Colón
+2025-06-08,Arroz 5 lb,Abarrotes,1,3.95,2.70,2.70,S003,David
+2025-06-08,Aceite de oliva 500 ml,Abarrotes,1,8.90,6.20,6.20,S003,David
+2025-06-08,Aceite de oliva 500 ml,Abarrotes,2,8.90,6.20,12.40,S001,Panamá
+2025-06-09,Cloro 1 gal,Limpieza,3,3.20,1.90,5.70,S003,David
+2025-06-09,Agua 1.5 L,Bebidas,1,0.95,0.45,0.45,S003,David
+2025-06-10,Arroz 5 lb,Abarrotes,3,3.95,2.70,8.10,S004,Colón
+2025-06-10,Mantequilla 250 g,Lácteos,1,3.30,2.20,2.20,S001,Panamá
+2025-06-10,Arroz 5 lb,Abarrotes,1,3.95,2.70,2.70,S004,Colón
+2025-06-10,Arroz 5 lb,Abarrotes,3,3.95,2.70,8.10,S001,Panamá
+2025-06-10,Carne molida kg,Carnes,3,7.40,5.30,15.90,S001,Panamá
+2025-06-10,Detergente 2 kg,Limpieza,6,7.30,4.90,29.40,S002,San Miguelito
+2025-06-11,Cloro 1 gal,Limpieza,6,3.20,1.90,11.40,S002,San Miguelito
+2025-06-11,Shampoo 400 ml,Cuidado personal,2,4.25,2.60,5.20,S004,Colón
+2025-06-11,Café molido 400 g,Abarrotes,1,6.50,4.10,4.10,S002,San Miguelito
+2025-06-11,Pasta dental 100 ml,Cuidado personal,1,2.40,1.35,1.35,S002,San Miguelito
+2025-06-12,Carne molida kg,Carnes,1,7.40,5.30,5.30,S001,Panamá
+2025-06-12,Aceite de oliva 500 ml,Abarrotes,2,8.90,6.20,12.40,S001,Panamá
+2025-06-12,Cerveza six pack,Bebidas,3,7.80,5.40,16.20,S002,San Miguelito
+2025-06-12,Pechuga de pollo kg,Carnes,1,6.20,4.35,4.35,S001,Panamá
+2025-06-13,Pechuga de pollo kg,Carnes,2,6.20,4.35,8.70,S002,San Miguelito
+2025-06-13,Pechuga de pollo kg,Carnes,5,6.20,4.35,21.75,S001,Panamá
+2025-06-13,Gaseosa 2 L,Bebidas,4,2.25,1.30,5.20,S001,Panamá
+2025-06-13,Cloro 1 gal,Limpieza,1,3.20,1.90,1.90,S001,Panamá
+2025-06-14,Arroz 5 lb,Abarrotes,5,3.95,2.70,13.50,S003,David
+2025-06-14,Leche entera 1 L,Lácteos,1,1.75,1.15,1.15,S004,Colón
+2025-06-14,Cerveza six pack,Bebidas,1,7.80,5.40,5.40,S004,Colón
+2025-06-14,Agua 1.5 L,Bebidas,2,0.95,0.45,0.90,S001,Panamá
+2025-06-15,Carne molida kg,Carnes,3,7.40,5.30,15.90,S002,San Miguelito
+2025-06-15,Filete de res kg,Carnes,4,12.90,9.10,36.40,S002,San Miguelito
+2025-06-15,Pechuga de pollo kg,Carnes,2,6.20,4.35,8.70,S001,Panamá
+2025-06-16,Papel higiénico 12 rollos,Limpieza,2,6.75,4.40,8.80,S001,Panamá
+2025-06-16,Aceite de oliva 500 ml,Abarrotes,1,8.90,6.20,6.20,S002,San Miguelito
+2025-06-16,Carne molida kg,Carnes,1,7.40,5.30,5.30,S003,David
+2025-06-16,Yogur griego 1 kg,Lácteos,3,5.20,3.40,10.20,S001,Panamá
+2025-06-16,Shampoo 400 ml,Cuidado personal,6,4.25,2.60,15.60,S003,David
+2025-06-17,Pechuga de pollo kg,Carnes,5,6.20,4.35,21.75,S002,San Miguelito
+2025-06-17,Arroz 5 lb,Abarrotes,2,3.95,2.70,5.40,S001,Panamá
+2025-06-17,Gaseosa 2 L,Bebidas,1,2.25,1.30,1.30,S001,Panamá
+2025-06-17,Shampoo 400 ml,Cuidado personal,5,4.25,2.60,13.00,S003,David
+2025-06-18,Azúcar 2 kg,Abarrotes,2,2.85,1.95,3.90,S003,David
+2025-06-18,Jugo de naranja 1 L,Bebidas,2,2.90,1.80,3.60,S002,San Miguelito
+2025-06-18,Detergente 2 kg,Limpieza,2,7.30,4.90,9.80,S003,David
+2025-06-18,Filete de res kg,Carnes,1,12.90,9.10,9.10,S001,Panamá
+2025-06-19,Pechuga de pollo kg,Carnes,0,6.20,4.35,17.40,S001,Panamá
+2025-06-19,Yogur griego 1 kg,Lácteos,3,5.20,3.40,10.20,S001,Panamá
+2025-06-19,Pasta spaghetti 500 g,Abarrotes,2,1.45,0.85,1.70,S003,David
+2025-06-19,Pasta dental 100 ml,Cuidado personal,3,2.40,1.35,4.05,S001,Panamá
+2025-06-20,Agua 1.5 L,Bebidas,1,0.95,0.45,0.45,S002,San Miguelito
+2025-06-20,Agua 1.5 L,Bebidas,1,0.95,0.45,0.45,S002,San Miguelito
+2025-06-21,Pasta dental 100 ml,Cuidado personal,2,2.40,1.35,2.70,S004,Colón
+2025-06-21,Pasta spaghetti 500 g,Abarrotes,3,1.45,0.85,2.55,S001,Panamá
+2025-06-22,Pechuga de pollo kg,Carnes,6,6.20,4.35,26.10,S002,San Miguelito
+2025-06-22,Café molido 400 g,Abarrotes,2,6.50,4.10,8.20,S002,San Miguelito
+2025-06-22,Pasta spaghetti 500 g,Abarrotes,1,1.45,0.85,0.85,S001,Panamá
+2025-06-23,Leche entera 1 L,Lácteos,3,1.75,1.15,3.45,S003,David
+2025-06-23,Aceite de oliva 500 ml,Abarrotes,2,8.90,6.20,12.40,S002,San Miguelito
+2025-06-23,Arroz 5 lb,Abarrotes,5,3.95,2.70,13.50,S003,David
+2025-06-24,Filete de res kg,Carnes,4,12.90,9.10,36.40,S002,San Miguelito
+2025-06-24,Café molido 400 g,Abarrotes,1,6.50,4.10,4.10,S001,Panamá
+2025-06-24,Pechuga de pollo kg,Carnes,4,6.20,4.35,17.40,S002,San Miguelito
+2025-06-25,Detergente 2 kg,Limpieza,2,7.30,4.90,9.80,S004,Colón
+2025-06-25,Jugo de naranja 1 L,Bebidas,2,2.90,1.80,3.60,S001,Panamá
+2025-06-25,Queso blanco 500 g,Lácteos,2,4.60,3.10,6.20,S004,Colón
+2025-06-25,Leche entera 1 L,Lácteos,1,1.75,1.15,1.15,S001,Panamá
+2025-06-26,Jugo de naranja 1 L,Bebidas,3,2.90,1.80,5.40,S004,Colón
+2025-06-26,Azúcar 2 kg,Abarrotes,3,2.85,1.95,5.85,S001,Panamá
+2025-06-26,Yogur griego 1 kg,Lácteos,3,5.20,3.40,10.20,S002,San Miguelito
+2025-06-27,Pasta spaghetti 500 g,Abarrotes,3,1.45,0.85,2.55,S004,Colón
+2025-06-27,Queso blanco 500 g,Lácteos,1,4.60,3.10,3.10,S001,Panamá
+2025-06-27,Mantequilla 250 g,Lácteos,2,,2.20,4.40,S002,San Miguelito
+2025-06-28,Cerveza six pack,Bebidas,1,7.80,5.40,5.40,S003,David
+2025-06-28,Café molido 400 g,Abarrotes,6,"6,50",4.10,24.60,S002,San Miguelito
+2025-06-28,Agua 1.5 L,Bebidas,6,0.95,0.45,2.70,S003,David
+2025-06-29,Aceite de oliva 500 ml,Abarrotes,1,8.90,6.20,6.20,S003,David
+2025-06-29,Azúcar 2 kg,Abarrotes,1,$2.85,1.95,1.95,S002,San Miguelito
+2025-06-29,Gaseosa 2 L,Bebidas,4,2.25,1.30,5.20,S003,David
+,,,,,,,,
+2025-06-30,Café molido 400 g,Abarrotes,2,6.50,4.10,8.20,S002,San Miguelito
+2025-06-30,Leche entera 1 L,Lácteos,1,1.75,1.15,1.15,S003,David
+2025-06-30,Aceite de oliva 500 ml,Abarrotes,2,8.90,6.20,12.40,S001,Panamá
+2025-07-01,Leche entera 1 L,Lácteos,3,1.75,1.15,3.45,S002,San Miguelito
+2025-07-01,Arroz 5 lb,Abarrotes,2,3.95,2.70,5.40,S001,Panamá
+2025-07-01,Papel higiénico 12 rollos,Limpieza,4,6.75,4.40,17.60,S004,Colón
+2025-07-01,Pechuga de pollo kg,Carnes,4,6.20,4.35,17.40,S002,San Miguelito
+2025-07-02,Arroz 5 lb,Abarrotes,1,3.95,2.70,2.70,S002,San Miguelito
+2025-07-02,Yogur griego 1 kg,Lácteos,1,5.20,3.40,3.40,S002,San Miguelito
+2025-07-02,Azúcar 2 kg,Abarrotes,1,2.85,1.95,1.95,S001,Panamá
+2025-07-02,Leche entera 1 L,Lácteos,2,1.75,1.15,2.30,S002,San Miguelito
+2025-07-03,Agua 1.5 L,Bebidas,1,0.95,0.45,0.45,S004,Colón
+2025-07-03,Pasta dental 100 ml,Cuidado personal,1,2.40,1.35,1.35,S001,Panamá
+2025-07-03,Cerveza six pack,Bebidas,3,7.80,5.40,16.20,S001,Panamá
+2025-07-04,Carne molida kg,Carnes,6,7.40,5.30,31.80,S001,Panamá
+2025-07-04,Arroz 5 lb,Abarrotes,3,3.95,2.70,8.10,S003,David
+2025-07-04,Aceite de oliva 500 ml,Abarrotes,2,8.90,6.20,12.40,S001,Panamá
+2025-07-05,Azúcar 2 kg,Abarrotes,2,2.85,1.95,3.90,S002,San Miguelito
+2025-07-05,Mantequilla 250 g,Lácteos,1,3.30,2.20,2.20,S001,Panamá
+2025-07-06,Pechuga de pollo kg,Carnes,4,6.20,4.35,17.40,S002,San Miguelito
+2025-07-06,Gaseosa 2 L,Bebidas,1,2.25,1.30,1.30,S004,Colón
+2025-07-06,Café molido 400 g,Abarrotes,1,6.50,4.10,4.10,S004,Colón
+2025-07-07,Carne molida kg,Carnes,1,7.40,5.30,5.30,S004,Colón
+2025-07-07,Café molido 400 g,Abarrotes,2,6.50,4.10,8.20,S004,Colón
+2025-07-07,Carne molida kg,Carnes,1,7.40,5.30,5.30,S003,David
+2025-07-08,Café molido 400 g,Abarrotes,3,6.50,4.10,12.30,S003,David
+2025-07-08,Pechuga de pollo kg,Carnes,2,6.20,4.35,8.70,S004,Colón
+2025-07-08,Cloro 1 gal,Limpieza,4,3.20,1.90,7.60,S001,Panamá
+2025-07-09,Café molido 400 g,Abarrotes,2,6.50,4.10,8.20,S003,David
+2025-07-10,Mantequilla 250 g,Lácteos,5,3.30,2.20,11.00,S004,Colón
+2025-07-10,Queso blanco 500 g,Lácteos,3,4.60,3.10,9.30,S004,Colón
+2025-07-10,Pasta dental 100 ml,Cuidado personal,5,2.40,1.35,6.75,S003,David
+2025-07-11,Leche entera 1 L,Lácteos,1,1.75,1.15,1.15,S004,Colón
+2025-07-11,Café molido 400 g,Abarrotes,6,6.50,4.10,24.60,S002,San Miguelito
+2025-07-11,Pasta dental 100 ml,Cuidado personal,6,2.40,1.35,8.10,S003,David
+2025-07-11,Papel higiénico 12 rollos,Limpieza,1,6.75,4.40,4.40,S001,Panamá
+2025-07-11,Arroz 5 lb,Abarrotes,2,3.95,2.70,5.40,S002,San Miguelito
+2025-07-12,Agua 1.5 L,Bebidas,1,0.95,0.45,0.45,S001,Panamá
+2025-07-12,Jugo de naranja 1 L,Bebidas,3,2.90,1.80,5.40,S002,San Miguelito
+2025-07-12,Gaseosa 2 L,Bebidas,3,2.25,1.30,3.90,S004,Colón
+2025-07-13,Pasta dental 100 ml,Cuidado personal,4,2.40,1.35,8.10,S004,Colón
+2025-07-13,Mantequilla 250 g,Lácteos,4,3.30,2.20,8.80,S002,San Miguelito
+2025-07-13,Gaseosa 2 L,Bebidas,3,2.25,1.30,3.90,S001,Panamá
+2025-07-14,Pechuga de pollo kg,Carnes,3,6.20,4.35,13.05,S001,Panamá
+2025-07-14,Azúcar 2 kg,Abarrotes,3,2.85,1.95,5.85,S002,San Miguelito
+2025-07-14,Leche entera 1 L,Lácteos,6,1.75,1.15,6.90,S001,Panamá
+2025-07-15,Leche entera 1 L,Lácteos,6,1.75,1.15,6.90,S001,Panamá
+2025-07-15,Aceite de oliva 500 ml,Abarrotes,1,8.90,6.20,6.20,S002,San Miguelito
+2025-07-15,Gaseosa 2 L,Bebidas,3,2.25,1.30,3.90,S001,Panamá
+2025-07-15,Cloro 1 gal,Limpieza,4,3.20,1.90,7.60,S002,San Miguelito
+2025-07-16,Carne molida kg,Carnes,4,7.40,5.30,21.20,S002,San Miguelito
+2025-07-16,Arroz 5 lb,Abarrotes,2,3.95,2.70,5.40,S001,Panamá
+2025-07-16,Pechuga de pollo kg,Carnes,1,6.20,4.35,4.35,S003,David
+2025-07-17,Yogur griego 1 kg,Lácteos,3,5.20,3.40,10.20,S004,Colón
+2025-07-17,Pasta spaghetti 500 g,Abarrotes,2,1.45,0.85,1.70,S003,David
+2025-07-17,Azúcar 2 kg,Abarrotes,2,2.85,1.95,3.90,S002,San Miguelito
+2025-07-17,Leche entera 1 L,Lácteos,1,1.75,1.15,1.15,S003,David
+2025-07-18,Yogur griego 1 kg,Lácteos,2,5.20,3.40,6.80,S001,Panamá
+2025-07-18,Azúcar 2 kg,Abarrotes,3,2.85,1.95,5.85,S001,Panamá
+2025-07-18,Detergente 2 kg,Limpieza,1,7.30,4.90,4.90,S004,Colón
+2025-07-19,Café molido 400 g,Abarrotes,2,6.50,4.10,8.20,S001,Panamá
+2025-07-19,Filete de res kg,Carnes,4,12.90,9.10,36.40,S003,David
+2025-07-20,Mantequilla 250 g,Lácteos,2,3.30,2.20,6.60,S002,San Miguelito
+2025-07-20,Shampoo 400 ml,Cuidado personal,1,4.25,2.60,2.60,S003,David
+2025-07-20,Leche entera 1 L,Lácteos,4,,1.15,4.60,S001,Panamá
+2025-07-21,Jugo de naranja 1 L,Bebidas,1,2.90,1.80,1.80,S003,David
+2025-07-21,Detergente 2 kg,Limpieza,3,7.30,4.90,14.70,S002,San Miguelito
+2025-07-21,Leche entera 1 L,Lácteos,6,1.75,1.15,6.90,S001,Panamá
+2025-07-22,Pasta dental 100 ml,Cuidado personal,1,2.40,1.35,1.35,S002,SAN MIGUELITO
+2025-07-22,Filete de res kg,Carnes,2,"12,90",9.10,18.20,S003,David
+2025-07-22,Gaseosa 2 L,Bebidas,2,2.25,1.30,2.60,S004,Colón
+2025-07-22,Leche entera 1 L,Lácteos,2,1.75,1.15,2.30,S001,Panamá
+2025-07-23,Papel higiénico 12 rollos,Limpieza,2,6.75,4.40,8.80,S001,Panamá
+2025-07-23,Pechuga de pollo kg,Carnes,1,6.20,4.35,4.35,S001,Panamá
+2025-07-23,Cloro 1 gal,Limpieza,1,3.20,1.90,1.90,S004,Colón
+2025-07-23,Pasta dental 100 ml,Cuidado personal,1,2.40,1.35,1.35,S002,San Miguelito
+2025-07-24,Café molido 400 g,Abarrotes,2,6.50,4.10,8.20,S001,Panamá
+2025-07-24,Agua 1.5 L,Bebidas,4,0.95,0.45,1.80,S003,David
+2025-07-24,Leche entera 1 L,Lácteos,2,1.75,1.15,2.30,S001,Panamá
+2025-07-24,Queso blanco 500 g,Lácteos,1,4.60,3.10,3.10,S002,San Miguelito
+2025-07-24,Mantequilla 250 g,Lácteos,4,3.30,2.20,8.80,S004,Colón
+2025-07-25,Arroz 5 lb,Abarrotes,2,3.95,2.70,5.40,S002,San Miguelito
+2025-07-25,Detergente 2 kg,Limpieza,2,7.30,4.90,9.80,S002,San Miguelito
+2025-07-25,Leche entera 1 L,Lácteos,2,1.75,1.15,2.30,S001,Panamá
+2025-07-26,Yogur griego 1 kg,Lácteos,3,5.20,3.40,10.20,S004,Colón
+2025-07-26,Jugo de naranja 1 L,Bebidas,3,2.90,1.80,5.40,S003,David
+2025-07-26,Gaseosa 2 L,Bebidas,1,2.25,1.30,1.30,S002,San Miguelito
+2025-07-26,  Yogur griego 1 kg ,Lácteos,2,5.20,3.40,6.80,S002,San Miguelito
+2025-07-27,Arroz 5 lb,Abarrotes,1,3.95,2.70,2.70,S004,Colón
+2025-07-27,Pechuga de pollo kg,Carnes,1,6.20,4.35,4.35,S002,San Miguelito
+2025-07-27,Leche entera 1 L,Lácteos,5,1.75,1.15,5.75,S002,San Miguelito
+2025-07-28,Shampoo 400 ml,Cuidado personal,1,4.25,2.60,2.60,S001,Panamá
+2025-07-28,Arroz 5 lb,Abarrotes,1,3.95,2.70,2.70,S001,Panamá
+2025-07-28,Café molido 400 g,Abarrotes,2,6.50,4.10,8.20,S003,David
+2025-07-29,Café molido 400 g,Abarrotes,2,6.50,4.10,8.20,S002,San Miguelito
+2025-07-29,Queso blanco 500 g,Lácteos,6,4.60,3.10,18.60,S002,San Miguelito
+2025-07-29,Pechuga de pollo kg,Carnes,2,6.20,4.35,8.70,S001,Panamá
+2025-07-29,Arroz 5 lb,Abarrotes,5,3.95,2.70,13.50,S001,Panamá
+2025-07-30,Azúcar 2 kg,Abarrotes,4,2.85,1.95,7.80,S003,David
+2025-07-30,Cloro 1 gal,Limpieza,2,3.20,1.90,3.80,S001,Panamá
+2025-07-31,Papel higiénico 12 rollos,Limpieza,1,6.75,4.40,4.40,S004,Colón
+2025-07-31,Cerveza six pack,Bebidas,1,7.80,5.40,5.40,S004,Colón
+2025-07-31,Pechuga de pollo kg,Carnes,2,6.20,4.35,8.70,S001,Panamá
+2025-07-31,Azúcar 2 kg,Abarrotes,2,2.85,1.95,3.90,S003,David
+2025-07-31,Filete de res kg,Carnes,4,12.90,9.10,36.40,S002,San Miguelito
+2025-08-01,Arroz 5 lb,Abarrotes,1,3.95,2.70,2.70,S004,Colón
+2025-08-01,Pasta spaghetti 500 g,Abarrotes,4,1.45,0.85,3.40,S001,Panamá
+2025-08-01,Carne molida kg,Carnes,6,7.40,5.30,31.80,S004,Colón
+2025-08-02,Detergente 2 kg,Limpieza,2,7.30,4.90,9.80,S004,Colón
+2025-08-02,Arroz 5 lb,Abarrotes,2,3.95,2.70,5.40,S001,Panamá
+2025-08-02,Pasta spaghetti 500 g,Abarrotes,1,1.45,0.85,0.85,S004,Colón
+2025-08-03,Cerveza six pack,Bebidas,2,7.80,5.40,10.80,S001,Panamá
+2025-08-03,Pechuga de pollo kg,Carnes,4,6.20,4.35,17.40,S004,Colón
+2025-08-03,Pasta dental 100 ml,Cuidado personal,4,2.40,1.35,5.40,S004,Colón
+2025-08-04,Azúcar 2 kg,Abarrotes,5,2.85,1.95,9.75,S002,San Miguelito
+2025-08-04,Queso blanco 500 g,Lácteos,5,4.60,3.10,15.50,S003,David
+2025-08-04,Arroz 5 lb,Abarrotes,3,3.95,2.70,8.10,S001,Panamá
+2025-08-05,Desodorante 150 ml,Cuidado personal,1,3.95,2.30,2.30,S004,Colón
+2025-08-05,Cerveza six pack,Bebidas,2,7.80,5.40,10.80,S004,Colón
+2025-08-05,Aceite de oliva 500 ml,Abarrotes,1,8.90,6.20,6.20,S003,David
+2025-08-06,Arroz 5 lb,Abarrotes,1,3.95,2.70,2.70,S003,David
+2025-08-06,Shampoo 400 ml,Cuidado personal,3,4.25,2.60,7.80,S003,David
+2025-08-06,Filete de res kg,Carnes,1,12.90,9.10,9.10,S004,Colón
+2025-08-06,Jugo de naranja 1 L,Bebidas,3,2.90,1.80,5.40,S003,David
+2025-08-07,Agua 1.5 L,Bebidas,2,0.95,0.45,0.90,S004,Colón
+2025-08-07,Carne molida kg,Carnes,3,7.40,5.30,15.90,S004,Colón
+2025-08-07,Café molido 400 g,Abarrotes,1,6.50,4.10,4.10,S002,San Miguelito
+2025-08-07,Cloro 1 gal,Limpieza,2,3.20,1.90,3.80,S002,San Miguelito
+2025-08-08,Cerveza six pack,Bebidas,3,,5.40,16.20,S002,San Miguelito
+2025-08-08,Leche entera 1 L,Lácteos,1,1.75,1.15,1.15,S001,Panamá
+2025-08-08,Shampoo 400 ml,Cuidado personal,1,4.25,2.60,2.60,S002,San Miguelito
+2025-08-08,Cloro 1 gal,Limpieza,2,3.20,1.90,3.80,S003,David
+2025-08-08,Pechuga de pollo kg,Carnes,5,6.20,4.35,21.75,S002,San Miguelito
+2025-08-09,Azúcar 2 kg,Abarrotes,4,2.85,1.95,7.80,S001,Panamá
+2025-08-09,Yogur griego 1 kg,Lácteos,1,5.20,3.40,3.40,S002,San Miguelito
+2025-08-09,Papel higiénico 12 rollos,Limpieza,2,6.75,4.40,8.80,S001,Panamá
+2025-08-09,Carne molida kg,Carnes,1,7.40,5.30,5.30,S003,David
+2025-08-10,Agua 1.5 L,Bebidas,1,0.95,0.45,0.45,S001,Panamá
+2025-08-10,Shampoo 400 ml,Cuidado personal,0,4.25,2.60,10.40,S001,Panamá
+2025-08-10,pechuga de pollo kg,Carnes,3,6.20,4.35,13.05,S003,David
+2025-08-11,Detergente 2 kg,Limpieza,4,7.30,4.90,19.60,S001,Panamá
+2025-08-11,Carne molida kg,Carnes,2,7.40,5.30,10.60,S001,Panamá
+2025-08-11,Mantequilla 250 g,Lácteos,1,3.30,2.20,2.20,S001,Panamá
+2025-08-11,Queso blanco 500 g,Lácteos,2,4.60,3.10,6.20,S001,Panamá
+2025-08-12,Agua 1.5 L,Bebidas,2,0.95,0.45,0.90,S004,Colón
+2025-08-12,Papel higiénico 12 rollos,Limpieza,2,6.75,4.40,8.80,S003,David
+2025-08-12,Agua 1.5 L,Bebidas,5,0.95,0.45,2.25,S003,David
+2025-08-13,Yogur griego 1 kg,Lácteos,4,5.20,3.40,13.60,S002,San Miguelito
+2025-08-13,Azúcar 2 kg,Abarrotes,3,2.85,1.95,5.85,S002,San Miguelito
+2025-08-14,Gaseosa 2 L,Bebidas,1,2.25,1.30,1.30,S002,San Miguelito
+2025-08-14,Pasta spaghetti 500 g,Abarrotes,5,1.45,0.85,4.25,S002,San Miguelito
+2025-08-15,Queso blanco 500 g,Lácteos,1,4.60,3.10,3.10,S003,David
+2025-08-15,Gaseosa 2 L,Bebidas,3,2.25,1.30,3.90,S001,Panamá
+2025-08-15,Jugo de naranja 1 L,Bebidas,4,2.90,1.80,7.20,S001,Panamá
+2025-08-16,Jugo de naranja 1 L,Bebidas,1,2.90,1.80,1.80,S002,San Miguelito
+2025-08-16,Pasta spaghetti 500 g,Abarrotes,4,1.45,0.85,3.40,S003,David
+2025-08-16,Gaseosa 2 L,Bebidas,2,2.25,1.30,2.60,S003,David
+2025-08-17,Gaseosa 2 L,Bebidas,1,2.25,1.30,1.30,S002,San Miguelito
+2025-08-17,Café molido 400 g,Abarrotes,2,6.50,4.10,8.20,S001,Panamá
+2025-08-17,Aceite de oliva 500 ml,Abarrotes,1,8.90,6.20,6.20,S002,SAN MIGUELITO
+2025-08-18,Pasta spaghetti 500 g,Abarrotes,1,1.45,0.85,0.85,S001,Panamá
+2025-08-18,Pechuga de pollo kg,Carnes,3,6.20,4.35,13.05,S001,Panamá
+2025-08-19,Arroz 5 lb,Abarrotes,3,3.95,2.70,8.10,S001,Panamá
+2025-08-19,Queso blanco 500 g,Lácteos,1,"4,60",3.10,3.10,S002,San Miguelito
+2025-08-19,  Jugo de naranja 1 L ,Bebidas,6,2.90,1.80,10.80,S001,Panamá
+2025-08-20,Arroz 5 lb,Abarrotes,5,3.95,2.70,13.50,S001,Panamá
+2025-08-20,Filete de res kg,Carnes,2,12.90,9.10,18.20,S003,David
+2025-08-20,Leche entera 1 L,Lácteos,3,1.75,1.15,3.45,S003,David
+2025-08-21,Café molido 400 g,Abarrotes,5,6.50,4.10,20.50,S002,San Miguelito
+2025-08-21,Arroz 5 lb,Abarrotes,4,3.95,2.70,10.80,S004,Colón
+2025-08-21,Yogur griego 1 kg,Lácteos,1,5.20,3.40,3.40,S002,San Miguelito
+2025-08-21,Azúcar 2 kg,Abarrotes,3,2.85,1.95,5.85,S001,Panamá
+2025-08-22,Café molido 400 g,Abarrotes,2,6.50,4.10,8.20,S004,Colón
+2025-08-23,Arroz 5 lb,Abarrotes,1,3.95,2.70,2.70,S002,San Miguelito
+2025-08-23,Cloro 1 gal,Limpieza,1,3.20,1.90,1.90,S002,San Miguelito
+2025-08-23,Agua 1.5 L,Bebidas,6,0.95,0.45,2.70,S004,Colón
+2025-08-24,Pechuga de pollo kg,Carnes,2,6.20,4.35,8.70,S001,Panamá
+2025-08-24,Leche entera 1 L,Lácteos,2,1.75,1.15,2.30,S002,San Miguelito
+2025-08-24,Queso blanco 500 g,Lácteos,5,4.60,3.10,15.50,S003,David
+2025-08-25,Leche entera 1 L,Lácteos,5,1.75,1.15,5.75,S001,Panamá
+2025-08-25,Detergente 2 kg,Limpieza,2,,4.90,9.80,S001,Panamá
+2025-08-26,Gaseosa 2 L,Bebidas,3,2.25,1.30,3.90,S002,San Miguelito
+2025-08-26,Café molido 400 g,Abarrotes,2,6.50,4.10,8.20,S002,San Miguelito
+2025-08-26,Papel higiénico 12 rollos,Limpieza,4,6.75,4.40,17.60,S001,Panamá
+2025-08-27,Pechuga de pollo kg,Carnes,1,6.20,4.35,4.35,S002,San Miguelito
+2025-08-27,Agua 1.5 L,Bebidas,4,0.95,0.45,1.80,S002,San Miguelito
+2025-08-27,Cerveza six pack,Bebidas,3,7.80,5.40,16.20,S002,San Miguelito
+2025-08-28,Jugo de naranja 1 L,Bebidas,6,2.90,1.80,10.80,S001,Panamá
+2025-08-28,  Cerveza six pack ,Bebidas,1,7.80,5.40,5.40,S001,Panamá
+2025-08-28,Papel higiénico 12 rollos,Limpieza,2,6.75,4.40,8.80,S001,Panamá
+2025-08-28,Pasta dental 100 ml,Cuidado personal,2,2.40,1.35,2.70,S001,Panamá
+2025-08-29,Pechuga de pollo kg,Carnes,5,6.20,4.35,21.75,S003,David
+2025-08-29,Pechuga de pollo kg,Carnes,1,6.20,4.35,4.35,S001,Panamá
+2025-08-29,Arroz 5 lb,Abarrotes,2,3.95,2.70,5.40,S003,David
+2025-08-30,Leche entera 1 L,Lácteos,1,1.75,1.15,1.15,S003,David
+2025-08-30,Gaseosa 2 L,Bebidas,6,2.25,1.30,7.80,S003,David
+2025-08-30,Jugo de naranja 1 L,Bebidas,1,2.90,1.80,1.80,S001,Panamá
+2025-08-31,Shampoo 400 ml,Cuidado personal,6,4.25,2.60,15.60,S004,Colón
+2025-08-31,Jugo de naranja 1 L,Bebidas,3,2.90,1.80,5.40,S002,San Miguelito
+2025-08-31,Gaseosa 2 L,Bebidas,2,2.25,1.30,2.60,S003,DAVID
+2025-09-01,Leche entera 1 L,Lácteos,1,1.75,1.15,1.15,S003,David
+2025-09-01,Leche entera 1 L,Lácteos,6,1.75,1.15,6.90,S001,Panamá
+2025-09-02,Azúcar 2 kg,Abarrotes,1,2.85,1.95,1.95,S002,San Miguelito
+2025-09-02,Agua 1.5 L,Bebidas,2,0.95,0.45,0.90,S001,Panamá
+2025-09-02,Leche entera 1 L,Lácteos,3,1.75,1.15,3.45,S004,Colón
+2025-09-02,Arroz 5 lb,Abarrotes,3,3.95,2.70,8.10,S002,San Miguelito
+2025-09-03,Cerveza six pack,Bebidas,1,7.80,5.40,5.40,S001,Panamá
+2025-09-03,Mantequilla 250 g,Lácteos,2,3.30,2.20,4.40,S001,Panamá
+2025-09-03,Pasta spaghetti 500 g,Abarrotes,3,1.45,0.85,2.55,S004,Colón
+2025-09-03,  Agua 1.5 L ,Bebidas,5,0.95,0.45,2.25,S003,David
+2025-09-04,Detergente 2 kg,Limpieza,3,7.30,4.90,14.70,S002,San Miguelito
+2025-09-04,Detergente 2 kg,Limpieza,2,7.30,4.90,9.80,S001,Panamá
+2025-09-05,Agua 1.5 L,Bebidas,1,0.95,0.45,0.45,S001,Panamá
+2025-13-05,Arroz 5 lb,Abarrotes,2,3.95,2.70,5.40,S003,David
+2025-09-05,Pasta dental 100 ml,Cuidado personal,1,2.40,1.35,1.35,S004,Colón
+2025-09-06,  Cerveza six pack ,Bebidas,6,7.80,5.40,32.40,S003,David
+2025-09-06,Papel higiénico 12 rollos,Limpieza,3,6.75,4.40,13.20,S001,Panamá
+2025-09-06,Detergente 2 kg,Limpieza,5,7.30,4.90,24.50,S004,Colón
+2025-09-07,Pechuga de pollo kg,Carnes,2,6.20,4.35,8.70,S004,Colón
+2025-09-07,Arroz 5 lb,Abarrotes,2,3.95,2.70,5.40,S002,San Miguelito
+2025-09-07,Papel higiénico 12 rollos,Limpieza,2,6.75,4.40,8.80,S002,San Miguelito
+2025-09-08,Agua 1.5 L,Bebidas,2,0.95,0.45,0.90,S001,Panamá
+2025-09-08,Yogur griego 1 kg,Lácteos,6,5.20,3.40,20.40,S004,Colón
+2025-09-08,Shampoo 400 ml,Cuidado personal,2,4.25,2.60,5.20,S003,David
+2025-09-09,Café molido 400 g,Abarrotes,3,6.50,4.10,12.30,S004,Colón
+2025-09-09,Mantequilla 250 g,Lácteos,3,3.30,2.20,6.60,S003,David
+2025-09-09,Filete de res kg,Carnes,1,12.90,9.10,9.10,S004,Colón
+2025-09-10,Mantequilla 250 g,Lácteos,2,3.30,2.20,4.40,S001,PANAMÁ
+2025-09-10,Jugo de naranja 1 L,Bebidas,5,2.90,1.80,9.00,S002,San Miguelito
+2025-09-10,Gaseosa 2 L,Bebidas,4,2.25,1.30,5.20,S001,Panamá
+2025-09-11,Mantequilla 250 g,Lácteos,2,3.30,2.20,4.40,S004,Colón
+2025-09-11,Gaseosa 2 L,Bebidas,5,2.25,1.30,6.50,S003,David
+2025-09-11,Pasta spaghetti 500 g,Abarrotes,1,1.45,0.85,0.85,S001,Panamá
+2025-09-12,Café molido 400 g,Abarrotes,1,6.50,4.10,4.10,S001,Panamá
+2025-09-12,Pechuga de pollo kg,Carnes,3,6.20,4.35,13.05,S004,Colón
+2025-09-12,Leche entera 1 L,Lácteos,1,1.75,1.15,1.15,S001,Panamá
+2025-09-12,,Abarrotes,2,2.85,1.95,3.90,S001,Panamá
+2025-09-13,  Shampoo 400 ml ,Cuidado personal,2,4.25,2.60,5.20,S002,San Miguelito
+2025-09-13,Agua 1.5 L,Bebidas,2,0.95,0.45,0.90,S003,David
+2025-09-13,Papel higiénico 12 rollos,Limpieza,3,6.75,4.40,13.20,S001,Panamá
+2025-09-14,Detergente 2 kg,Limpieza,1,7.30,4.90,4.90,S001,Panamá
+2025-09-14,  Pasta spaghetti 500 g ,Abarrotes,1,1.45,0.85,0.85,S001,Panamá
+2025-09-14,Leche entera 1 L,Lácteos,1,1.75,1.15,1.15,S002,San Miguelito
+2025-09-15,Café molido 400 g,Abarrotes,5,6.50,4.10,20.50,S001,Panamá
+2025-09-15,Agua 1.5 L,Bebidas,6,0.95,0.45,2.70,S004,Colón
+2025-09-15,gaseosa 2 l,Bebidas,2,2.25,1.30,2.60,S004,Colón
+2025-09-16,Yogur griego 1 kg,Lácteos,1,5.20,3.40,3.40,S001,Panamá
+2025-09-16,Queso blanco 500 g,Lácteos,6,4.60,3.10,18.60,S001,Panamá
+2025-09-16,Arroz 5 lb,Abarrotes,3,3.95,2.70,8.10,S003,David
+2025-09-17,Café molido 400 g,Abarrotes,1,6.50,4.10,4.10,S002,San Miguelito
+2025-09-17,Papel higiénico 12 rollos,Limpieza,2,6.75,4.40,8.80,S004,Colón
+2025-09-17,Arroz 5 lb,Abarrotes,4,3.95,2.70,10.80,S001,Panamá
+2025-09-17,Aceite de oliva 500 ml,Abarrotes,2,8.90,6.20,12.40,S004,San Miguelito
+2025-09-18,Cerveza six pack,Lácteos,1,7.80,5.40,5.40,S001,Panamá
+2025-09-18,Pasta dental 100 ml,Cuidado personal,5,2.40,1.35,6.75,S001,Panamá
+2025-09-19,Arroz 5 lb,Abarrotes,3,3.95,2.70,8.10,S001,Panamá
+2025-09-19,Pasta spaghetti 500 g,Abarrotes,5,1.45,0.85,4.25,S003,David
+2025-09-19,Azúcar 2 kg,Abarrotes,5,2.85,1.95,9.75,S002,San Miguelito
+2025-09-20,Aceite de oliva 500 ml,Abarrotes,3,8.90,6.20,18.60,S001,Panamá
+2025-09-20,Gaseosa 2 L,Bebidas,2,2.25,1.30,2.60,S002,San Miguelito
+2025-09-20,Aceite de oliva 500 ml,Abarrotes,2,8.90,6.20,12.40,S001,Panamá
+2025-09-21,pechuga de pollo kg,Carnes,4,6.20,4.35,17.40,S002,San Miguelito
+2025-09-21,Pasta spaghetti 500 g,Abarrotes,1,1.45,0.85,0.85,S001,Panamá
+2025-09-21,Cloro 1 gal,Limpieza,3,3.20,1.90,5.70,S001,Panamá
+2025-09-22,Leche entera 1 L,Lácteos,1,1.75,1.15,1.15,S002,San Miguelito
+2025-09-22,Papel higiénico 12 rollos,Limpieza,3,6.75,4.40,13.20,S002,San Miguelito
+2025-09-22,Pasta spaghetti 500 g,Abarrotes,3,1.45,0.85,2.55,S001,Panamá
+2025-09-23,  Mantequilla 250 g ,Lácteos,3,3.30,2.20,6.60,S001,Panamá
+2025-09-23,Gaseosa 2 L,Bebidas,4,2.25,1.30,5.20,S003,David
+2025-09-23,Azúcar 2 kg,Abarrotes,4,2.85,1.95,7.80,S001,Panamá
+2025-09-24,Queso blanco 500 g,Lácteos,3,4.60,3.10,9.30,S002,San Miguelito
+2025-09-24,Leche entera 1 L,Lácteos,4,1.75,1.15,4.60,S002,SAN MIGUELITO
+2025-09-25,Pasta dental 100 ml,Cuidado personal,3,2.40,1.35,4.05,S001,Panamá
+2025-09-25,Yogur griego 1 kg,Lácteos,6,5.20,3.40,20.40,S001,Panamá
+2025-09-25,Aceite de oliva 500 ml,Abarrotes,3,8.90,6.20,18.60,S001,Panamá
+2025-09-25,Cloro 1 gal,Limpieza,6,3.20,1.90,11.40,S001,Panamá
+2025-09-26,Cerveza six pack,Bebidas,2,-7.80,5.40,10.80,S001,Panamá
+2025-09-26,Leche entera 1 L,Lácteos,6,1.75,1.15,6.90,S001,Panamá
+2025-09-26,Mantequilla 250 g,Lácteos,5,3.30,2.20,11.00,S004,Colón
+2025-09-27,Cerveza six pack,Bebidas,4,7.80,5.40,21.60,S002,San Miguelito
+2025-09-27,Cerveza six pack,Bebidas,5,7.80,5.40,27.00,S002,San Miguelito
+2025-09-27,Arroz 5 lb,Abarrotes,3,3.95,2.70,8.10,S003,David
+2025-09-28,Pechuga de pollo kg,Carnes,1,6.20,4.35,4.35,S001,Panamá
+2025-09-28,Jugo de naranja 1 L,Bebidas,4,2.90,1.80,7.20,S003,David
+2025-09-28,Leche entera 1 L,Lácteos,1,1.75,1.15,1.15,S002,San Miguelito
+2025-09-29,Agua 1.5 L,Bebidas,1,0.95,0.45,0.45,S001,Panamá
+2025-09-29,Pechuga de pollo kg,Carnes,1,6.20,4.35,4.35,S002,San Miguelito
+2025-09-29,Desodorante 150 ml,Cuidado personal,1,3.95,2.30,2.30,S004,Colón
+2025-09-29,Pasta dental 100 ml,Cuidado personal,6,2.40,1.35,8.10,S003,David
+2025-09-30,Desodorante 150 ml,Cuidado personal,1,3.95,2.30,2.30,S002,San Miguelito
+2025-09-30,Carne molida kg,Carnes,3,7.40,5.30,15.90,S003,David
+2025-09-30,Pasta spaghetti 500 g,Abarrotes,2,1.45,0.85,1.70,S001,Panamá
+2025-10-01,Café molido 400 g,Abarrotes,1,6.50,4.10,4.10,S003,David
+2025-10-01,Café molido 400 g,Abarrotes,4,6.50,4.10,16.40,S002,San Miguelito
+2025-10-02,Pechuga de pollo kg,Carnes,3,6.20,4.35,13.05,S003,David
+2025-10-02,Papel higiénico 12 rollos,Limpieza,3,6.75,4.40,19.80,S001,Panamá
+2025-10-03,Arroz 5 lb,Abarrotes,1,3.95,2.70,2.70,S001,Panamá
+2025-10-03,Shampoo 400 ml,Cuidado personal,1,4.25,2.60,2.60,S002,San Miguelito
+2025-10-04,Café molido 400 g,Abarrotes,4,6.50,4.10,16.40,S004,Colón
+2025-10-04,Cerveza six pack,Bebidas,3,7.80,5.40,16.20,S001,Panamá
+2025-10-04,Café molido 400 g,Abarrotes,2,6.50,4.10,8.20,S002,San Miguelito
+2025-10-04,Desodorante 150 ml,Cuidado personal,4,3.95,2.30,9.20,S001,Panamá
+2025-10-05,Café molido 400 g,Abarrotes,3,6.50,4.10,12.30,S001,Panamá
+2025-10-05,Filete de res kg,Carnes,1,12.90,9.10,9.10,S001,Panamá
+2025-10-06,Pasta spaghetti 500 g,Abarrotes,1,1.45,0.85,0.85,S001,Panamá
+2025-10-06,Café molido 400 g,Abarrotes,1,6.50,4.10,4.10,S002,San Miguelito
+2025-10-06,Carne molida kg,Carnes,2,7.40,5.30,10.60,S001,Panamá
+,,,,,,,,
+2025-10-07,Leche entera 1 L,Lácteos,1,1.75,1.15,1.15,S001,Panamá
+2025-10-07,Pechuga de pollo kg,Carnes,3,6.20,4.35,13.05,S001,Panamá
+2025-10-07,Gaseosa 2 L,Bebidas,6,2.25,1.30,7.80,S001,Panamá
+2025-10-08,Pechuga de pollo kg,Carnes,2,6.20,4.35,8.70,S001,Panamá
+2025-10-08,Café molido 400 g,Abarrotes,1,6.50,4.10,4.10,S003,David
+2025-10-08,Cloro 1 gal,Limpieza,3,3.20,1.90,5.70,S001,Panamá
+2025-10-08,Queso blanco 500 g,Lácteos,5,4.60,3.10,15.50,S004,Colón
+2025-10-08,Café molido 400 g,Abarrotes,5,6.50,4.10,20.50,S002,San Miguelito
+2025-10-09,  Arroz 5 lb ,Abarrotes,1,3.95,2.70,2.70,S002,San Miguelito
+2025-13-09,Gaseosa 2 L,Bebidas,4,2.25,1.30,5.20,S004,Colón
+2025-10-09,Pechuga de pollo kg,Carnes,1,6.20,4.35,4.35,S004,Colón
+2025-10-09,Carne molida kg,Carnes,1,7.40,5.30,5.30,S002,San Miguelito
+2025-10-10,Azúcar 2 kg,Abarrotes,1,2.85,1.95,1.95,S004,Colón
+2025-10-10,Jugo de naranja 1 L,Bebidas,1,2.90,1.80,1.80,S001,Panamá
+2025-10-10,Pasta spaghetti 500 g,Abarrotes,1,1.45,0.85,0.85,S003,David
+2025-10-10,Leche entera 1 L,Lácteos,1,1.75,1.15,1.15,S001,Panamá
+2025-10-11,Café molido 400 g,Abarrotes,2,6.50,4.10,8.20,S002,San Miguelito
+2025-10-11,Papel higiénico 12 rollos,Limpieza,4,6.75,4.40,17.60,S001,Panamá
+2025-10-11,Agua 1.5 L,Bebidas,2,0.95,0.45,0.90,S004,Colón
+2025-10-11,Carne molida kg,Carnes,2,7.40,5.30,10.60,S003,David
+2025-10-12,Agua 1.5 L,Bebidas,2,0.95,0.45,0.90,S003,David
+2025-10-12,Pasta spaghetti 500 g,Abarrotes,5,1.45,0.85,4.25,S001,Panamá
+2025-10-12,Arroz 5 lb,Abarrotes,4,3.95,2.70,10.80,S001,Panamá
+2025-10-13,Papel higiénico 12 rollos,Limpieza,4,6.75,4.40,17.60,S001,Panamá
+2025-10-13,Shampoo 400 ml,Cuidado personal,2,4.25,2.60,5.20,S001,Panamá
+2025-10-13,Jugo de naranja 1 L,Bebidas,1,2.90,1.80,1.80,S002,San Miguelito
+2025-10-14,Papel higiénico 12 rollos,Limpieza,1,6.75,4.40,4.40,S001,Panamá
+2025-10-14,Azúcar 2 kg,Abarrotes,5,2.85,1.95,9.75,S001,Panamá
+2025-10-14,Leche entera 1 L,Lácteos,2,1.75,1.15,2.30,S002,San Miguelito
+2025-10-15,Leche entera 1 L,Lácteos,1,1.75,1.15,1.15,S004,Colón
+2025-10-15,Shampoo 400 ml,Cuidado personal,1,4.25,2.60,2.60,S002,San Miguelito
+2025-10-15,Azúcar 2 kg,Abarrotes,3,2.85,1.95,5.85,S001,Panamá
+2025-10-16,Arroz 5 lb,Abarrotes,1,3.95,2.70,2.70,S001,Panamá
+2025-10-16,Gaseosa 2 L,Bebidas,1,2.25,1.30,1.30,S002,San Miguelito
+2025-10-16,Aceite de oliva 500 ml,Abarrotes,3,8.90,6.20,18.60,S004,Colón
+2025-10-17,Yogur griego 1 kg,Lácteos,5,5.20,3.40,17.00,S001,Panamá
+2025-10-17,Agua 1.5 L,Bebidas,1,0.95,0.45,0.45,S003,David
+2025-10-17,Desodorante 150 ml,Cuidado personal,1,3.95,2.30,2.30,S004,Colón
+2025-10-17,Carne molida kg,Carnes,1,7.40,5.30,5.30,S002,San Miguelito
+2025-10-17,Leche entera 1 L,Lácteos,2,1.75,1.15,2.30,S004,Colón
+2025-10-18,Arroz 5 lb,Abarrotes,2,3.95,2.70,5.40,S001,Panamá
+2025-10-18,Leche entera 1 L,Lácteos,4,1.75,1.15,4.60,S004,Colón
+2025-10-18,Filete de res kg,Carnes,2,12.90,9.10,18.20,S002,San Miguelito
+2025-10-18,Pechuga de pollo kg,Carnes,2,6.20,4.35,8.70,S001,Panamá
+2025-10-18,Arroz 5 lb,Abarrotes,1,3.95,2.70,2.70,S002,San Miguelito
+2025-10-19,Jugo de naranja 1 L,Bebidas,3,2.90,1.80,5.40,S002,San Miguelito
+2025-10-19,Jugo de naranja 1 L,Bebidas,2,2.90,1.80,3.60,S002,San Miguelito
+2025-10-19,Pechuga de pollo kg,Carnes,2,6.20,4.35,8.70,S001,Panamá
+2025-10-20,Yogur griego 1 kg,Lácteos,1,5.20,3.40,3.40,S004,Colón
+2025-10-20,Arroz 5 lb,Abarrotes,4,3.95,2.70,10.80,S002,San Miguelito
+2025-10-20,Carne molida kg,Carnes,3,7.40,5.30,15.90,S001,Panamá
+2025-10-21,Cerveza six pack,Bebidas,2,7.80,5.40,10.80,S001,Panamá
+2025-10-21,Desodorante 150 ml,Cuidado personal,5,3.95,2.30,11.50,S001,Panamá
+2025-10-21,Azúcar 2 kg,Abarrotes,4,2.85,1.95,7.80,S004,Colón
+2025-10-21,Gaseosa 2 L,Bebidas,3,2.25,1.30,3.90,S002,San Miguelito
+2025-10-22,Pechuga de pollo kg,Carnes,5,6.20,4.35,21.75,S002,San Miguelito
+2025-10-22,Detergente 2 kg,Limpieza,3,7.30,4.90,14.70,S001,Panamá
+2025-10-22,Yogur griego 1 kg,Lácteos,2,-5.20,3.40,6.80,S001,Panamá
+2025-10-23,Pechuga de pollo kg,Carnes,4,6.20,4.35,17.40,S001,Panamá
+2025-10-23,Shampoo 400 ml,Cuidado personal,1,4.25,2.60,2.60,S003,David
+2025-10-23,Yogur griego 1 kg,Lácteos,3,5.20,3.40,10.20,S004,Colón
+2025-10-23,Agua 1.5 L,Bebidas,3,0.95,0.45,1.35,S002,San Miguelito
+2025-10-24,Desodorante 150 ml,Cuidado personal,1,3.95,2.30,2.30,S003,David
+2025-10-24,,Abarrotes,3,6.50,4.10,12.30,S001,Panamá
+2025-10-24,Leche entera 1 L,Lácteos,1,1.75,1.15,1.15,S004,Colón
+2025-10-24,  Arroz 5 lb ,Abarrotes,2,3.95,2.70,5.40,S002,San Miguelito
+2025-10-25,Desodorante 150 ml,Cuidado personal,2,3.95,2.30,4.60,S001,Panamá
+2025-10-25,Aceite de oliva 500 ml,Abarrotes,1,8.90,6.20,6.20,S001,Panamá
+2025-10-25,Leche entera 1 L,Lácteos,4,1.75,1.15,4.60,S001,Panamá
+2025-10-26,Pasta dental 100 ml,Cuidado personal,3,2.40,1.35,4.05,S003,David
+2025-10-26,Agua 1.5 L,Bebidas,3,0.95,0.45,1.35,S003,David
+2025-10-26,Gaseosa 2 L,Bebidas,6,2.25,1.30,7.80,S002,San Miguelito
+2025-10-26,Cerveza six pack,Bebidas,5,7.80,5.40,27.00,S002,San Miguelito
+2025-10-27,Café molido 400 g,Abarrotes,1,6.50,4.10,4.10,S001,Panamá
+2025-10-27,Agua 1.5 L,Bebidas,2,0.95,0.45,0.90,S004,Colón
+2025-10-27,Pasta spaghetti 500 g,Abarrotes,1,1.45,0.85,0.85,S001,Panamá
+2025-10-27,Gaseosa 2 L,Bebidas,2,2.25,1.30,2.60,S002,San Miguelito
+2025-10-27,Shampoo 400 ml,Cuidado personal,3,4.25,2.60,7.80,S001,Panamá
+2025-10-28,Gaseosa 2 L,Bebidas,4,2.25,1.30,5.20,S003,David
+2025-10-28,Papel higiénico 12 rollos,Limpieza,4,6.75,4.40,17.60,S004,Colón
+2025-10-28,Azúcar 2 kg,Abarrotes,6,2.85,1.95,11.70,S001,Panamá
+2025-10-29,Mantequilla 250 g,Lácteos,4,3.30,2.20,8.80,S001,Panamá
+2025-10-29,filete de res kg,Carnes,4,12.90,9.10,36.40,S002,San Miguelito
+2025-10-30,Café molido 400 g,Abarrotes,1,6.50,4.10,4.10,S002,San Miguelito
+2025-10-30,Pasta spaghetti 500 g,Abarrotes,3,1.45,0.85,2.55,S004,Colón
+2025-10-30,Pechuga de pollo kg,Carnes,2,6.20,4.35,8.70,S002,San Miguelito
+2025-10-31,Gaseosa 2 L,Bebidas,2,2.25,1.30,2.60,S001,Panamá
+2025-10-31,Gaseosa 2 L,Bebidas,5,2.25,1.30,6.50,S001,Panamá
+2025-11-01,  Leche entera 1 L ,Lácteos,1,$1.75,1.15,1.15,S003,David
+2025-11-01,cafe molido 400 g,Abarrotes,5,6.50,4.10,20.50,S003,David
+2025-11-01,Pasta spaghetti 500 g,Abarrotes,2,1.45,0.85,1.70,S001,Panamá
+2025-11-01,Cerveza six pack,Bebidas,5,7.80,5.40,27.00,S001,PANAMÁ
+2025-11-02,Agua 1.5 L,Bebidas,3,0.95,0.45,1.35,S001,Panamá
+2025-11-02,Detergente 2 kg,Limpieza,3,7.30,4.90,14.70,S001,Panamá
+2025-11-02,Pechuga de pollo kg,Carnes,4,6.20,4.35,17.40,S001,Panamá
+2025-11-02,Pechuga de pollo kg,Carnes,6,6.20,4.35,26.10,S004,Colón
+2025-11-03,Detergente 2 kg,Limpieza,2,7.30,4.90,9.80,S004,Colón
+2025-11-03,Filete de res kg,Carnes,2,12.90,9.10,18.20,S004,Colón
+2025-11-03,Pasta spaghetti 500 g,Abarrotes,1,1.45,0.85,0.85,S002,San Miguelito
+2025-11-04,  Pasta spaghetti 500 g ,Abarrotes,3,1.45,0.85,2.55,S003,David
+2025-11-04,Pasta spaghetti 500 g,Abarrotes,1,"1,45",0.85,0.85,S001,Panamá
+2025-11-04,Pechuga de pollo kg,Carnes,3,6.20,4.35,13.05,S001,Panamá
+2025-11-04,Arroz 5 lb,Abarrotes,3,3.95,2.70,8.10,S001,Panamá
+2025-11-04,Pechuga de pollo kg,Carnes,1,6.20,4.35,4.35,S002,San Miguelito
+2025-11-05,Café molido 400 g,Abarrotes,0,"6,50",4.10,4.10,S001,Panamá
+2025-11-05,Leche entera 1 L,Lácteos,3,1.75,1.15,3.45,S002,San Miguelito
+2025-11-05,Café molido 400 g,Abarrotes,1,6.50,4.10,4.10,S003,David
+2025-11-06,Arroz 5 lb,Abarrotes,2,3.95,2.70,5.40,S004,Colón
+2025-11-06,Pasta dental 100 ml,Cuidado personal,3,2.40,1.35,4.05,S003,David
+2025-11-06,Desodorante 150 ml,Cuidado personal,2,3.95,2.30,4.60,S003,David
+2025-11-06,Cerveza six pack,Bebidas,4,7.80,5.40,21.60,S001,Panamá
+2025-11-07,Gaseosa 2 L,Bebidas,3,2.25,1.30,3.90,S002,San Miguelito
+2025-11-07,Cloro 1 gal,Limpieza,5,3.20,1.90,9.50,S003,David
+2025-11-07,Papel higiénico 12 rollos,Limpieza,2,6.75,4.40,8.80,S002,San Miguelito
+2025-11-08,Gaseosa 2 L,Bebidas,1,2.25,1.30,1.30,S001,Panamá
+2025-11-08,  Leche entera 1 L ,Lácteos,3,1.75,1.15,3.45,S002,San Miguelito
+2025-11-08,Agua 1.5 L,Bebidas,1,0.95,0.45,0.45,S002,San Miguelito
+2025-11-08,Café molido 400 g,Abarrotes,2,6.50,4.10,8.20,S002,San Miguelito
+2025-11-09,Filete de res kg,Carnes,2,12.90,9.10,18.20,S001,Panamá
+2025-11-09,Papel higiénico 12 rollos,Limpieza,1,6.75,4.40,4.40,S003,David
+2025-11-09,Carne molida kg,Carnes,1,7.40,5.30,5.30,S001,Panamá
+2025-11-10,  Arroz 5 lb ,Abarrotes,2,3.95,2.70,5.40,S001,Panamá
+2025-11-10,Pechuga de pollo kg,Carnes,4,6.20,4.35,17.40,S002,San Miguelito
+2025-11-10,Agua 1.5 L,Bebidas,1,0.95,0.45,0.45,S004,Colón
+2025-11-11,Filete de res kg,Carnes,3,12.90,9.10,27.30,S001,Panamá
+2025-11-11,Papel higiénico 12 rollos,Limpieza,6,6.75,4.40,26.40,S001,Panamá
+2025-11-11,Pasta spaghetti 500 g,Abarrotes,2,1.45,0.85,1.70,S004,Colón
+2025-11-12,Gaseosa 2 L,Bebidas,1,2.25,1.30,1.30,S004,Colón
+2025-11-12,Cerveza six pack,Bebidas,2,7.80,5.40,10.80,S003,David
+2025-11-12,Cloro 1 gal,Limpieza,4,3.20,1.90,7.60,S001,Panamá
+2025-11-12,Papel higiénico 12 rollos,Limpieza,3,6.75,4.40,13.20,S003,David
+2025-11-12,Azúcar 2 kg,Limpieza,2,2.85,1.95,3.90,S004,Colón
+2025-11-13,Pasta spaghetti 500 g,Abarrotes,1,1.45,0.85,0.85,S001,Panamá
+2025-11-13,Gaseosa 2 L,Bebidas,2,2.25,1.30,2.60,S004,Colón
+2025-11-13,Arroz 5 lb,Abarrotes,1,3.95,2.70,2.70,S001,Panamá
+2025-11-14,Pasta dental 100 ml,Cuidado personal,4,2.40,1.35,5.40,S003,Colón
+2025-11-14,Azúcar 2 kg,Abarrotes,3,2.85,1.95,5.85,S004,Colón
+2025-11-14,Yogur griego 1 kg,Lácteos,4,5.20,3.40,13.60,S003,David
+2025-11-14,Agua 1.5 L,Bebidas,2,0.95,0.45,0.90,S002,San Miguelito
+2025-11-15,Pasta spaghetti 500 g,Abarrotes,1,1.45,0.85,0.85,S003,David
+2025-11-15,Queso blanco 500 g,Lácteos,1,4.60,3.10,3.10,S001,Panamá
+2025-11-15,Yogur griego 1 kg,Lácteos,3,5.20,3.40,10.20,S004,Colón
+2025-11-15,Cloro 1 gal,Limpieza,2,3.20,1.90,3.80,S004,Colón
+2025-11-16,Agua 1.5 L,Bebidas,4,$0.95,0.45,1.80,S001,Panamá
+2025-11-16,Aceite de oliva 500 ml,Abarrotes,1,8.90,6.20,6.20,S002,Colón
+2025-11-16,Detergente 2 kg,Limpieza,1,7.30,4.90,4.90,S002,San Miguelito
+2025-11-16,Papel higiénico 12 rollos,Limpieza,3,6.75,4.40,13.20,S001,Panamá
+2025-11-16,Queso blanco 500 g,Lácteos,4,4.60,3.10,12.40,S004,Colón
+2025-11-16,Queso blanco 500 g,Lácteos,2,4.60,3.10,6.20,S001,Panamá
+2025-11-17,Pasta spaghetti 500 g,Abarrotes,2,1.45,0.85,1.70,S003,David
+2025-11-17,Café molido 400 g,Abarrotes,1,$6.50,4.10,4.10,S004,Colón
+2025-11-17,Jugo de naranja 1 L,Bebidas,1,2.90,1.80,1.80,S004,Colón
+2025-11-18,Café molido 400 g,Abarrotes,1,"6,50",4.10,4.10,S001,Panamá
+2025-11-18,Leche entera 1 L,Lácteos,2,1.75,1.15,2.30,S003,David
+2025-11-18,Aceite de oliva 500 ml,Abarrotes,1,8.90,6.20,6.20,S004,Colón
+2025-11-18,Azúcar 2 kg,Abarrotes,4,2.85,1.95,7.80,S001,Panamá
+2025-11-19,Agua 1.5 L,Bebidas,2,0.95,0.45,0.90,S002,San Miguelito
+2025-11-19,Arroz 5 lb,Abarrotes,3,3.95,2.70,8.10,S002,San Miguelito
+2025-11-20,Shampoo 400 ml,Cuidado personal,1,4.25,2.60,2.60,S003,David
+2025-11-20,Cerveza six pack,Bebidas,3,7.80,5.40,16.20,S001,Panamá
+2025-11-20,Agua 1.5 L,Bebidas,2,0.95,0.45,0.90,S002,SAN MIGUELITO
+2025-11-20,Café molido 400 g,Abarrotes,1,6.50,4.10,4.10,S001,Panamá
+2025-11-21,Pasta spaghetti 500 g,Abarrotes,4,1.45,0.85,3.40,S001,Panamá
+2025-11-21,Papel higiénico 12 rollos,Limpieza,5,6.75,4.40,22.00,S001,Panamá
+2025-11-21,pasta spaghetti 500 g,Abarrotes,2,1.45,0.85,1.70,S003,David
+2025-11-21,Gaseosa 2 L,Bebidas,6,2.25,1.30,7.80,S001,Panamá
+2025-11-22,Pasta dental 100 ml,Cuidado personal,4,2.40,1.35,5.40,S004,Colón
+2025-11-22,Cerveza six pack,Bebidas,3,7.80,5.40,16.20,S003,David
+2025-11-22,Azúcar 2 kg,Abarrotes,1,2.85,1.95,1.95,S004,Colón
+2025-11-22,Desodorante 150 ml,Cuidado personal,1,3.95,2.30,2.30,S001,Panamá
+2025-11-23,Pechuga de pollo kg,Carnes,1,6.20,4.35,4.35,S001,Panamá
+2025-11-23,Papel higiénico 12 rollos,Limpieza,6,6.75,4.40,26.40,S001,Panamá
+2025-11-23,Gaseosa 2 L,Bebidas,1,2.25,1.30,1.30,S003,David
+2025-11-23,Agua 1.5 L,Bebidas,3,0.95,0.45,1.35,S001,Panamá
+2025-11-24,Cerveza six pack,Bebidas,4,7.80,5.40,21.60,S001,Panamá
+2025-11-24,Carne molida kg,Carnes,1,7.40,5.30,5.30,S004,Colón
+2025-11-24,Gaseosa 2 L,Bebidas,1,2.25,1.30,1.30,S004,Colón
+2025-11-24,Gaseosa 2 L,Bebidas,6,2.25,1.30,7.80,S001,Panamá
+2025-11-24,Papel higiénico 12 rollos,Limpieza,2,6.75,4.40,8.80,S002,San Miguelito
+2025-11-25,Pasta dental 100 ml,Cuidado personal,2,2.40,1.35,2.70,S001,Panamá
+2025-13-25,Arroz 5 lb,Abarrotes,1,3.95,2.70,2.70,S004,Colón
+2025-11-25,Mantequilla 250 g,Lácteos,3,3.30,2.20,6.60,S002,San Miguelito
+2025-11-25,Café molido 400 g,Abarrotes,0,6.50,4.10,16.40,S004,Colón
+2025-11-25,Pechuga de pollo kg,Carnes,1,6.20,4.35,4.35,S001,Panamá
+2025-11-26,Azúcar 2 kg,Abarrotes,4,2.85,1.95,7.80,S002,San Miguelito
+2025-11-26,Carne molida kg,Carnes,2,7.40,5.30,10.60,S003,David
+2025-11-26,Café molido 400 g,Abarrotes,2,6.50,4.10,8.20,S002,San Miguelito
+2025-11-26,Pasta spaghetti 500 g,Abarrotes,1,1.45,0.85,0.85,S002,San Miguelito
+2025-11-27,Shampoo 400 ml,Cuidado personal,2,4.25,2.60,5.20,S001,Panamá
+2025-11-27,Detergente 2 kg,Limpieza,2,7.30,4.90,9.80,S004,Colón
+2025-11-27,Gaseosa 2 L,Bebidas,1,2.25,1.30,1.30,S004,Colón
+2025-11-27,Leche entera 1 L,Lácteos,2,1.75,1.15,2.30,S003,David
+2025-11-28,Filete de res kg,Carnes,2,12.90,9.10,18.20,S001,Panamá
+2025-11-28,Gaseosa 2 L,Bebidas,1,2.25,1.30,1.30,S004,Colón
+2025-11-28,Pasta dental 100 ml,Cuidado personal,4,2.40,1.35,5.40,S001,Panamá
+2025-11-28,  Pasta spaghetti 500 g ,Abarrotes,6,1.45,0.85,5.10,S001,Panamá
+2025-11-29,Carne molida kg,Carnes,2,7.40,5.30,10.60,S001,Panamá
+2025-11-29,Gaseosa 2 L,Bebidas,1,2.25,1.30,1.30,S001,Panamá
+2025-11-30,  Cerveza six pack ,Bebidas,4,7.80,5.40,21.60,S003,David
+2025-11-30,detergente 2 kg,Limpieza,1,7.30,4.90,4.90,S002,San Miguelito
+2025-11-30,Cerveza six pack,Bebidas,3,7.80,5.40,16.20,S001,Panamá
+2025-11-30,Leche entera 1 L,Lácteos,5,1.75,1.15,5.75,S001,Panamá
+2025-11-30,Azúcar 2 kg,Abarrotes,6,2.85,1.95,11.70,S001,Panamá
+2025-12-01,Pechuga de pollo kg,Carnes,3,6.20,4.35,13.05,S001,Panamá
+2025-12-01,Agua 1.5 L,Bebidas,2,0.95,0.45,0.90,S002,San Miguelito
+2025-12-01,Leche entera 1 L,Lácteos,1,1.75,1.15,1.15,S002,San Miguelito
+2025-12-01,Café molido 400 g,Abarrotes,3,6.50,4.10,12.30,S002,San Miguelito
+2025-12-02,Pasta spaghetti 500 g,Abarrotes,3,1.45,0.85,2.55,S001,Panamá
+2025-12-02,Pechuga de pollo kg,Carnes,2,6.20,4.35,8.70,S001,Panamá
+2025-12-02,Cloro 1 gal,Limpieza,2,3.20,1.90,3.80,S002,San Miguelito
+2025-12-02,Café molido 400 g,Abarrotes,1,6.50,4.10,4.10,S004,Colón
+2025-12-02,Papel higiénico 12 rollos,Limpieza,1,6.75,4.40,4.40,S004,Colón
+2025-12-02,Gaseosa 2 L,Bebidas,1,2.25,1.30,1.30,S001,Panamá
+2025-12-02,Pasta dental 100 ml,Cuidado personal,2,2.40,1.35,2.70,S001,Panamá
+2025-12-03,Detergente 2 kg,Limpieza,2,7.30,4.90,9.80,S002,San Miguelito
+2025-12-03,Jugo de naranja 1 L,Bebidas,2,2.90,1.80,3.60,S004,Colón
+2025-12-03,Gaseosa 2 L,Bebidas,6,2.25,1.30,7.80,S004,Colón
+2025-12-03,Papel higiénico 12 rollos,Limpieza,3,6.75,4.40,13.20,S003,David
+2025-12-03,Leche entera 1 L,Lácteos,4,1.75,1.15,4.60,S003,David
+2025-12-03,Pasta dental 100 ml,Cuidado personal,4,2.40,1.35,5.40,S003,David
+2025-12-03,Leche entera 1 L,Lácteos,5,1.75,1.15,5.75,S002,San Miguelito
+2025-12-04,Arroz 5 lb,Abarrotes,1,3.95,2.70,2.70,S004,Colón
+2025-12-04,Queso blanco 500 g,Lácteos,3,4.60,3.10,9.30,S002,San Miguelito
+2025-12-04,Shampoo 400 ml,Cuidado personal,1,4.25,2.60,2.60,S002,San Miguelito
+2025-12-04,Carne molida kg,Carnes,1,7.40,5.30,5.30,S001,Panamá
+2025-12-04,Carne molida kg,Carnes,2,7.40,5.30,10.60,S001,Panamá
+2025-12-04,Jugo de naranja 1 L,Bebidas,2,2.90,1.80,3.60,S003,David
+2025-12-05,Detergente 2 kg,Limpieza,1,7.30,4.90,4.90,S002,San Miguelito
+2025-12-05,Aceite de oliva 500 ml,Abarrotes,4,8.90,6.20,24.80,S001,Panamá
+2025-12-05,Carne molida kg,Carnes,1,7.40,5.30,5.30,S003,David
+2025-12-05,Yogur griego 1 kg,Lácteos,1,5.20,3.40,3.40,S004,Colón
+2025-12-05,Carne molida kg,Carnes,2,7.40,5.30,10.60,S001,Panamá
+2025-12-06,Pasta spaghetti 500 g,Abarrotes,1,1.45,0.85,0.85,S004,Colón
+2025-12-06,Azúcar 2 kg,Abarrotes,1,$2.85,1.95,1.95,S001,Panamá
+2025-12-06,Café molido 400 g,Abarrotes,3,6.50,4.10,12.30,S001,Panamá
+2025-12-06,Detergente 2 kg,Limpieza,4,7.30,4.90,19.60,S004,Colón
+2025-12-07,,Carnes,3,7.40,5.30,15.90,S002,San Miguelito
+2025-12-08,Aceite de oliva 500 ml,Abarrotes,1,8.90,6.20,6.20,S004,Colón
+2025-12-08,Café molido 400 g,Abarrotes,2,"6,50",4.10,8.20,S004,Colón
+2025-12-08,Detergente 2 kg,Limpieza,5,7.30,4.90,24.50,S002,San Miguelito
+2025-12-08,Cerveza six pack,Bebidas,2,7.80,5.40,10.80,S003,David
+2025-12-08,Cerveza six pack,Bebidas,4,7.80,5.40,21.60,S003,David
+2025-12-09,Leche entera 1 L,Lácteos,2,1.75,1.15,2.30,S001,Panamá
+2025-12-09,cerveza six pack,Bebidas,4,7.80,5.40,21.60,S003,David
+2025-12-09,Gaseosa 2 L,Bebidas,4,2.25,1.30,5.20,S003,David
+2025-12-09,Shampoo 400 ml,Cuidado personal,2,4.25,2.60,5.20,S001,Panamá
+2025-12-09,Azúcar 2 kg,Abarrotes,2,2.85,1.95,3.90,S001,Panamá
+2025-12-10,Papel higiénico 12 rollos,Limpieza,1,6.75,4.40,4.40,S001,Panamá
+2025-12-10,Detergente 2 kg,Limpieza,2,7.30,4.90,9.80,S003,David
+2025-12-10,Leche entera 1 L,Lácteos,4,1.75,1.15,4.60,S001,Panamá
+2025-12-10,Agua 1.5 L,Bebidas,2,0.95,0.45,0.90,S003,David
+2025-12-11,Papel higiénico 12 rollos,Limpieza,5,6.75,4.40,22.00,S001,Panamá
+2025-12-11,Cerveza six pack,Bebidas,5,7.80,5.40,27.00,S003,David
+2025-12-11,Papel higiénico 12 rollos,Limpieza,6,6.75,4.40,26.40,S003,David
+2025-12-11,Yogur griego 1 kg,Lácteos,1,5.20,3.40,3.40,S004,Colón
+2025-12-11,Yogur griego 1 kg,Lácteos,1,5.20,3.40,3.40,S001,Panamá
+2025-12-11,Papel higiénico 12 rollos,Limpieza,6,6.75,4.40,26.40,S003,David
+2025-12-12,Desodorante 150 ml,Cuidado personal,3,3.95,2.30,6.90,S003,David
+2025-12-12,Jugo de naranja 1 L,Bebidas,4,2.90,1.80,7.20,S004,Colón
+2025-12-12,Pechuga de pollo kg,Carnes,2,6.20,4.35,8.70,S001,Panamá
+2025-12-12,Carne molida kg,Carnes,2,7.40,5.30,10.60,S001,Panamá
+2025-12-12,Azúcar 2 kg,Abarrotes,4,2.85,1.95,7.80,S003,DAVID
+2025-12-13,Cerveza six pack,Bebidas,2,7.80,5.40,10.80,S003,David
+2025-12-13,Carne molida kg,Carnes,2,7.40,5.30,10.60,S003,David
+2025-12-13,Aceite de oliva 500 ml,Abarrotes,2,8.90,6.20,12.40,S002,San Miguelito
+2025-12-13,Yogur griego 1 kg,Lácteos,3,5.20,3.40,10.20,S004,Colón
+2025-12-13,Gaseosa 2 L,Bebidas,3,2.25,1.30,3.90,S001,Panamá
+2025-12-14,Café molido 400 g,Abarrotes,1,6.50,4.10,4.10,S003,David
+2025-12-14,Queso blanco 500 g,Lácteos,1,4.60,3.10,3.10,S003,David
+2025-12-14,Leche entera 1 L,Lácteos,3,1.75,1.15,3.45,S003,David
+2025-12-14,Pechuga de pollo kg,Carnes,4,6.20,4.35,17.40,S002,San Miguelito
+2025-12-14,Detergente 2 kg,Limpieza,2,7.30,4.90,9.80,S001,David
+2025-12-14,Pasta spaghetti 500 g,Abarrotes,5,1.45,0.85,4.25,S002,San Miguelito
+2025-12-14,Azúcar 2 kg,Abarrotes,6,2.85,1.95,11.70,S003,David
+2025-12-15,Cloro 1 gal,Limpieza,2,3.20,1.90,3.80,S002,San Miguelito
+2025-12-15,Agua 1.5 L,Bebidas,1,0.95,0.45,0.45,S004,Colón
+2025-12-15,Agua 1.5 L,Bebidas,1,0.95,0.45,0.45,S001,Panamá
+2025-12-15,pechuga de pollo kg,Carnes,4,6.20,4.35,17.40,S001,Panamá
+2025-12-15,Arroz 5 lb,Abarrotes,1,3.95,2.70,2.70,S004,Colón
+2025-12-15,Detergente 2 kg,Limpieza,2,7.30,4.90,9.80,S003,David
+2025-12-15,Pasta spaghetti 500 g,Abarrotes,4,1.45,0.85,3.40,S002,San Miguelito
+2025-12-16,Aceite de oliva 500 ml,Abarrotes,3,8.90,6.20,18.60,S003,David
+2025-12-16,Pechuga de pollo kg,Carnes,5,6.20,4.35,21.75,S002,San Miguelito
+2025-12-16,Detergente 2 kg,Limpieza,2,7.30,4.90,9.80,S003,David
+2025-12-16,Desodorante 150 ml,Cuidado personal,2,3.95,2.30,4.60,S002,San Miguelito
+2025-12-17,Desodorante 150 ml,Cuidado personal,1,3.95,2.30,2.30,S004,Colón
+2025-12-17,Aceite de oliva 500 ml,Abarrotes,1,8.90,6.20,6.20,S003,David
+2025-12-17,Aceite de oliva 500 ml,Abarrotes,3,8.90,6.20,18.60,S003,David
+2025-12-17,Arroz 5 lb,Abarrotes,2,3.95,2.70,5.40,S001,Panamá
+2025-12-17,Café molido 400 g,Abarrotes,1,6.50,4.10,4.10,S001,Panamá
+2025-12-17,Café molido 400 g,Abarrotes,2,6.50,4.10,8.20,S003,David
+2025-12-18,Queso blanco 500 g,Lácteos,2,4.60,3.10,6.20,S002,San Miguelito
+2025-12-18,Agua 1.5 L,Bebidas,5,0.95,0.45,2.25,S001,Panamá
+2025-12-18,Café molido 400 g,Abarrotes,5,6.50,4.10,20.50,S001,Panamá
+2025-12-18,Desodorante 150 ml,Cuidado personal,3,3.95,2.30,6.90,S003,David
+2025-12-18,Arroz 5 lb,Abarrotes,2,3.95,2.70,5.40,S001,Panamá
+2025-12-18,Jugo de naranja 1 L,Bebidas,2,2.90,1.80,3.60,S003,David
+2025-12-18,Gaseosa 2 L,Bebidas,3,2.25,1.30,3.90,S004,Colón
+2025-12-19,Jugo de naranja 1 L,Bebidas,2,2.90,1.80,3.60,S001,Panamá
+2025-12-19,Aceite de oliva 500 ml,Abarrotes,1,8.90,6.20,6.20,S001,Panamá
+2025-12-19,Gaseosa 2 L,Bebidas,3,2.25,1.30,3.90,S002,San Miguelito
+2025-12-19,Pasta spaghetti 500 g,Abarrotes,2,1.45,0.85,1.70,S001,Panamá
+2025-12-19,Pechuga de pollo kg,Carnes,1,6.20,4.35,4.35,S002,San Miguelito
+2025-12-19,Mantequilla 250 g,Lácteos,1,3.30,2.20,2.20,S003,David
+2025-12-20,Arroz 5 lb,Abarrotes,5,3.95,2.70,13.50,S001,Panamá
+2025-12-20,Azúcar 2 kg,Abarrotes,1,2.85,1.95,1.95,S004,Colón
+2025-12-20,Agua 1.5 L,Bebidas,1,0.95,0.45,0.45,S004,Colón
+2025-12-20,Agua 1.5 L,Bebidas,1,0.95,0.45,0.45,S003,David
+2025-12-21,Pasta dental 100 ml,Cuidado personal,4,$2.40,1.35,5.40,S002,San Miguelito
+2025-12-21,Shampoo 400 ml,Cuidado personal,5,4.25,2.60,13.00,S001,Panamá
+2025-12-21,Carne molida kg,Carnes,2,7.40,5.30,10.60,S002,San Miguelito
+2025-12-22,Pasta dental 100 ml,Cuidado personal,1,2.40,1.35,1.35,S002,San Miguelito
+2025-12-22,Pechuga de pollo kg,Carnes,1,6.20,4.35,4.35,S003,David
+2025-12-22,Arroz 5 lb,Abarrotes,5,3.95,2.70,13.50,S001,Panamá
+2025-12-22,Queso blanco 500 g,Lácteos,4,4.60,3.10,12.40,S004,Colón
+2025-12-23,Leche entera 1 L,Lácteos,1,1.75,1.15,1.15,S004,Colón
+2025-12-23,Shampoo 400 ml,Cuidado personal,2,4.25,2.60,5.20,S001,Panamá
+2025-12-23,Pasta spaghetti 500 g,Abarrotes,1,1.45,0.85,0.85,S002,San Miguelito
+2025-12-23,Queso blanco 500 g,Lácteos,2,4.60,3.10,6.20,S001,Panamá
+2025-12-23,Café molido 400 g,Abarrotes,1,6.50,4.10,4.10,S001,Panamá
+2025-12-24,Pasta dental 100 ml,Lácteos,1,2.40,1.35,1.35,S004,Colón
+2025-12-24,Jugo de naranja 1 L,Bebidas,1,2.90,1.80,1.80,S001,Panamá
+2025-12-24,Agua 1.5 L,Bebidas,4,0.95,0.45,1.80,S004,Colón
+2025-12-24,Agua 1.5 L,Bebidas,3,0.95,0.45,1.35,S004,Colón
+2025-12-24,Agua 1.5 L,Bebidas,1,0.95,0.45,0.45,S001,Panamá
+2025-12-24,Agua 1.5 L,Bebidas,1,0.95,0.45,0.45,S004,Colón
+2025-12-25,Pechuga de pollo kg,Carnes,2,6.20,4.35,8.70,S001,Panamá
+2025-12-25,Arroz 5 lb,Abarrotes,0,3.95,2.70,5.40,S001,Panamá
+2025-12-25,Pechuga de pollo kg,Carnes,3,6.20,4.35,13.05,S003,David
+2025-12-25,Gaseosa 2 L,Bebidas,1,2.25,1.30,1.30,S003,David
+2025-12-25,Mantequilla 250 g,Lácteos,2,3.30,2.20,4.40,S001,Panamá
+2025-12-25,Jugo de naranja 1 L,Bebidas,2,2.90,1.80,3.60,S003,David
+2025-12-26,Cerveza six pack,Bebidas,2,7.80,5.40,10.80,S001,Panamá
+2025-12-26,Azúcar 2 kg,Abarrotes,4,2.85,1.95,7.80,S002,San Miguelito
+2025-12-27,Cloro 1 gal,Limpieza,3,3.20,1.90,5.70,S002,San Miguelito
+2025-12-27,Pasta dental 100 ml,Cuidado personal,5,2.40,1.35,6.75,S002,San Miguelito
+2025-12-27,Aceite de oliva 500 ml,Abarrotes,3,8.90,6.20,18.60,S001,Panamá
+2025-12-28,Agua 1.5 L,Bebidas,1,0.95,0.45,0.45,S002,San Miguelito
+2025-12-28,Agua 1.5 L,Bebidas,2,0.95,0.45,0.90,S002,San Miguelito
+2025-12-28,Pasta dental 100 ml,Cuidado personal,3,2.40,1.35,4.05,S003,David
+2025-12-28,Cerveza six pack,Bebidas,2,7.80,5.40,10.80,S004,Colón
+2025-12-28,Pechuga de pollo kg,Bebidas,1,6.20,4.35,4.35,S003,David
+2025-12-29,Queso blanco 500 g,Lácteos,1,4.60,3.10,3.10,S002,San Miguelito
+2025-12-29,Gaseosa 2 L,Bebidas,5,2.25,1.30,6.50,S002,San Miguelito
+2025-12-29,Azúcar 2 kg,Abarrotes,2,2.85,1.95,3.90,S003,David
+2025-12-29,Leche entera 1 L,Lácteos,2,1.75,1.15,2.30,S004,Colón
+2025-12-30,Carne molida kg,Carnes,3,7.40,5.30,15.90,S002,San Miguelito
+2025-12-30,Gaseosa 2 L,Bebidas,1,2.25,1.30,1.30,S002,San Miguelito
+2025-12-30,  Leche entera 1 L ,Lácteos,4,1.75,1.15,4.60,S002,San Miguelito
+2025-12-30,Mantequilla 250 g,Lácteos,1,3.30,2.20,2.20,S004,Colón
+2025-12-31,Detergente 2 kg,Limpieza,3,7.30,4.90,14.70,S001,Panamá
+2025-12-31,Cerveza six pack,Bebidas,2,7.80,5.40,10.80,S002,San Miguelito
+2025-12-31,Leche entera 1 L,Lácteos,5,1.75,1.15,5.75,S003,David
+2025-12-31,Queso blanco 500 g,Lácteos,3,4.60,3.10,9.30,S001,Panamá
+2025-12-31,Azúcar 2 kg,Abarrotes,2,2.85,1.95,3.90,S003,David
+2025-12-31,Detergente 2 kg,Limpieza,1,7.30,4.90,4.90,S001,Panamá
+2025-12-03,Leche entera 1 L,Lácteos,4,1.75,1.15,4.60,S003,David
+2025-09-11,Gaseosa 2 L,Bebidas,5,2.25,1.30,6.50,S003,David
+2025-07-11,Pasta dental 100 ml,Cuidado personal,6,2.40,1.35,8.10,S003,David
+2025-11-29,Carne molida kg,Carnes,2,7.40,5.30,10.60,S001,Panamá
+2025-02-20,Carne molida kg,Carnes,1,7.40,5.30,5.30,S002,San Miguelito
+2025-09-23,  Mantequilla 250 g ,Lácteos,3,3.30,2.20,6.60,S001,Panamá
+2025-11-22,Desodorante 150 ml,Cuidado personal,1,3.95,2.30,2.30,S001,Panamá
+2025-10-27,Shampoo 400 ml,Cuidado personal,3,4.25,2.60,7.80,S001,Panamá
+2025-12-05,Carne molida kg,Carnes,2,7.40,5.30,10.60,S001,Panamá
+2025-01-26,Cerveza six pack,Bebidas,2,7.80,5.40,10.80,S002,San Miguelito
+2025-09-02,Azúcar 2 kg,Abarrotes,1,2.85,1.95,1.95,S002,San Miguelito
+2025-11-08,  Leche entera 1 L ,Lácteos,3,1.75,1.15,3.45,S002,San Miguelito
