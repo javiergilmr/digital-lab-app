@@ -1,3 +1,6 @@
+import logging
+import os
+
 from fastapi import FastAPI, UploadFile, File, Form, HTTPException, BackgroundTasks
 import pandas as pd
 from services.column_validator import detect_sales_columns, validate_sales_file, validate_column_types
@@ -7,6 +10,13 @@ from routers.api import router as api_router
 from fastapi import FastAPI, Request
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
+
+# Nivel con la variable LOG_LEVEL (DEBUG muestra el detalle de cada limpieza)
+logging.basicConfig(
+    level=os.getenv("LOG_LEVEL", "INFO").upper(),
+    format="%(asctime)s %(levelname)s %(name)s: %(message)s",
+)
+log = logging.getLogger("data_cleaner")
 
 app = FastAPI()
 templates = Jinja2Templates(directory="templates")
@@ -94,11 +104,17 @@ def health():
     return {"status": "ok"}
 
 # UPLOAD 
+# Protege la memoria del servidor: un archivo más grande no cabe en una instancia pequeña
+MAX_UPLOAD_MB = 10
+
 @app.post("/api/upload")
 async def upload_file(request: Request, background_tasks: BackgroundTasks, file: UploadFile = File(...)):
 
     if not file.filename.lower().endswith((".csv", ".xlsx")):
         raise HTTPException(400, "Este archivo no parece ser de ventas. Sube un Excel o CSV con tus ventas.")
+
+    if file.size is not None and file.size > MAX_UPLOAD_MB * 1024 * 1024:
+        raise HTTPException(413, f"El archivo pesa más de {MAX_UPLOAD_MB} MB. Sube uno más liviano.")
 
     try:
         if file.filename.lower().endswith(".csv"):
@@ -266,9 +282,6 @@ def map_page(request: Request, session_id: str):
     if df is None:
         raise HTTPException(status_code=404, detail="Sesión no encontrada")
 
-    print(" File: ")
-    print(df.head(3))
-
     auto_mapping = auto_map_columns(list(df.columns))
     # Si ya se mapeó (ej. al volver desde Procesar), se muestra lo elegido y no lo automático
     saved_mapping = get_session_mapping(session_id, owner_id)
@@ -297,9 +310,6 @@ def clean_data(request: Request, session_id: str, background_tasks: BackgroundTa
 
     if df is None:
         raise HTTPException(404, "Sesión inválida")
-
-    print("Columnas: ")
-    print(df.columns)
 
     df_clean, report = clean_sales_data(df, SALES_SCHEMA)
     update_session_df(session_id, owner_id, df_clean)
@@ -402,5 +412,5 @@ def export_pdf(request: Request, session_id: str):
 
 if __name__ == "__main__":
     import uvicorn
-    print("Abre http://127.0.0.1:8000 en tu navegador")
+    log.info("Abre http://127.0.0.1:8000 en tu navegador")
     uvicorn.run("main:app", host="127.0.0.1", port=8000, reload=True)

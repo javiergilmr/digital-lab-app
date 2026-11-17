@@ -1,4 +1,5 @@
 const ACCEPTED_EXTENSIONS = [".csv", ".xlsx"];
+const MAX_UPLOAD_MB = 10; // igual que en main.py
 
 const dropzone = document.getElementById("dropzone");
 const fileInput = document.getElementById("file-input");
@@ -59,6 +60,11 @@ function pickFile(files) {
 
   if (!ACCEPTED_EXTENSIONS.some(ext => name.endsWith(ext))) {
     showUploadError("Ese formato no es compatible. Sube un archivo CSV o Excel (.xlsx).");
+    return;
+  }
+
+  if (file.size > MAX_UPLOAD_MB * 1024 * 1024) {
+    showUploadError(`El archivo pesa más de ${MAX_UPLOAD_MB} MB. Sube uno más liviano.`);
     return;
   }
 

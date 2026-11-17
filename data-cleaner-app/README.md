@@ -28,7 +28,7 @@ Construida con **FastAPI**, **pandas**, **Jinja2** y **reportlab**.
 ## Qué hace
 
 - **Login obligatorio** con Supabase: correo y contraseña, o Google. Registro abierto, recuperación de contraseña y botón de “ojo” para ver la contraseña.
-- **Carga de archivos** `.csv` o `.xlsx` arrastrándolos a la página o con el botón *Cargar archivo*.
+- **Carga de archivos** `.csv` o `.xlsx` de hasta 10 MB, arrastrándolos a la página o con el botón *Cargar archivo*.
 - **Guía del archivo** en la página de carga: una mini hoja de ejemplo con las columnas obligatorias y opcionales, y un [CSV de ejemplo](static/ejemplo_ventas.csv) para descargar y probar.
 - **Detección automática de columnas**: reconoce nombres en español e inglés (`fecha`, `transaction_date`, `precio`, `unit_price`…) y propone el mapeo.
 - **Mapeo editable**: 4 columnas obligatorias y 7 opcionales que enriquecen el análisis.
@@ -67,7 +67,7 @@ venv\Scripts\activate
 # macOS / Linux
 source venv/bin/activate
 
-pip install fastapi uvicorn pandas numpy openpyxl jinja2 python-multipart python-dotenv reportlab pydantic
+pip install -r data-cleaner-app/requirements.txt
 ```
 
 | Paquete | Para qué se usa |
@@ -81,7 +81,7 @@ pip install fastapi uvicorn pandas numpy openpyxl jinja2 python-multipart python
 | `python-dotenv` | Leer el archivo `.env` |
 | `pydantic` | Validar los datos que envía el navegador |
 
-Versiones con las que se probó: fastapi 0.162.0, uvicorn 0.54.0, pandas 3.1.0, numpy 2.5.4, openpyxl 3.1.5, reportlab 5.1.0, Jinja2 3.1.6, python-dotenv 1.2.4, python-multipart 0.0.33, pydantic 2.14.2.
+Las versiones exactas con las que se probó están fijadas en [`requirements.txt`](requirements.txt).
 
 ## Configuración de Supabase
 
@@ -139,6 +139,19 @@ python main.py
 Abre **http://127.0.0.1:8000** en el navegador. El servidor se recarga solo al guardar cambios en el código.
 
 > Usa `127.0.0.1` y no `localhost`: las cookies de sesión y las URLs de Supabase están configuradas para esa dirección.
+
+### Logs
+
+La app escribe sus avisos con `logging`, por ejemplo `WARNING services.user_stats: No se pudieron leer los stats del usuario`. Con la variable `LOG_LEVEL=DEBUG` también muestra el detalle de cada limpieza.
+
+### En producción
+
+[`render.yaml`](../render.yaml), en la raíz del repositorio, deja lista la configuración para Render:
+
+- Instala con `pip install -r requirements.txt` dentro de `data-cleaner-app/`.
+- Arranca uvicorn con `--proxy-headers --forwarded-allow-ips="*"`. Render atiende el HTTPS en su proxy; sin esos parámetros la app creería que corre en `http`, no marcaría las cookies como `secure` y armaría mal las URLs de regreso del login con Google y de los correos.
+- Usa un solo proceso, porque las sesiones viven en memoria.
+- Las claves `SUPABASE_URL` y `SUPABASE_PUBLISHABLE_KEY` se cargan en el panel de Render, no en el código.
 
 ## Columnas que reconoce
 
@@ -285,6 +298,7 @@ Al final del panel, la sección **Cuenta** muestra:
 ```
 data-cleaner-app/
 ├── main.py                  # App FastAPI: middleware de login, carga, mapeo, limpieza, análisis y exportaciones
+├── requirements.txt         # Dependencias con versiones fijas
 ├── models/
 │   └── payloads.py          # Datos del mapeo que envía el navegador (incluye el nombre del informe)
 ├── routers/
@@ -370,7 +384,8 @@ Todas las rutas requieren sesión iniciada, excepto las marcadas como públicas.
 
 ## Limitaciones conocidas
 
-- **Sesiones en memoria**: los archivos subidos se pierden al reiniciar el servidor, y la app está pensada para un solo proceso. Los informes ya procesados sí quedan guardados en el historial del panel, con su PDF.
+- **Sesiones en memoria**: los archivos subidos se pierden al reiniciar el servidor, y la app está pensada para un solo proceso. Además, cada sesión expira tras **2 horas sin uso** para que la memoria no crezca sin límite; al abrir una sesión vencida aparece *Sesión no encontrada* y hay que subir el archivo de nuevo. Los informes ya procesados sí quedan guardados en el historial del panel, con su PDF.
+- **Archivos de hasta 10 MB**: protege la memoria del servidor. Se revisa en el navegador antes de subir y otra vez en el servidor (`MAX_UPLOAD_MB` en `main.py`).
 - **Espacio en Storage**: cada PDF pesa alrededor de 10 KB. El nivel gratuito de Supabase incluye 1 GB. Los informes se guardan todos; el panel muestra los 10 más recientes.
 - **Precio deducido aproximado**: un precio corregido toma la mediana del producto, que puede no ser el valor real. Si existe la venta neta, los totales no se ven afectados porque el ingreso sale de ella.
 - **Sinónimos no se unifican**: solo se unifican variantes de escritura. Por ejemplo, `Online` y `E-commerce` quedan como valores distintos.

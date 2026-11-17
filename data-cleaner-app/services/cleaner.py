@@ -1,3 +1,4 @@
+import logging
 import re
 import unicodedata
 
@@ -5,6 +6,8 @@ import pandas as pd
 from fastapi import HTTPException
 
 from services.schema import SALES_SCHEMA
+
+log = logging.getLogger(__name__)
 
 REQUIRED = list(SALES_SCHEMA["required"])
 NUMERIC_FIELDS = ["quantity", "price", "net_sales", "unit_cost", "total_cost", "profit"]
@@ -290,6 +293,6 @@ def clean_sales_data(df, schema):
         )
 
     result = report.to_dict(len(df))
-    print("📊 Reporte Final:", result)
+    log.debug("Reporte de limpieza: %s", result)
 
     return df.reset_index(drop=True), result

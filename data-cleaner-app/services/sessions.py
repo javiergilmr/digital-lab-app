@@ -1,9 +1,23 @@
+# Sesiones en memoria: una por archivo subido. Expiran tras SESSION_TTL sin uso
+# para que la memoria del servidor no crezca sin límite.
+import time
 import uuid
+
+SESSION_TTL = 2 * 60 * 60  # segundos
 SESSIONS = {}
 
+def purge_expired_sessions():
+    now = time.monotonic()
+    # list() copia las llaves: otras peticiones pueden crear sesiones mientras se recorre
+    for session_id, session in list(SESSIONS.items()):
+        if now - session["last_used"] > SESSION_TTL:
+            SESSIONS.pop(session_id, None)
+
 def create_session(df, schema, owner_id, filename=""):
+    purge_expired_sessions()
     session_id = str(uuid.uuid4())
     SESSIONS[session_id] = {
+        "last_used": time.monotonic(),
         "df": df,
         "df_original": df.copy(),
         "schema": schema,
@@ -12,10 +26,6 @@ def create_session(df, schema, owner_id, filename=""):
         "clean_report": None,
         "owner_id": owner_id
     }
-    # print("CREATE_SESSION")
-    # print("SESSION_ID:", session_id)
-    # print("DF COLUMNS:", df.columns)
-    # print("SESSIONS KEYS:", SESSIONS.keys())
     return session_id
 
 def _get_session(session_id: str, owner_id: str):
@@ -23,6 +33,10 @@ def _get_session(session_id: str, owner_id: str):
     session = SESSIONS.get(session_id)
     if not session or session["owner_id"] != owner_id:
         return None
+    if time.monotonic() - session["last_used"] > SESSION_TTL:
+        SESSIONS.pop(session_id, None)
+        return None
+    session["last_used"] = time.monotonic()
     return session
 
 def get_session_df(session_id: str, owner_id: str):
