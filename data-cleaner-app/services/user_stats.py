@@ -1,6 +1,10 @@
 # Stats del panel de usuario: se guardan en la tabla user_stats de Supabase (ver supabase/user_stats.sql)
 
+import logging
+
 from services.supabase_auth import AuthError, rest_call
+
+log = logging.getLogger(__name__)
 
 EMPTY_STATS = {
     "files_uploaded": 0,
@@ -24,7 +28,7 @@ def record_activity(access_token, files=0, processed=0, fixed=0, removed=0):
             "removed": int(removed),
         }, token=access_token)
     except AuthError as e:
-        print(f"⚠️ No se pudieron guardar los stats del usuario: {e}")
+        log.warning(f"No se pudieron guardar los stats del usuario: {e}")
 
 
 def get_stats(access_token, user_id):
@@ -35,7 +39,7 @@ def get_stats(access_token, user_id):
             "user_id": f"eq.{user_id}",
         })
     except AuthError as e:
-        print(f"⚠️ No se pudieron leer los stats del usuario: {e}")
+        log.warning(f"No se pudieron leer los stats del usuario: {e}")
         raise StatsUnavailable() from None
 
     return {**EMPTY_STATS, **(rows[0] if rows else {})}

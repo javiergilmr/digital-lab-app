@@ -1,9 +1,13 @@
 # Cuenta del usuario en "Mi panel": método de acceso, cambio de contraseña y eliminación de la cuenta
 
+import logging
+
 from services.report_history import BUCKET
 from services.supabase_auth import (
     AuthError, forget_token, rest_call, sign_in, sign_out, storage_list, storage_remove, update_password
 )
+
+log = logging.getLogger(__name__)
 
 PROVIDER_LABELS = {"email": "Correo y contraseña", "google": "Google"}
 
@@ -60,13 +64,13 @@ def delete_account(user, access_token, confirm_email):
     except AuthError as e:
         # Sin bucket (reports.sql sin ejecutar) no hay PDFs que borrar; cualquier otro error detiene todo
         if "bucket not found" not in f"{e.code} {e.detail}".lower():
-            print(f"⚠️ No se pudieron borrar los PDFs del usuario: {e}")
+            log.warning(f"No se pudieron borrar los PDFs del usuario: {e}")
             raise AccountError("No pudimos borrar tus informes guardados. Inténtalo de nuevo.") from None
 
     try:
         rest_call("POST", "/rpc/delete_my_account", {}, token=access_token)
     except AuthError as e:
-        print(f"⚠️ No se pudo eliminar la cuenta: {e}")
+        log.warning(f"No se pudo eliminar la cuenta: {e}")
         raise AccountError("No pudimos eliminar tu cuenta. Inténtalo de nuevo más tarde.") from None
 
     forget_token(access_token)
