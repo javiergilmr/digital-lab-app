@@ -1,9 +1,0 @@
-data/*
-!data/raw/
-data/raw/*
-!data/raw/olist/
-data/raw/olist/*
-!data/raw/olist/.gitkeep
-__pycache__/
-*.pyc
-.env
