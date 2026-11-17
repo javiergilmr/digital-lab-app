@@ -59,9 +59,13 @@
       display: grid;
       flex-shrink: 0;
       place-items: center;
-      width: 56px;
-      height: 56px;
+      width: 72px;
+      height: 72px;
       border-radius: 50%;
+      object-fit: cover;
+      object-position: center;
+      border: 2px solid var(--surface);
+      box-shadow: 0 0 0 2px var(--violet-soft), 0 4px 12px rgba(0, 0, 0, 0.12);
       background: var(--violet-soft);
       color: var(--violet);
       font-size: 1.2rem;
@@ -181,7 +185,7 @@
 
     <section class="about-card" aria-labelledby="author-title">
       <div class="author">
-        <span class="author-avatar" aria-hidden="true">JG</span>
+        <img class="author-avatar" src="/static/img/javier.jpg" alt="Foto de Javier Gil Moreno" width="72" height="72" loading="lazy" decoding="async">
         <div>
           <p class="author-name" id="author-title">Javier Gil Moreno</p>
           <p class="author-role">Desarrollador del proyecto</p>
