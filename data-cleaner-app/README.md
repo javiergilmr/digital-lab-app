@@ -36,6 +36,7 @@ Construida con **FastAPI**, **pandas**, **Jinja2** y **reportlab**.
 - **Limpieza que corrige antes de eliminar**: deduce el valor correcto cuando los datos lo permiten y reporta cada cambio.
 - **Informe de ventas**: total vendido, utilidad, margen, rankings, ventas por categoría, tienda y ciudad, tendencia mensual e insights automáticos.
 - **Exportación** de los datos limpios a CSV y del informe a PDF, con el nombre de la empresa y la fecha.
+- **Modo día / noche**: botón con luna o sol en la barra superior. Sin elección guardada, sigue el tema del sistema; la elección se guarda en el navegador.
 - **Mi panel**: cada usuario ve sus archivos cargados, filas corregidas, último inicio de sesión, un historial de sus informes con el PDF listo para volver a descargar, y la sección *Cuenta*: método de acceso, cambio de contraseña y eliminación de la cuenta.
 
 ## Flujo de uso
@@ -333,6 +334,7 @@ data-cleaner-app/
 │   ├── analyzer.py          # Métricas, desgloses, descripción del informe e insights
 │   ├── pdf_report.py        # Construcción del PDF y nombres de archivo
 │   ├── sessions.py          # Sesiones en memoria, una por archivo y por usuario
+│   ├── templating.py        # Plantillas compartidas; asset() versiona CSS y JS (?v=) para que el navegador no use una copia vieja
 │   ├── supabase_auth.py     # Cliente de Supabase: Auth, API de datos y Storage (solo librería estándar)
 │   ├── user_stats.py        # Stats del panel: guardar actividad y leerla
 │   ├── report_history.py    # Historial de informes: guardar resumen y PDF, listar y descargar
@@ -343,6 +345,7 @@ data-cleaner-app/
 │   └── account.sql          # Función para eliminar la cuenta y permiso para borrar PDFs
 ├── templates/
 │   ├── _user_bar.html       # Barra con “Mi panel”, el correo del usuario y “Cerrar sesión”
+│   ├── _theme_toggle.html   # Botón día / noche (luna de día, sol de noche)
 │   ├── _stepper.html        # Indicador de pasos: subir, mapear, procesar e informe
 │   ├── auth.html            # Login, registro y contraseñas
 │   ├── index.html           # Carga de archivos (arrastrar y soltar)
@@ -350,8 +353,9 @@ data-cleaner-app/
 │   ├── panel.html           # Mi panel: stats, historial y cuenta
 │   └── clean.html           # Procesamiento, informe y descargas
 └── static/
-    ├── css/styles.css       # Estilos compartidos
+    ├── css/styles.css       # Estilos compartidos y las dos paletas del tema (variables --text, --surface, --accent…)
     ├── css/main.js
+    ├── js/theme.js          # Tema día / noche: aplica el guardado o el del sistema antes de pintar
     ├── js/upload.js         # Carga de archivos
     ├── js/password_toggle.js # “Ojo” para mostrar u ocultar contraseñas (login, registro y panel)
     ├── ejemplo_ventas.csv   # Archivo de ejemplo que se descarga desde la guía de carga

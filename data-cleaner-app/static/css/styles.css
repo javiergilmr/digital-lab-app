@@ -1,4 +1,100 @@
 /* =========================
+   TEMA (día / noche)
+   Todos los colores salen de estas variables. static/js/theme.js pone data-theme="dark"
+   en <html> según la elección guardada o, si no hay, según el sistema.
+   Los botones de color sólido (azul, verde, rojo, morado) se ven igual en los dos temas.
+   ========================= */
+:root {
+  color-scheme: light;
+  --bg: #f9fafb;
+  --surface: #ffffff;
+  --surface-2: #f3f4f6;
+  --surface-3: #f9fafb;
+  --text: #111827;
+  --text-2: #374151;
+  --muted: #6b7280;
+  --faint: #9ca3af;
+  --strong: #000000;
+  --border: #e5e7eb;
+  --border-strong: #d1d5db;
+  --divider: #f3f4f6;
+
+  --btn-bg: #111827;
+  --btn-bg-hover: #1f2937;
+  --btn-text: #ffffff;
+
+  --accent: #0d6efd;
+  --accent-ink: #0a3d8f;
+  --accent-soft: #eff6ff;
+  --accent-soft-hover: #dbeafe;
+
+  --violet: #6d28d9;
+  --violet-soft: #f5f3ff;
+  --violet-soft-hover: #ede9fe;
+  --violet-border: #ddd6fe;
+  --violet-border-hover: #c4b5fd;
+  --step: #6d28d9;
+
+  --success-ink: #065f46;
+  --success-soft: #ecfdf5;
+  --success-border: #34d399;
+
+  --danger: #dc3545;
+  --danger-ink: #b91c1c;
+  --danger-soft: #fef2f2;
+  --danger-border: #fecaca;
+
+  --warning-ink: #92400e;
+  --warning-soft: #fffbeb;
+  --warning-border: #fcd34d;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #0b1120;
+  --surface: #131c2e;
+  --surface-2: #1e293b;
+  --surface-3: #172135;
+  --text: #e5e7eb;
+  --text-2: #cbd5e1;
+  --muted: #94a3b8;
+  --faint: #64748b;
+  --strong: #ffffff;
+  --border: #263247;
+  --border-strong: #334155;
+  --divider: #1e293b;
+
+  --btn-bg: #e5e7eb;
+  --btn-bg-hover: #ffffff;
+  --btn-text: #0b1120;
+
+  --accent: #60a5fa;
+  --accent-ink: #bfdbfe;
+  --accent-soft: rgba(59, 130, 246, 0.14);
+  --accent-soft-hover: rgba(59, 130, 246, 0.24);
+
+  --violet: #a78bfa;
+  --violet-soft: rgba(139, 92, 246, 0.14);
+  --violet-soft-hover: rgba(139, 92, 246, 0.24);
+  --violet-border: rgba(139, 92, 246, 0.35);
+  --violet-border-hover: rgba(139, 92, 246, 0.55);
+  --step: #8b5cf6;
+
+  --success-ink: #6ee7b7;
+  --success-soft: rgba(16, 185, 129, 0.12);
+  --success-border: rgba(52, 211, 153, 0.45);
+
+  --danger: #f87171;
+  --danger-ink: #fca5a5;
+  --danger-soft: rgba(239, 68, 68, 0.12);
+  --danger-border: rgba(239, 68, 68, 0.35);
+
+  --warning-ink: #fcd34d;
+  --warning-soft: rgba(245, 158, 11, 0.12);
+  --warning-border: rgba(245, 158, 11, 0.4);
+}
+
+/* =========================
    RESET / BASE
    ========================= */
 * {
@@ -9,8 +105,8 @@
 
 body {
   margin: 0;
-  background: #f9fafb;
-  color: #111827;
+  background: var(--bg);
+  color: var(--text);
 }
 
 /* =========================
@@ -28,7 +124,7 @@ body {
 }
 
 .card {
-  background: #ffffff;
+  background: var(--surface);
   padding: 24px;
   border-radius: 12px;
   box-shadow: 0 10px 25px rgba(0,0,0,0.05);
@@ -48,7 +144,7 @@ h1 {
 }
 
 .subtitle {
-  color: #6b7280;
+  color: var(--muted);
   margin-bottom: 30px;
 }
 
@@ -71,20 +167,20 @@ h1 {
 select {
   padding: 10px;
   border-radius: 8px;
-  border: 1px solid #d1d5db;
-  background: #fff;
+  border: 1px solid var(--border-strong);
+  background: var(--surface);
   font-size: 0.95rem;
   cursor: pointer;
 }
 
 select:focus {
   outline: none;
-  border-color: #111827;
+  border-color: var(--text);
 }
 
 select.auto-selected {
-  background-color: #f6fffa;
-  border-color: #10b981;
+  background-color: var(--success-soft);
+  border-color: var(--success-border);
 }
 
 /* =========================
@@ -96,8 +192,8 @@ select.auto-selected {
   padding: 2px 8px;
   font-size: 0.7rem;
   font-weight: 600;
-  color: #0f5132;
-  background-color: #d1e7dd;
+  color: var(--success-ink);
+  background-color: var(--success-soft);
   border-radius: 999px;
 }
 
@@ -108,26 +204,26 @@ button {
   padding: 12px;
   border: none;
   border-radius: 8px;
-  background: #111827;
-  color: #ffffff;
+  background: var(--btn-bg);
+  color: var(--btn-text);
   font-size: 1rem;
   cursor: pointer;
   transition: background 0.2s ease;
 }
 
 button:hover {
-  background: #1f2937;
+  background: var(--btn-bg-hover);
 }
 
 .secondary-btn {
   margin-top: 20px;
-  color: #555;
+  color: var(--text-2);
   text-decoration: none;
   font-size: 0.9rem;
 }
 
 .secondary-btn:hover {
-  color: #000;
+  color: var(--strong);
   text-decoration: underline;
 }
 
@@ -151,24 +247,24 @@ button:hover {
 /* ================================================== */
 
 .field.ok select {
-  border-color: #10b981; /* verde */
-  background-color: #f6fffa;
+  border-color: var(--success-border); /* verde */
+  background-color: var(--success-soft);
 }
 
 .field.missing select {
-  border-color: #ef4444; /* rojo */
-  background-color: #fff5f5;
+  border-color: var(--danger); /* rojo */
+  background-color: var(--danger-soft);
 }
 
 .field.duplicate select {
-  border-color: #f97316; /* naranja */
-  background-color: #fff7ed;
+  border-color: var(--warning-border); /* naranja */
+  background-color: var(--warning-soft);
 }
 
 .form-error {
   margin-top: 12px;
   font-size: 0.85rem;
-  color: #b45309; /* naranja warning */
+  color: var(--warning-ink); /* naranja warning */
   text-align: center;
 }
 
@@ -180,7 +276,7 @@ button:hover {
 
 
 .field.missing .field-error {
-  color: #dc2626; /* rojo */
+  color: var(--danger); /* rojo */
 }
 
 /* Transición suave */
@@ -196,16 +292,16 @@ button:disabled {
 .form-feedback {
   margin-top: 8px;
   font-size: 0.9rem;
-  color: #c0392b;
+  color: var(--danger);
 }
 .hidden {
   display: none;
 }
 
 .ready-message {
-  background: #ecfdf5;
-  color: #065f46;
-  border: 1px solid #34d399;
+  background: var(--success-soft);
+  color: var(--success-ink);
+  border: 1px solid var(--success-border);
   padding: 10px 14px;
   border-radius: 8px;
   font-size: 0.9rem;
@@ -275,14 +371,14 @@ button.loading::after {
   margin-top: 24px;
   padding: 16px;
   border-radius: 10px;
-  background: #f6fdf8;
-  border: 1px solid #b7e4c7;
+  background: var(--success-soft);
+  border: 1px solid var(--success-border);
 }
 
 .summary-title {
   font-weight: 600;
   margin-bottom: 8px;
-  color: #2d6a4f;
+  color: var(--success-ink);
 }
 
 /* ------------------------- */
@@ -291,9 +387,9 @@ button.loading::after {
   margin-top: 16px;
   padding: 14px 16px;
   border-radius: 10px;
-  border: 1px solid #f3c6c6;
-  background: #fff5f5;
-  color: #8b2c2c;
+  border: 1px solid var(--danger-border);
+  background: var(--danger-soft);
+  color: var(--danger-ink);
   max-width: 520px;
 }
 
@@ -338,29 +434,29 @@ button.loading::after {
 
 
 .alert.success {
-  background-color: #e8f7ee;
-  border: 1px solid #b7e4c7;
-  color: #1e7e34;
+  background-color: var(--success-soft);
+  border: 1px solid var(--success-border);
+  color: var(--success-ink);
 }
 
 .alert.error {
-  background-color: #fdecec;
-  border: 1px solid #f5c2c7;
-  color: #b02a37;
+  background-color: var(--danger-soft);
+  border: 1px solid var(--danger-border);
+  color: var(--danger-ink);
 }
 
 .alert.loading {
-  background-color: #f5f5f5;
-  border: 1px solid #ddd;
-  color: #444;
+  background-color: var(--surface-2);
+  border: 1px solid var(--border-strong);
+  color: var(--text-2);
 }
 
 /* ================= ALERT COMPONENT ================= */
 
 .ready-message {
-  background-color: #e6f9ec;
-  border: 1px solid #28a745;
-  color: #1e7e34;
+  background-color: var(--success-soft);
+  border: 1px solid var(--success-border);
+  color: var(--success-ink);
   padding: 12px;
   border-radius: 8px;
   margin-bottom: 15px;
@@ -389,7 +485,7 @@ button.loading::after {
 /* ================= CANVAS ================= */
 
 canvas {
-  background: white;
+  background: var(--surface);
   padding: 10px;
   border-radius: 8px;
 }
@@ -422,7 +518,7 @@ canvas {
   gap: 12px;
   padding: 14px 20px;
   font-size: 0.85rem;
-  color: #6b7280;
+  color: var(--muted);
 }
 
 .user-bar form {
@@ -460,12 +556,12 @@ canvas {
 }
 
 .user-bar .panel-btn {
-  background: #eff6ff;
-  color: #0d6efd;
+  background: var(--accent-soft);
+  color: var(--accent);
 }
 
 .user-bar .panel-btn:hover {
-  background: #dbeafe;
+  background: var(--accent-soft-hover);
 }
 
 .user-bar .panel-btn[aria-current="page"] {
@@ -474,41 +570,77 @@ canvas {
 }
 
 .user-bar button[type="submit"].logout-btn {
-  border-color: #e5e7eb;
-  background: #ffffff;
-  color: #374151;
+  border-color: var(--border);
+  background: var(--surface);
+  color: var(--text-2);
 }
 
 .user-bar button[type="submit"].logout-btn:not(:disabled):hover {
-  border-color: #fecaca;
-  background: #fef2f2;
-  color: #dc3545;
+  border-color: var(--danger-border);
+  background: var(--danger-soft);
+  color: var(--danger);
   box-shadow: none;
   transform: none;
 }
 
 .user-bar a.outline-btn {
-  border-color: #e5e7eb;
-  background: #ffffff;
-  color: #374151;
+  border-color: var(--border);
+  background: var(--surface);
+  color: var(--text-2);
 }
 
 .user-bar a.outline-btn:hover {
-  border-color: #cbd5e1;
-  background: #f8fafc;
+  border-color: var(--border-strong);
+  background: var(--surface-3);
 }
 
 .user-bar .user-btn:focus-visible {
-  outline: 2px solid #0d6efd;
+  outline: 2px solid var(--accent);
   outline-offset: 2px;
+}
+
+/* Botón día / noche */
+.user-bar .theme-toggle,
+.user-bar button.theme-toggle {
+  display: inline-grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--text-2);
+  box-shadow: none;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.user-bar button.theme-toggle:hover {
+  border-color: var(--border-strong);
+  background: var(--surface-2);
+  color: var(--text);
+}
+
+.user-bar .theme-toggle:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.theme-toggle .icon-sun,
+:root[data-theme="dark"] .theme-toggle .icon-moon {
+  display: none;
+}
+
+:root[data-theme="dark"] .theme-toggle .icon-sun {
+  display: block;
 }
 
 /* =========================
    PASOS DEL FLUJO (subir, mapear, procesar, informe)
    ========================= */
 .stepper-wrap {
-  --step-accent: #6d28d9;
-  --step-line: #e5e7eb;
+  --step-accent: var(--step);
+  --step-line: var(--border);
   width: 100%;
   max-width: 560px;
   margin: 0 auto 36px;
@@ -559,8 +691,8 @@ canvas {
   height: 32px;
   border: 1.5px solid var(--step-line);
   border-radius: 50%;
-  background: #ffffff;
-  color: #6b7280;
+  background: var(--surface);
+  color: var(--muted);
   font-size: 0.75rem;
   font-variant-numeric: tabular-nums;
   transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
@@ -594,16 +726,16 @@ canvas {
 .step-label {
   font-size: 0.75rem;
   line-height: 1.3;
-  color: #9ca3af;
+  color: var(--faint);
   text-align: center;
 }
 
 .step.done .step-label {
-  color: #6b7280;
+  color: var(--muted);
 }
 
 .step.current .step-label {
-  color: #111827;
+  color: var(--text);
   font-weight: 600;
 }
 
@@ -627,15 +759,15 @@ canvas {
 .auth-field input {
   padding: 10px;
   border-radius: 8px;
-  border: 1px solid #d1d5db;
-  background: #fff;
+  border: 1px solid var(--border-strong);
+  background: var(--surface);
   font-size: 0.95rem;
   transition: border-color 0.2s ease;
 }
 
 .auth-field input:focus {
   outline: none;
-  border-color: #111827;
+  border-color: var(--text);
 }
 
 /* Ojo para mostrar u ocultar la contraseña */
@@ -658,17 +790,17 @@ canvas {
   padding: 6px;
   border-radius: 6px;
   background: none;
-  color: #6b7280;
+  color: var(--muted);
   transform: translateY(-50%);
 }
 
 .password-toggle:hover {
-  background: #f3f4f6;
-  color: #111827;
+  background: var(--surface-2);
+  color: var(--text);
 }
 
 .password-toggle:focus-visible {
-  outline: 2px solid #111827;
+  outline: 2px solid var(--text);
   outline-offset: 1px;
 }
 

@@ -10,7 +10,6 @@ from routers.api import router as api_router
 
 from fastapi import FastAPI, Request
 from fastapi.staticfiles import StaticFiles
-from fastapi.templating import Jinja2Templates
 
 # Nivel con la variable LOG_LEVEL (DEBUG muestra el detalle de cada limpieza)
 logging.basicConfig(
@@ -20,7 +19,7 @@ logging.basicConfig(
 log = logging.getLogger("data_cleaner")
 
 app = FastAPI()
-templates = Jinja2Templates(directory="templates")
+from services.templating import templates
 app.include_router(api_router, prefix="/api")
 
 from routers.pages import router as pages_router
@@ -334,10 +333,6 @@ def map_columns(request: Request, session_id: str, payload: ColumnMappingPayload
 
 
 from fastapi import Request, HTTPException
-from fastapi.templating import Jinja2Templates
-
-templates = Jinja2Templates(directory="templates")
-
 # MAP 
 from services.auto_mapping import auto_map_columns
 

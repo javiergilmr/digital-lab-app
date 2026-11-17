@@ -4,7 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{{ page_title }} · Data Cleaner &amp; Sales Report</title>
-  <link rel="stylesheet" href="/static/css/styles.css">
+  <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
+  <script src="{{ asset('js/theme.js') }}"></script>
 
   <!-- Estilos solo de esta página: styles.css se comparte con el resto (incluye campos y el ojo de la contraseña) -->
   <style>
@@ -31,17 +32,17 @@
       justify-content: center;
       gap: 10px;
       padding: 11px;
-      border: 1px solid #d1d5db;
+      border: 1px solid var(--border-strong);
       border-radius: 8px;
-      background: #fff;
-      color: #111827;
+      background: var(--surface);
+      color: var(--text);
       font-weight: 500;
       text-decoration: none;
       transition: background 0.2s ease;
     }
 
     .google-btn:hover {
-      background: #f9fafb;
+      background: var(--surface-3);
     }
 
     .google-btn svg {
@@ -54,14 +55,14 @@
       align-items: center;
       gap: 12px;
       font-size: 0.8rem;
-      color: #6b7280;
+      color: var(--muted);
     }
 
     .auth-divider::before,
     .auth-divider::after {
       content: "";
       flex: 1;
-      border-top: 1px solid #e5e7eb;
+      border-top: 1px solid var(--border);
     }
 
     .auth-links {
@@ -73,11 +74,11 @@
     }
 
     .auth-links a {
-      color: #555;
+      color: var(--text-2);
     }
 
     .auth-links a:hover {
-      color: #000;
+      color: var(--strong);
     }
 
     .guest-link {
@@ -85,7 +86,7 @@
       align-items: center;
       gap: 6px;
       margin-top: 20px;
-      color: #0d6efd;
+      color: var(--accent);
       font-size: 0.95rem;
       font-weight: 600;
       text-decoration: none;
@@ -97,7 +98,7 @@
 
     .guest-hint {
       margin: 6px 0 0;
-      color: #6b7280;
+      color: var(--muted);
       font-size: 0.85rem;
     }
 
@@ -109,6 +110,10 @@
 </head>
 
 <body>
+
+<div class="user-bar">
+  {% include "_theme_toggle.html" %}
+</div>
 
 <main class="container">
   <h1>Data Cleaner &amp; Sales Report</h1>
@@ -220,7 +225,7 @@
   </p>
 </main>
 
-<script src="/static/js/password_toggle.js"></script>
+<script src="{{ asset('js/password_toggle.js') }}"></script>
 
 </body>
 </html>

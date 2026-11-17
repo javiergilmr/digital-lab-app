@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Form, Request
 from fastapi.responses import RedirectResponse
-from fastapi.templating import Jinja2Templates
+from services.templating import templates
 
 from services.supabase_auth import (
     AuthError,
@@ -16,7 +16,6 @@ from services.supabase_auth import (
 )
 
 router = APIRouter()
-templates = Jinja2Templates(directory="templates")
 
 ACCESS_COOKIE = "sb_access"
 REFRESH_COOKIE = "sb_refresh"
