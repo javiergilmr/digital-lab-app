@@ -22,6 +22,7 @@ Construida con **FastAPI**, **pandas**, **Jinja2** y **reportlab**.
 12. [Rutas y API](#rutas-y-api)
 13. [Seguridad](#seguridad)
 14. [Limitaciones conocidas](#limitaciones-conocidas)
+15. [Licencia](#licencia)
 
 ---
 
@@ -434,6 +435,10 @@ Las rutas del flujo (carga, mapeo, informe, descargas y su API) funcionan con o 
 - **Precio deducido aproximado**: un precio corregido toma la mediana del producto, que puede no ser el valor real. Si existe la venta neta, los totales no se ven afectados porque el ingreso sale de ella.
 - **Sinónimos no se unifican**: solo se unifican variantes de escritura. Por ejemplo, `Online` y `E-commerce` quedan como valores distintos.
 - **El PDF no incluye** la sección *Acerca de este informe* ni el reporte de limpieza: se muestran solo en la página.
+
+## Licencia
+
+Todos los derechos reservados. El código se publica solo para consulta, como parte de un portafolio profesional: no se permite copiarlo, modificarlo ni usarlo en otros proyectos sin permiso del autor. Ver [`LICENSE`](../LICENSE).
 
 ---
 
