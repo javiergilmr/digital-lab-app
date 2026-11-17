@@ -4,7 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Data Cleaner &amp; Sales Report</title>
-  <link rel="stylesheet" href="/static/css/styles.css">
+  <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
+  <script src="{{ asset('js/theme.js') }}"></script>
 
   <!-- Estilos solo de esta página: styles.css se comparte con index y map -->
   <style>
@@ -17,14 +18,14 @@
 
     .report section {
       padding: 28px 0;
-      border-top: 1px solid #e5e7eb;
+      border-top: 1px solid var(--border);
     }
 
     .report h2 {
       margin: 0 0 16px;
       font-size: 0.8rem;
       font-weight: 600;
-      color: #6b7280;
+      color: var(--muted);
     }
 
     .hero-value {
@@ -43,7 +44,7 @@
 
     .stat-label {
       font-size: 0.8rem;
-      color: #6b7280;
+      color: var(--muted);
     }
 
     .stat-value {
@@ -56,7 +57,7 @@
     .stat-note {
       margin-top: 2px;
       font-size: 0.85rem;
-      color: #6b7280;
+      color: var(--muted);
     }
 
     .report ol,
@@ -74,7 +75,7 @@
     }
 
     .ranking li + li {
-      border-top: 1px solid #f3f4f6;
+      border-top: 1px solid var(--divider);
     }
 
     .ranking span:first-child {
@@ -109,7 +110,7 @@
       padding: 0 0 8px;
       font-size: 0.8rem;
       font-weight: 500;
-      color: #6b7280;
+      color: var(--muted);
       text-align: right;
       white-space: nowrap;
     }
@@ -133,27 +134,27 @@
     }
 
     .data-table tbody tr + tr td {
-      border-top: 1px solid #f3f4f6;
+      border-top: 1px solid var(--divider);
     }
 
     .data-table .muted {
-      color: #6b7280;
+      color: var(--muted);
     }
 
     .overview-text {
       margin: 0;
       font-size: 1rem;
       line-height: 1.65;
-      color: #374151;
+      color: var(--text-2);
     }
 
     .overview-note {
       margin: 12px 0 0;
       padding-left: 12px;
-      border-left: 3px solid #0d6efd;
+      border-left: 3px solid var(--accent);
       font-size: 0.85rem;
       line-height: 1.55;
-      color: #6b7280;
+      color: var(--muted);
     }
 
     .cleaning-stats {
@@ -161,24 +162,24 @@
     }
 
     .cleaning-stats .removed .stat-value {
-      color: #dc3545;
+      color: var(--danger);
     }
 
     .cleaning-stats .fixed .stat-value {
-      color: #0d6efd;
+      color: var(--accent);
     }
 
     .cleaning-summary {
       margin: 20px 0 0;
       font-size: 0.9rem;
-      color: #6b7280;
+      color: var(--muted);
     }
 
     .cleaning-group {
       margin: 20px 0 4px;
       font-size: 0.8rem;
       font-weight: 600;
-      color: #6b7280;
+      color: var(--muted);
     }
 
     .cleaning {
@@ -194,7 +195,7 @@
     }
 
     .cleaning li + li {
-      border-top: 1px solid #f3f4f6;
+      border-top: 1px solid var(--divider);
     }
 
     .cleaning li span:last-child {
@@ -229,10 +230,10 @@
       z-index: 1000;
       max-width: calc(100% - 32px);
       padding: 12px 20px;
-      border: 1px solid #34d399;
+      border: 1px solid var(--success-border);
       border-radius: 999px;
-      background: #ecfdf5;
-      color: #065f46;
+      background: var(--success-soft);
+      color: var(--success-ink);
       font-size: 0.9rem;
       box-shadow: 0 10px 30px rgba(17, 24, 39, 0.15);
       opacity: 0;
@@ -255,14 +256,14 @@
     .loading-label {
       margin-bottom: 8px;
       font-size: 0.9rem;
-      color: #6b7280;
+      color: var(--muted);
     }
 
     .loading-track {
       height: 6px;
       overflow: hidden;
       border-radius: 999px;
-      background: #e5e7eb;
+      background: var(--border);
     }
 
     .loading-bar {
@@ -277,6 +278,22 @@
       flex-direction: column;
       align-items: center;
       width: 100%;
+    }
+
+    .guest-note {
+      margin: 16px 0 0;
+      padding: 12px 16px;
+      border-radius: 10px;
+      background: var(--accent-soft);
+      color: var(--accent-ink);
+      font-size: 0.9rem;
+      line-height: 1.5;
+      text-align: center;
+    }
+
+    .guest-note a {
+      color: var(--accent);
+      font-weight: 600;
     }
 
     .download-actions {
@@ -343,7 +360,7 @@
       }
 
       .data-table tbody tr + tr {
-        border-top: 1px solid #f3f4f6;
+        border-top: 1px solid var(--divider);
       }
 
       .data-table tbody tr + tr td {
@@ -382,7 +399,7 @@
         display: block;
         margin-bottom: 2px;
         font-size: 0.72rem;
-        color: #9ca3af;
+        color: var(--faint);
       }
     }
 
@@ -396,6 +413,7 @@
       border-radius: 999px;
       background: linear-gradient(110deg, #0d6efd, #6f42c1, #0dcaf0, #0d6efd);
       background-size: 300% 100%;
+      color: #ffffff; /* fondo de color en los dos temas */
       font-weight: 600;
       letter-spacing: 0.01em;
       box-shadow: 0 0 0 0 rgba(13, 110, 253, 0.55);
@@ -420,10 +438,10 @@
       gap: 6px;
       margin: -8px 0 24px;
       padding: 8px 16px;
-      border: 1px solid #e5e7eb;
+      border: 1px solid var(--border);
       border-radius: 999px;
-      background: #ffffff;
-      color: #374151;
+      background: var(--surface);
+      color: var(--text-2);
       font-size: 0.9rem;
       text-decoration: none;
       transition: border-color 0.2s ease, color 0.2s ease;
@@ -431,8 +449,8 @@
 
     .back-to-map:hover,
     .back-to-map:focus-visible {
-      border-color: #6d28d9;
-      color: #6d28d9;
+      border-color: var(--violet);
+      color: var(--violet);
     }
 
     .process-arrow {
@@ -579,6 +597,14 @@
       </a>
     </div>
 
+    {% if not request.state.user %}
+      <p id="guest-note" class="guest-note hidden">
+        Usas la app sin cuenta, así que este informe no se guarda.
+        <a href="/login?next=/clean/{{ session_id }}">Inicia sesión o crea tu cuenta</a>
+        y procésalo de nuevo para tenerlo en tu panel con su PDF.
+      </p>
+    {% endif %}
+
     <a href="/" class="secondary-btn">
       ← Volver al inicio
     </a>
@@ -638,8 +664,20 @@ document.addEventListener("DOMContentLoaded", () => {
       </div>`;
   }
 
+  // Colores del gráfico desde las variables del tema (styles.css)
+  function themeColor(name) {
+    return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+  }
+
+  let lastTrend = null;
+  document.addEventListener("themechange", () => {
+    if (lastTrend) renderChart(lastTrend);
+  });
+
   function renderChart(trend) {
     if (!window.Chart) return;
+    lastTrend = trend;
+    const accent = themeColor("--accent");
 
     const months = trend.filter(item => item.total > 0);
 
@@ -654,8 +692,8 @@ document.addEventListener("DOMContentLoaded", () => {
         datasets: [{
           label: "Ventas",
           data: months.map(item => Number(item.total)),
-          borderColor: "#0d6efd",
-          backgroundColor: "#0d6efd",
+          borderColor: accent,
+          backgroundColor: accent,
           borderWidth: 2,
           pointRadius: 4,
           pointHoverRadius: 6,
@@ -669,7 +707,9 @@ document.addEventListener("DOMContentLoaded", () => {
         plugins: {
           legend: { display: false },
           tooltip: {
-            backgroundColor: "#111827",
+            backgroundColor: themeColor("--btn-bg"),
+            titleColor: themeColor("--btn-text"),
+            bodyColor: themeColor("--btn-text"),
             displayColors: false,
             callbacks: {
               label: context => formatMoney(context.parsed.y)
@@ -679,14 +719,14 @@ document.addEventListener("DOMContentLoaded", () => {
         scales: {
           x: {
             grid: { display: false },
-            ticks: { color: "#6b7280" }
+            ticks: { color: themeColor("--muted") }
           },
           y: {
             beginAtZero: true,
             border: { display: false },
-            grid: { color: "#f3f4f6" },
+            grid: { color: themeColor("--divider") },
             ticks: {
-              color: "#6b7280",
+              color: themeColor("--muted"),
               maxTicksLimit: 5,
               callback: value => formatMoney(value)
             }
@@ -887,6 +927,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       showStatus("✅ Análisis generado correctamente.");
       downloadActions.classList.remove("hidden");
+      document.getElementById("guest-note")?.classList.remove("hidden");
       advanceStepper();
 
     } catch (error) {

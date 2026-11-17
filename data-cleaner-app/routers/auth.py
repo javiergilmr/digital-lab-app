@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Form, Request
 from fastapi.responses import RedirectResponse
-from fastapi.templating import Jinja2Templates
+from services.templating import templates
 
 from services.supabase_auth import (
     AuthError,
@@ -16,7 +16,6 @@ from services.supabase_auth import (
 )
 
 router = APIRouter()
-templates = Jinja2Templates(directory="templates")
 
 ACCESS_COOKIE = "sb_access"
 REFRESH_COOKIE = "sb_refresh"
@@ -25,7 +24,7 @@ REFRESH_MAX_AGE = 30 * 24 * 3600
 VERIFIER_MAX_AGE = 15 * 60
 
 TITLES = {
-    "login": ("Iniciar sesión", "Entra para limpiar y analizar tus ventas."),
+    "login": ("Iniciar sesión", "Entra para guardar tus informes y ver tu panel."),
     "signup": ("Crear cuenta", "Crea tu cuenta para empezar."),
     "forgot": ("Recuperar contraseña", "Te enviaremos un enlace para crear una nueva contraseña."),
     "reset": ("Nueva contraseña", "Escribe tu nueva contraseña."),

@@ -4,7 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Data Cleaner &amp; Sales Report</title>
-  <link rel="stylesheet" href="/static/css/styles.css">
+  <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
+  <script src="{{ asset('js/theme.js') }}"></script>
 
   <style>
     .report-name {
@@ -15,21 +16,21 @@
 
     .report-name-hint {
       font-size: 0.8rem;
-      color: #6b7280;
+      color: var(--muted);
     }
 
     .report-name input {
       padding: 10px;
       border-radius: 8px;
-      border: 1px solid #d1d5db;
-      background: #fff;
+      border: 1px solid var(--border-strong);
+      background: var(--surface);
       font-size: 0.95rem;
       transition: border-color 0.2s ease;
     }
 
     .report-name input:focus {
       outline: none;
-      border-color: #111827;
+      border-color: var(--text);
     }
 
     .optional-heading {
@@ -38,7 +39,7 @@
       gap: 2px;
       margin-top: 8px;
       padding-top: 16px;
-      border-top: 1px solid #e5e7eb;
+      border-top: 1px solid var(--border);
       text-align: left;
     }
 
@@ -48,7 +49,7 @@
 
     .optional-heading small {
       font-size: 0.8rem;
-      color: #6b7280;
+      color: var(--muted);
     }
   </style>
 </head>

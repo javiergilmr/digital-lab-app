@@ -1,5 +1,6 @@
 import logging
 import os
+from pathlib import Path
 
 from fastapi import FastAPI, UploadFile, File, Form, HTTPException, BackgroundTasks
 import pandas as pd
@@ -9,7 +10,6 @@ from routers.api import router as api_router
 
 from fastapi import FastAPI, Request
 from fastapi.staticfiles import StaticFiles
-from fastapi.templating import Jinja2Templates
 
 # Nivel con la variable LOG_LEVEL (DEBUG muestra el detalle de cada limpieza)
 logging.basicConfig(
@@ -19,7 +19,7 @@ logging.basicConfig(
 log = logging.getLogger("data_cleaner")
 
 app = FastAPI()
-templates = Jinja2Templates(directory="templates")
+from services.templating import templates
 app.include_router(api_router, prefix="/api")
 
 from routers.pages import router as pages_router
@@ -29,18 +29,36 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 app.include_router(pages_router)
 app.include_router(auth_router)
 
-# LOGIN REQUERIDO
+# LOGIN OPCIONAL
+# Sin cuenta se usa todo el flujo (subir → mapear → procesar → informe → descargas) como invitado.
+# Con cuenta, además, se guardan los stats y el historial del panel.
+import uuid
 from urllib.parse import quote
 from fastapi.responses import JSONResponse, RedirectResponse
 from starlette.concurrency import run_in_threadpool
 from routers.auth import ACCESS_COOKIE, REFRESH_COOKIE, clear_session_cookies, set_session_cookies
 from services.supabase_auth import AuthError, get_user, refresh_session
+from services.sessions import adopt_sessions, SESSION_TTL
 
 PUBLIC_PATHS = ("/login", "/signup", "/forgot-password", "/api/health")
 PUBLIC_PREFIXES = ("/static/", "/auth/")
+# Lo que un invitado puede usar; el panel y la cuenta piden iniciar sesión
+GUEST_PATHS = ("/", "/api/upload", "/api/demo")
+GUEST_PREFIXES = ("/map/", "/clean/", "/export/", "/export-pdf/",
+                  "/api/map-columns/", "/api/clean-data/", "/api/analyze/")
+GUEST_COOKIE = "guest_id"
 
 def is_public(path: str) -> bool:
     return path in PUBLIC_PATHS or path.startswith(PUBLIC_PREFIXES)
+
+def is_guest_allowed(path: str) -> bool:
+    return path in GUEST_PATHS or path.startswith(GUEST_PREFIXES)
+
+def valid_guest_id(value) -> bool:
+    try:
+        return uuid.UUID(hex=value).hex == value
+    except (TypeError, ValueError):
+        return False
 
 @app.middleware("http")
 async def require_login(request: Request, call_next):
@@ -61,7 +79,21 @@ async def require_login(request: Request, call_next):
     request.state.user = user
     request.state.access_token = access_token if user else None
 
-    if user is None and not is_public(request.url.path):
+    # Invitado: un id al azar en una cookie identifica sus archivos (las sesiones en memoria)
+    guest_id = request.cookies.get(GUEST_COOKIE)
+    guest_id = guest_id if valid_guest_id(guest_id) else None
+    new_guest = False
+    if user is None and guest_id is None and is_guest_allowed(request.url.path):
+        guest_id, new_guest = uuid.uuid4().hex, True
+    request.state.guest_id = guest_id
+
+    # Al iniciar sesión, los archivos que subió como invitado pasan a su cuenta
+    adopted = False
+    if user and guest_id:
+        adopt_sessions(f"guest:{guest_id}", user["id"])
+        adopted = True
+
+    if user is None and not is_public(request.url.path) and not is_guest_allowed(request.url.path):
         if request.url.path.startswith("/api/"):
             response = JSONResponse({"detail": "Tu sesión expiró. Vuelve a iniciar sesión."}, status_code=401)
         else:
@@ -72,12 +104,27 @@ async def require_login(request: Request, call_next):
         return response
 
     response = await call_next(request)
+    secure = request.url.scheme == "https"
     if new_session:
-        set_session_cookies(response, new_session, request.url.scheme == "https")
+        set_session_cookies(response, new_session, secure)
+    elif user is None and (access_token or refresh_token):
+        # Tokens vencidos o inválidos en una página de invitado: se limpian
+        clear_session_cookies(response)
+    if new_guest:
+        response.set_cookie(GUEST_COOKIE, guest_id, max_age=SESSION_TTL,
+                            httponly=True, samesite="lax", secure=secure, path="/")
+    if adopted:
+        response.delete_cookie(GUEST_COOKIE, path="/")
     return response
 
 def current_user_id(request: Request) -> str:
-    return request.state.user["id"]
+    """Dueño de los archivos subidos: el usuario con sesión o el invitado de esta cookie."""
+    if request.state.user:
+        return request.state.user["id"]
+    return f"guest:{request.state.guest_id}"
+
+def is_logged_in(request: Request) -> bool:
+    return request.state.user is not None
 
 from services.sessions import (
     create_session,
@@ -124,6 +171,21 @@ async def upload_file(request: Request, background_tasks: BackgroundTasks, file:
     except Exception as e:
         raise HTTPException(400, f"Error leyendo archivo: {e}")
 
+    return start_session(request, background_tasks, df, file.filename)
+
+# Datos de ejemplo: un año de ventas de 4 tiendas con errores típicos para que la limpieza tenga qué mostrar
+DEMO_FILE = Path(__file__).resolve().parent / "static" / "demo_ventas.csv"
+DEMO_REPORT_NAME = "Tiendas Demo"
+
+@app.post("/api/demo")
+def demo_file(request: Request, background_tasks: BackgroundTasks):
+    df = pd.read_csv(DEMO_FILE)
+    result = start_session(request, background_tasks, df, DEMO_FILE.name)
+    set_session_report_name(result["session_id"], current_user_id(request), DEMO_REPORT_NAME)
+    return result
+
+def start_session(request: Request, background_tasks: BackgroundTasks, df, filename):
+    """Valida que parezca un archivo de ventas y crea la sesión del archivo."""
     if df.empty:
         raise HTTPException(400, "Archivo vacío")
 
@@ -145,14 +207,15 @@ async def upload_file(request: Request, background_tasks: BackgroundTasks, file:
     #         detail="Asegúrate de subir un archivo con fechas, productos, cantidades y precios."
     #     )
 
-    session_id = create_session(df, SALES_SCHEMA, current_user_id(request), file.filename)
-    # Se guarda después de responder para no hacer esperar al usuario
-    background_tasks.add_task(record_activity, request.state.access_token, files=1)
+    session_id = create_session(df, SALES_SCHEMA, current_user_id(request), filename)
+    # Solo con cuenta hay stats; se guardan después de responder para no hacer esperar al usuario
+    if is_logged_in(request):
+        background_tasks.add_task(record_activity, request.state.access_token, files=1)
 
     return {
         "status": "ok",
         "session_id": session_id,
-        "filename": file.filename,
+        "filename": filename,
         "rows": len(df),
         "detected_columns": detected_columns,
         "required_fields": SALES_SCHEMA["required"],
@@ -235,6 +298,9 @@ def panel_report_pdf(request: Request, report_id: str):
 # CLEAN
 @app.get("/clean/{session_id}")
 def clean_page(request: Request, session_id: str):
+    # Sesión vencida (2 h sin uso), de otro usuario o inexistente: se vuelve a la carga con un aviso
+    if get_session_original_df(session_id, current_user_id(request)) is None:
+        return RedirectResponse("/?expired=1", status_code=303)
     return templates.TemplateResponse(
         request, "clean.html",
         {
@@ -267,10 +333,6 @@ def map_columns(request: Request, session_id: str, payload: ColumnMappingPayload
 
 
 from fastapi import Request, HTTPException
-from fastapi.templating import Jinja2Templates
-
-templates = Jinja2Templates(directory="templates")
-
 # MAP 
 from services.auto_mapping import auto_map_columns
 
@@ -280,7 +342,7 @@ def map_page(request: Request, session_id: str):
     df = get_session_original_df(session_id, owner_id)
 
     if df is None:
-        raise HTTPException(status_code=404, detail="Sesión no encontrada")
+        return RedirectResponse("/?expired=1", status_code=303)
 
     auto_mapping = auto_map_columns(list(df.columns))
     # Si ya se mapeó (ej. al volver desde Procesar), se muestra lo elegido y no lo automático
@@ -315,7 +377,7 @@ def clean_data(request: Request, session_id: str, background_tasks: BackgroundTa
     update_session_df(session_id, owner_id, df_clean)
     set_session_clean_report(session_id, owner_id, report)
 
-    if claim_once(session_id, owner_id, "stats_recorded"):
+    if is_logged_in(request) and claim_once(session_id, owner_id, "stats_recorded"):
         background_tasks.add_task(
             record_activity, request.state.access_token,
             processed=report["rows_initial"], fixed=report["rows_fixed"], removed=report["rows_removed"]
@@ -342,7 +404,7 @@ def analyze_data(request: Request, session_id: str, background_tasks: Background
 
     # Primer análisis de este archivo: queda en el historial del panel con su PDF
     clean_report = get_session_clean_report(session_id, owner_id)
-    if clean_report and claim_once(session_id, owner_id, "report_saved"):
+    if clean_report and is_logged_in(request) and claim_once(session_id, owner_id, "report_saved"):
         background_tasks.add_task(
             save_report, request.state.access_token, owner_id,
             get_session_filename(session_id, owner_id), get_session_report_name(session_id, owner_id),

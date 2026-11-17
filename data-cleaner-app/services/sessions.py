@@ -13,6 +13,12 @@ def purge_expired_sessions():
         if now - session["last_used"] > SESSION_TTL:
             SESSIONS.pop(session_id, None)
 
+def adopt_sessions(old_owner, new_owner):
+    """Pasa los archivos de un dueño a otro: al iniciar sesión, lo subido como invitado queda en su cuenta."""
+    for session in list(SESSIONS.values()):
+        if session["owner_id"] == old_owner:
+            session["owner_id"] = new_owner
+
 def create_session(df, schema, owner_id, filename=""):
     purge_expired_sessions()
     session_id = str(uuid.uuid4())

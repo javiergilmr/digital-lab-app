@@ -1,5 +1,6 @@
 {% if request.state.user %}
   <div class="user-bar">
+    {% include "_theme_toggle.html" %}
     <a href="/panel" class="user-btn panel-btn"{% if request.url.path == "/panel" %} aria-current="page"{% endif %}>
       <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
         <rect x="3" y="3" width="7" height="9" rx="1.5"/>
@@ -20,5 +21,19 @@
         Cerrar sesión
       </button>
     </form>
+  </div>
+{% else %}
+  {# Invitado: puede usar todo el flujo; con cuenta, además, guarda su historial #}
+  <div class="user-bar">
+    {% include "_theme_toggle.html" %}
+    <a href="/login?next={{ request.url.path | urlencode }}" class="user-btn panel-btn">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
+        <path d="M10 17l5-5-5-5"/>
+        <path d="M15 12H3"/>
+      </svg>
+      Iniciar sesión
+    </a>
+    <a href="/signup" class="user-btn outline-btn">Crear cuenta</a>
   </div>
 {% endif %}

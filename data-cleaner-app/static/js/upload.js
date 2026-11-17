@@ -147,6 +147,39 @@ async function uploadFile(file) {
 }
 
 /* ======================
+   DATOS DE EJEMPLO (el servidor carga static/demo_ventas.csv)
+   ====================== */
+const demoBtn = document.getElementById("demo-btn");
+
+async function loadDemo() {
+  if (uploading) return;
+  uploading = true;
+  demoBtn.disabled = true;
+  hideUploadError();
+
+  fileLabel.textContent = "demo_ventas.csv · datos de ejemplo";
+  setProgress(40, "Cargando datos de ejemplo…");
+  dropzone.dataset.state = "uploading";
+
+  try {
+    const res = await fetch("/api/demo", { method: "POST" });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok || !data.session_id) {
+      throw new Error(data.detail || "No se pudieron cargar los datos de ejemplo.");
+    }
+    setProgress(100, "✔ Datos de ejemplo cargados");
+    await wait(500);
+    window.location.href = `/map/${data.session_id}`;
+  } catch (err) {
+    resetDropzone();
+    demoBtn.disabled = false;
+    showUploadError(err.message === "Failed to fetch" ? "Error de conexión. Intenta nuevamente." : err.message);
+  }
+}
+
+demoBtn.addEventListener("click", loadDemo);
+
+/* ======================
    CLIC Y BOTÓN (el botón está dentro de la zona: su clic llega aquí)
    ====================== */
 dropzone.addEventListener("click", () => {
