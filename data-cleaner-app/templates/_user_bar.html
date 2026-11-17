@@ -1,5 +1,17 @@
+{# "Volver" junto al día / noche: la página lo activa con {% set back_url = "/" %} antes del include #}
+{% macro back_button() %}
+  {% if back_url %}
+    <a href="{{ back_url }}" class="user-btn outline-btn back-btn">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M19 12H5M11 18l-6-6 6-6"/>
+      </svg>
+      Volver
+    </a>
+  {% endif %}
+{% endmacro %}
 {% if request.state.user %}
   <div class="user-bar">
+    {{ back_button() }}
     {% include "_theme_toggle.html" %}
     <a href="/panel" class="user-btn panel-btn"{% if request.url.path == "/panel" %} aria-current="page"{% endif %}>
       <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -25,6 +37,7 @@
 {% else %}
   {# Invitado: puede usar todo el flujo; con cuenta, además, guarda su historial #}
   <div class="user-bar">
+    {{ back_button() }}
     {% include "_theme_toggle.html" %}
     <a href="/login?next={{ request.url.path | urlencode }}" class="user-btn panel-btn">
       <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">

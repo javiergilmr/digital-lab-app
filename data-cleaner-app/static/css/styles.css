@@ -635,6 +635,20 @@ canvas {
   display: block;
 }
 
+/* Enlace "Sobre nosotros" del pie de cada página */
+.footer-link {
+  display: inline-block;
+  margin-top: 6px;
+  color: var(--muted);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.footer-link:hover {
+  color: var(--text);
+  text-decoration: underline;
+}
+
 /* =========================
    PASOS DEL FLUJO (subir, mapear, procesar, informe)
    ========================= */
