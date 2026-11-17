@@ -1,0 +1,9 @@
+# Instala las dependencias de todos los proyectos del repo:
+#   pip install -r requirements.txt
+#
+# Cada proyecto fija sus versiones en su propio requirements.txt (Render usa ese).
+# Al sumar un proyecto nuevo, agrega aquí su línea "-r".
+
+# Data Cleaner & Sales Report: fastapi, uvicorn, pandas, numpy, openpyxl,
+# reportlab, Jinja2, python-multipart, python-dotenv, pydantic
+-r data-cleaner-app/requirements.txt
